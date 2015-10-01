@@ -27,15 +27,5 @@ namespace Hackathon.Controllers
         {
             return View();
         }
-
-        public ActionResult Angular()
-        {
-            return View();
-        }
-
-        public ActionResult Demo()
-        {
-            return View();
-        }
     }
 }
