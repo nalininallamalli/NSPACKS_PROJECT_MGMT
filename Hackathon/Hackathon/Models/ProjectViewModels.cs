@@ -13,24 +13,41 @@ namespace Hackathon.Models
 {
     public class ProjectViewModels
     {
-        [Required]
+        [Required(ErrorMessage = "Please enter Project Name", AllowEmptyStrings = false)]
         [Display(Name = "Name")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Please enter Description", AllowEmptyStrings = false)]
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
         [Required]
         [Display(Name = "StartDate")]
-        public string StartDate { get; set; }
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        public DateTime StartDate { get; set; }
 
         [Required]
         [Display(Name = "EndDate")]
-        public string EndDate { get; set; }
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        public DateTime EndDate { get; set; }
     }
 
     public class Project
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public string Description { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    public class ProjectDbContext : DbContext
+    {
+        public ProjectDbContext()
+            : base("DefaultConnection")
+        {
+        }
+        public DbSet<Project> Projects { get; set; }
     }
 
 }

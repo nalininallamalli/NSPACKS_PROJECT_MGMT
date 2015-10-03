@@ -10,16 +10,19 @@ namespace Hackathon.Controllers
 {
     public class ProjectController : Controller
     {
+        ProjectDbContext projectDb = new ProjectDbContext();
+
         // GET: Project
         public ActionResult Index()
         {
-            return View();
+            var projects = projectDb.Projects.ToList();
+            return View(projects);
         }
 
         // GET: Project/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return View(projectDb.Projects.Find(id));
         }
 
         // GET: Project/Create
@@ -36,8 +39,11 @@ namespace Hackathon.Controllers
             {
                 try
                 {
-                    var project = new Project { Name = model.Name, StartDate = model.StartDate, EndDate = model.EndDate };
-                    return RedirectToAction("Create");
+                    var project = new Project { Name = model.Name, Description = model.Description, StartDate = model.StartDate, EndDate = model.EndDate };
+                    projectDb.Projects.Add(project);
+                    projectDb.SaveChanges();
+
+                    return RedirectToAction("Index");
                 }
                 catch
                 {
@@ -55,11 +61,17 @@ namespace Hackathon.Controllers
 
         // POST: Project/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, ProjectViewModels model)
         {
             try
-            {
-                // TODO: Add update logic here
+            {                
+                Project project = projectDb.Projects.Find(id);
+                project.Name = model.Name;
+                project.Description = model.Description;
+                project.StartDate = model.StartDate;
+                project.EndDate = model.EndDate;
+
+                projectDb.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -70,18 +82,20 @@ namespace Hackathon.Controllers
         }
 
         // GET: Project/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id = 0)
         {
-            return View();
+            return View(projectDb.Projects.Find(id));
         }
 
         // POST: Project/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        public ActionResult delete_conf(int id)
         {
             try
             {
-                // TODO: Add delete logic here
+                Project project = projectDb.Projects.Find(id);
+                projectDb.Projects.Remove(project);
+                projectDb.SaveChanges();
 
                 return RedirectToAction("Index");
             }
