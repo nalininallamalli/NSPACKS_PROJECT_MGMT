@@ -13,5 +13,9 @@ namespace Hackathon.Controllers
         {
             return View();
         }
+        public ActionResult ByFundsView()
+        {
+            return View();
+        }
     }
 }
