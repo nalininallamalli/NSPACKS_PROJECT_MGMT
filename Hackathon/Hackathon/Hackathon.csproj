@@ -1062,8 +1062,10 @@
     <Content Include="Views\Project\Delete.cshtml" />
     <Content Include="Views\Project\Edit.cshtml" />
     <Content Include="Views\Project\Details.cshtml" />
-    <Content Include="Views\Analytics\ByProjectsView.cshtml" />
-    <Content Include="Views\Analytics\ByFundsView.cshtml" />
+    <Content Include="Views\Analytics\_ViewByProjectTab.cshtml" />
+    <Content Include="Views\Analytics\_ViewByFundsTab.cshtml" />
+    <Content Include="Views\Analytics\AnalyticsView.cshtml" />
+    <Content Include="Views\Analytics\_CustomViewTab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -9,13 +9,22 @@ namespace Hackathon.Controllers
     public class AnalyticsController : Controller
     {
         // GET: Analytics
-        public ActionResult ByProjectsView()
+        public ActionResult AnalyticsView()
         {
             return View();
         }
-        public ActionResult ByFundsView()
+
+        public ActionResult _ViewByProjectTab()
         {
-            return View();
+            return PartialView();
+        }
+        public ActionResult _ViewByFundsTab()
+        {
+            return PartialView();
+        }
+        public ActionResult _CustomViewTab()
+        {
+            return PartialView();
         }
     }
 }
