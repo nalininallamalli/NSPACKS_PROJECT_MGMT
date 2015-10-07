@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Hackathon.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
         ProjectDbContext projectDb = new ProjectDbContext();
