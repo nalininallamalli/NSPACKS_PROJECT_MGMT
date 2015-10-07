@@ -83,8 +83,8 @@ namespace Hackathon.Models
         public GenderType Gender { get; set; }
 
         [Required]
-        [Display(Name = "Mobile")]
-        public string Mobile { get; set; }
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
 
         [Required]
         [Display(Name = "City")]

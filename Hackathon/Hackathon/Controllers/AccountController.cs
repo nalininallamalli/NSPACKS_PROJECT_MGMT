@@ -136,6 +136,20 @@ namespace Hackathon.Controllers
         }
 
         //
+        // GET: /Account/ListUsers
+        [AllowAnonymous]
+        public ActionResult ListUsers()
+        {
+            var users = new List<ApplicationUser>();
+            // Get the list of Users in this Role
+            foreach (var user in UserManager.Users.ToList())
+            {
+                users.Add(user);
+            }
+            return View(users);
+        }
+
+        //
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -153,7 +167,8 @@ namespace Hackathon.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Gender = model.Gender};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Gender = model.Gender,
+                PhoneNumber = model.PhoneNumber, City = model.City, State = model.State, Country = model.Country, Zip = model.Zip};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
