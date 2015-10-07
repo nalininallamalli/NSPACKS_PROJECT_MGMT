@@ -136,8 +136,7 @@ namespace Hackathon.Controllers
         }
 
         //
-        // GET: /Account/ListUsers
-        [AllowAnonymous]
+        // GET: /Account/ListUsers        
         public ActionResult ListUsers()
         {
             var users = new List<ApplicationUser>();
