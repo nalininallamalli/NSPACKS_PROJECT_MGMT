@@ -215,7 +215,7 @@ namespace Hackathon.Controllers
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.Id == id);
             Db.Users.Remove(user);
-            Db.SaveChanges();
+            await Db.SaveChangesAsync();
             return RedirectToAction("ListUsers");
         }
 
