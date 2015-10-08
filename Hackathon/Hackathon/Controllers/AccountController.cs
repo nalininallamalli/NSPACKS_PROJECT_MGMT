@@ -136,7 +136,7 @@ namespace Hackathon.Controllers
         }
 
         //
-        // GET: /Account/ListUsers        
+        // GET: /Account/ListUsers
         public ActionResult ListUsers()
         {
             var users = new List<ApplicationUser>();
@@ -146,6 +146,77 @@ namespace Hackathon.Controllers
                 users.Add(user);
             }
             return View(users);
+        }
+
+        // GET: /Account/DetailtUser
+        public ActionResult DetailUser(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            return View(user);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        public ActionResult EditUser(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            return View(user);
+        }
+
+
+        [HttpPost]
+        //[Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditUser(string id, ApplicationUser model)
+        {
+            if (ModelState.IsValid)
+            {
+                var Db = new ApplicationDbContext();
+                var user = Db.Users.First(u => u.Id == id);
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.Gender = model.Gender;
+                user.PhoneNumber = model.PhoneNumber;
+                user.City = model.City;
+                user.State = model.State;
+                user.Country = model.Country;
+                user.Zip = model.Zip;
+                Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                await Db.SaveChangesAsync();
+                return RedirectToAction("ListUsers");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        // GET: Account/DeleteUser/
+        //[Authorize(Roles = "Admin")]
+        public ActionResult DeleteUser(string id = null)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Account/DeleteUser
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Delete_User(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            Db.Users.Remove(user);
+            Db.SaveChanges();
+            return RedirectToAction("ListUsers");
         }
 
         //
@@ -161,6 +232,7 @@ namespace Hackathon.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
 

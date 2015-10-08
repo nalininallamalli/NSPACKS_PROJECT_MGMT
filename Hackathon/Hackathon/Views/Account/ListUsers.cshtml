@@ -58,6 +58,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.Country)
         </td>
+        <td>
+            @Html.ActionLink("Edit", "EditUser", new { id = item.Id }) |
+            @Html.ActionLink("Details", "DetailUser", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id })
+        </td>
     </tr>
 }
 

@@ -57,7 +57,8 @@ namespace Hackathon.Controllers
         // GET: Project/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Project project = projectDb.Projects.Find(id);
+            return View(project);
         }
 
         // POST: Project/Edit/5

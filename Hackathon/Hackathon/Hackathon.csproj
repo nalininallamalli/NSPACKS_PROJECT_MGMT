@@ -1067,6 +1067,9 @@
     <Content Include="Views\Analytics\AnalyticsView.cshtml" />
     <Content Include="Views\Analytics\_CustomViewTab.cshtml" />
     <Content Include="Views\Account\ListUsers.cshtml" />
+    <Content Include="Views\Account\EditUser.cshtml" />
+    <Content Include="Views\Account\DeleteUser.cshtml" />
+    <Content Include="Views\Account\DetailUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
