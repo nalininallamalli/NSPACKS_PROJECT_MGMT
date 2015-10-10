@@ -2,30 +2,88 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<!-- This is vertical tabbed pane view-->
+<div class="col-md-3 column margintop20">
+    <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="#projects" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Projects</a></li>
+        <li><a href="#stakeholders" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Stakeholders</a></li>
+        <li><a href="#funds" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Funds</a></li>
+        <li><a href="#analytics" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Analytics</a></li>
+    </ul>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+@*
+    @section scripts {
+        <script>
+            $('#tabstrip a').click(function (e) {
+                e.preventDefault()
+                var tabID = $(this).attr("href").substr(1);
+                $(".tab-pane").each(function () {
+                    console.log("clearing " + $(this).attr("id") + " tab");
+                    $(this).empty();
+                });
+                //$("#" + tabID).load("/@ViewContext.RouteData.Values["controller"]/" + tabID)
+                $.ajax({
+                    url: "/@ViewContext.RouteData.Values["controller"]/" + tabID,
+                    cache: false,
+                    type: "get",
+                    dataType: "html",
+                    success: function (result) {
+                        $("#" + tabID).html(result);
+                    }
+
+                })
+                $(this).tab('show')
+            });
+        </script> 
+} *@
+
+<!-- This is horizontal tabbed pane view-->
+<!--
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#projects" data-toggle="tab">Projects</a></li>
+    <li><a href="#stakeholders" data-toggle="tab">Stakeholders</a></li>
+    <li><a href="#funds" data-toggle="tab">Funds</a></li>
+    <li><a href="#analytics" data-toggle="tab">Analytics</a></li>
+</ul>
+-->
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="projects">
+        @Html.ActionLink("Project", "Index", "Project")
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    <div class="tab-pane fade" id="stakeholders">
+        @Html.ActionLink("Stakeholders", "ListUsers", "Account")
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <div class="tab-pane fade" id="funds">
+        @Html.ActionLink("Funds", "Index", "Project")
+    </div>
+    <div class="tab-pane fade" id="analytics">
+        @Html.ActionLink("Analytics", "AnalyticsView", "Analytics")
     </div>
 </div>
+
+
+
+@*<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Project Management Application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Project", "Index", "Project")</li>
+                <li>@Html.ActionLink("Stakeholders", "ListUsers", "Account")</li>
+                <li>@Html.ActionLink("Funds", "Index", "Project")</li>
+                <li>@Html.ActionLink("Analytics", "AnalyticsView", "Analytics")</li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</div>
+*@
+
