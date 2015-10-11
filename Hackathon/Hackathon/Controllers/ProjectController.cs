@@ -34,17 +34,20 @@ namespace Hackathon.Controllers
 
         // POST: Project/Create
         [HttpPost]
-        public ActionResult Create(ProjectViewModels model)
+        public ActionResult Create(ProjectViewModels model, string command)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+
                     var project = new Project { Name = model.Name, Description = model.Description, StartDate = model.StartDate, EndDate = model.EndDate };
                     projectDb.Projects.Add(project);
                     projectDb.SaveChanges();
-
-                    return RedirectToAction("Index");
+                    if (command == "Next")
+                        return RedirectToAction("Index");
+                    else                    
+                        return RedirectToAction("Index");
                 }
                 catch
                 {
