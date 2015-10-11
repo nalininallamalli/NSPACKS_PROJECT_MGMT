@@ -1,43 +1,41 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-
 <!-- This is vertical tabbed pane view-->
-<div class="col-md-3 column margintop20">
-    <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="#projects" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Projects</a></li>
-        <li><a href="#stakeholders" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Stakeholders</a></li>
-        <li><a href="#funds" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Funds</a></li>
-        <li><a href="#analytics" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Analytics</a></li>
-    </ul>
+<div class="col-md-12 column margintop20">
+    @*<ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#projects" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Projects</a></li>
+            <li><a href="#stakeholders" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Stakeholders</a></li>
+            <li><a href="#funds" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Funds</a></li>
+            <li><a href="#analytics" data-toggle="tab"><span class="glyphicon glyphicon-chevron-right"></span>Analytics</a></li>
+        </ul>*@
+    this is index page from Home controller
 </div>
-
 @*
-    @section scripts {
-        <script>
-            $('#tabstrip a').click(function (e) {
-                e.preventDefault()
-                var tabID = $(this).attr("href").substr(1);
-                $(".tab-pane").each(function () {
-                    console.log("clearing " + $(this).attr("id") + " tab");
-                    $(this).empty();
+        @section scripts {
+            <script>
+                $('#tabstrip a').click(function (e) {
+                    e.preventDefault()
+                    var tabID = $(this).attr("href").substr(1);
+                    $(".tab-pane").each(function () {
+                        console.log("clearing " + $(this).attr("id") + " tab");
+                        $(this).empty();
+                    });
+                    //$("#" + tabID).load("/@ViewContext.RouteData.Values["controller"]/" + tabID)
+                    $.ajax({
+                        url: "/@ViewContext.RouteData.Values["controller"]/" + tabID,
+                        cache: false,
+                        type: "get",
+                        dataType: "html",
+                        success: function (result) {
+                            $("#" + tabID).html(result);
+                        }
+
+                    })
+                    $(this).tab('show')
                 });
-                //$("#" + tabID).load("/@ViewContext.RouteData.Values["controller"]/" + tabID)
-                $.ajax({
-                    url: "/@ViewContext.RouteData.Values["controller"]/" + tabID,
-                    cache: false,
-                    type: "get",
-                    dataType: "html",
-                    success: function (result) {
-                        $("#" + tabID).html(result);
-                    }
-
-                })
-                $(this).tab('show')
-            });
-        </script> 
-} *@
-
+            </script>
+    } *@
 <!-- This is horizontal tabbed pane view-->
 <!--
 <ul class="nav nav-tabs">
@@ -47,43 +45,40 @@
     <li><a href="#analytics" data-toggle="tab">Analytics</a></li>
 </ul>
 -->
-<div id="myTabContent" class="tab-content">
-    <div class="tab-pane fade active in" id="projects">
-        @Html.ActionLink("Project", "Index", "Project")
-    </div>
-    <div class="tab-pane fade" id="stakeholders">
-        @Html.ActionLink("Stakeholders", "ListUsers", "Account")
-    </div>
-    <div class="tab-pane fade" id="funds">
-        @Html.ActionLink("Funds", "Index", "Project")
-    </div>
-    <div class="tab-pane fade" id="analytics">
-        @Html.ActionLink("Analytics", "AnalyticsView", "Analytics")
-    </div>
-</div>
-
-
+@*<div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in" id="projects">
+            @Html.ActionLink("Projecthh", "Index", "Project")
+        </div>
+        <div class="tab-pane fade" id="stakeholders">
+            @Html.ActionLink("Stakeholders", "ListUsers", "Account")
+        </div>
+        <div class="tab-pane fade" id="funds">
+            @Html.ActionLink("Funds", "Index", "Project")
+        </div>
+        <div class="tab-pane fade" id="analytics">
+            @Html.ActionLink("Analytics", "AnalyticsView", "Analytics")
+        </div>
+    </div>*@
 
 @*<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            @Html.ActionLink("Project Management Application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Project", "Index", "Project")</li>
-                <li>@Html.ActionLink("Stakeholders", "ListUsers", "Account")</li>
-                <li>@Html.ActionLink("Funds", "Index", "Project")</li>
-                <li>@Html.ActionLink("Analytics", "AnalyticsView", "Analytics")</li>
-            </ul>
-            @Html.Partial("_LoginPartial")
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Project Management Application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Project", "Index", "Project")</li>
+                    <li>@Html.ActionLink("Stakeholders", "ListUsers", "Account")</li>
+                    <li>@Html.ActionLink("Funds", "Index", "Project")</li>
+                    <li>@Html.ActionLink("Analytics", "AnalyticsView", "Analytics")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
         </div>
     </div>
-</div>
 *@
-

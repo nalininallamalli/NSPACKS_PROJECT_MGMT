@@ -6,38 +6,54 @@
     <title>@ViewBag.Title - Project Management App</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
 </head>
 <body>
-   <div class="navbar navbar-inverse navbar-fixed-top">
-          <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Project Management Application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                  <!--  <ul class="nav navbar-nav">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Project Management Application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td id="navMenu" width="30%">
+
+                <div>
+                    <ul class="nav nav-pills nav-stacked">
                         <li>@Html.ActionLink("Project", "Index", "Project")</li>
                         <li>@Html.ActionLink("Stakeholders", "ListUsers", "Account")</li>
                         <li>@Html.ActionLink("Funds", "Index", "Project")</li>
                         <li>@Html.ActionLink("Analytics", "AnalyticsView", "Analytics")</li>
-                    </ul> -->
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - N-SPARKS Team</p>
-        </footer>
-    </div>
+                    </ul>
 
+
+                </div>
+
+            </td>
+            <td width="70%">
+                <div class="container body-content">
+                    @RenderBody()
+
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <hr />
+    <br /><br /><br />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - N-SPARKS Team</p>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

@@ -79,8 +79,13 @@ namespace Hackathon.Controllers
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
+                //case SignInStatus.Success:
+                //    return RedirectToLocal(returnUrl);
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (returnUrl == null || returnUrl == "")
+                        return RedirectToLocal("Home/Index");
+                    else
+                        return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
