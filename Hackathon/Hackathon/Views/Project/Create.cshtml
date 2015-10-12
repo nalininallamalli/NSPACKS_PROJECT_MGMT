@@ -1,5 +1,10 @@
 ﻿@model Hackathon.Models.Project
-
+<script>    
+    $(document).ready(function () {
+        $("#stDate").datepicker();
+        $("#edDate").datepicker();
+    });
+</script>
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
@@ -27,7 +32,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-9">
-                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "stDate" } })
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -35,17 +40,18 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-9">
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @id = "edDate" } })
                 @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-9">
+            <div class="col-md-offset-2 col-md-9 ">
                 <input type="submit" name="command" value="Create" class="btn btn-default" />
                 <input type="submit" name="command" value="Next" class="btn btn-default" />
             </div>
         </div>
+
     </div>
 }
 

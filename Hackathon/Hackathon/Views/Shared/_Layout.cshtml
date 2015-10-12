@@ -4,8 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Project Management App</title>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script src="~/Scripts/jquery-ui.js"></script>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -24,13 +32,13 @@
             </div>
         </div>
     </div>
-    <table>
+    <table width="100%">
         <tr>
-            <td id="navMenu" width="30%">
+            <td id="navMenu" style="width:20%;">
 
                 <div>
                     <ul class="nav nav-pills nav-stacked">
-                        <li>@Html.ActionLink("Project", "Index", "Project")</li>
+                        <li style="padding:5px 0px">@Html.ActionLink("Project", "Index", "Project")</li>
                         <li>@Html.ActionLink("Stakeholders", "ListUsers", "Account")</li>
                         <li>@Html.ActionLink("Funds", "Index", "Project")</li>
                         <li>@Html.ActionLink("Analytics", "AnalyticsView", "Analytics")</li>
@@ -40,7 +48,7 @@
                 </div>
 
             </td>
-            <td width="70%">
+            <td width="80%">
                 <div class="container body-content">
                     @RenderBody()
 
@@ -54,8 +62,6 @@
     <footer>
         <p>&copy; @DateTime.Now.Year - N-SPARKS Team</p>
     </footer>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+
 </body>
 </html>
