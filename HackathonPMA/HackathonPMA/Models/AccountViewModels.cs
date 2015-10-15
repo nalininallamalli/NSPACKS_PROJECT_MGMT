@@ -1,4 +1,4 @@
-﻿using Hackathon.Models;
+﻿using HackathonPMA.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

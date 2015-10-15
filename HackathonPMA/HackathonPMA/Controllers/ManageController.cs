@@ -103,7 +103,9 @@ namespace HackathonPMA.Controllers
         // GET: /Manage/AddPhoneNumber
         public ActionResult AddPhoneNumber()
         {
-            return View();
+            AddPhoneNumberViewModel model = new AddPhoneNumberViewModel();
+            model.Number = UserManager.GetPhoneNumber(User.Identity.GetUserId());
+            return View(model);
         }
 
         //
@@ -116,6 +118,8 @@ namespace HackathonPMA.Controllers
             {
                 return View(model);
             }
+            await UserManager.SetPhoneNumberAsync(User.Identity.GetUserId(), model.Number);
+            /*
             // Generate the token and send it
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
             if (UserManager.SmsService != null)
@@ -128,6 +132,8 @@ namespace HackathonPMA.Controllers
                 await UserManager.SmsService.SendAsync(message);
             }
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
+            */
+            return RedirectToAction("Index", "Manage");
         }
 
         //

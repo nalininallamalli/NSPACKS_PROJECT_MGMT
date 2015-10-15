@@ -161,6 +161,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\FundsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoriesController.cs" />
@@ -318,6 +319,14 @@
     <Content Include="Views\Inventories\Details.cshtml" />
     <Content Include="Views\Inventories\Edit.cshtml" />
     <Content Include="Views\Inventories\Index.cshtml" />
+    <Content Include="Views\Account\DeleteUser.cshtml" />
+    <Content Include="Views\Account\DetailUser.cshtml" />
+    <Content Include="Views\Account\EditUser.cshtml" />
+    <Content Include="Views\Analytics\AnalyticsView.cshtml" />
+    <Content Include="Views\Analytics\_CustomViewTab.cshtml" />
+    <Content Include="Views\Analytics\_ViewByFundsTab.cshtml" />
+    <Content Include="Views\Analytics\_ViewByProjectTab.cshtml" />
+    <Content Include="Views\Account\ListUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
