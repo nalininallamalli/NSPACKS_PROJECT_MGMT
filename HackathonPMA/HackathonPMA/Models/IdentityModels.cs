@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Hackathon.Models;
 
 namespace HackathonPMA.Models
 {
@@ -16,6 +17,13 @@ namespace HackathonPMA.Models
             // Add custom user claims here
             return userIdentity;
         }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public GenderType Gender { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public string Zip { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

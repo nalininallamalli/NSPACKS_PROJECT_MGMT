@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using HackathonPMA.Models;
+using System.Collections.Generic;
 
 namespace HackathonPMA.Controllers
 {
@@ -135,6 +136,90 @@ namespace HackathonPMA.Controllers
         }
 
         //
+        // GET: /Account/ListUsers
+        public ActionResult ListUsers()
+        {
+            var users = new List<ApplicationUser>();
+            // Get the list of Users in this Role
+            foreach (var user in UserManager.Users.ToList())
+            {
+                users.Add(user);
+            }
+            return View(users);
+        }
+
+        // GET: /Account/DetailtUser
+        public ActionResult DetailUser(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            return View(user);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        public ActionResult EditUser(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            return View(user);
+        }
+
+
+        [HttpPost]
+        //[Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditUser(string id, ApplicationUser model)
+        {
+            if (ModelState.IsValid)
+            {
+                var Db = new ApplicationDbContext();
+                var user = Db.Users.First(u => u.Id == id);
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.Gender = model.Gender;
+                user.PhoneNumber = model.PhoneNumber;
+                user.City = model.City;
+                user.State = model.State;
+                user.Country = model.Country;
+                user.Zip = model.Zip;
+                Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                await Db.SaveChangesAsync();
+                return RedirectToAction("ListUsers");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        // GET: Account/DeleteUser/
+        //[Authorize(Roles = "Admin")]
+        public ActionResult DeleteUser(string id = null)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Account/DeleteUser
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Delete_User(string id)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            Db.Users.Remove(user);
+            await Db.SaveChangesAsync();
+            return RedirectToAction("ListUsers");
+        }
+
+        //
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -151,7 +236,8 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Gender = model.Gender,
+                PhoneNumber = model.PhoneNumber, City = model.City, State = model.State, Country = model.Country, Zip = model.Zip};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -392,7 +478,7 @@ namespace HackathonPMA.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         //
