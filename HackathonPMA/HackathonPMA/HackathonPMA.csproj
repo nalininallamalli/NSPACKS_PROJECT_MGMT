@@ -180,6 +180,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AnalyticsViewModel.cs" />
     <Compile Include="Models\AspNetRole.cs">
       <DependentUpon>HackathonModel.tt</DependentUpon>
     </Compile>
@@ -327,6 +328,8 @@
     <Content Include="Views\Analytics\_ViewByFundsTab.cshtml" />
     <Content Include="Views\Analytics\_ViewByProjectTab.cshtml" />
     <Content Include="Views\Account\ListUsers.cshtml" />
+    <Content Include="Views\Analytics\CustomChart.cshtml" />
+    <Content Include="Views\Analytics\ProjectsFundsChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

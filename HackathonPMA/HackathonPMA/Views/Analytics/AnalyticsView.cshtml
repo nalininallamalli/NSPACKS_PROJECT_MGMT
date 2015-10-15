@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Analytics View";
 }
 
@@ -17,8 +16,8 @@
     <div class="tab-pane fade" id="_CustomViewTab">@Html.Partial("~/Views/Analytics/_CustomViewTab.cshtml")</div>
 </div>
 
- @section scripts {
-        <script>
+@section scripts {
+    <script>
         $('#tabstrip a').click(function (e) {
             e.preventDefault()
             var tabID = $(this).attr("href").substr(1);
@@ -27,19 +26,19 @@
                 $(this).empty();
             });
             //$("#" + tabID).load("/@ViewContext.RouteData.Values["controller"]/" + tabID)
-        $.ajax({
-            url: "/@ViewContext.RouteData.Values["controller"]/" + tabID,
-            cache: false,
-            type: "get",
-            dataType: "html",
-            success: function (result) {
-                $("#" + tabID).html(result);
-            }
+            $.ajax({
+                url: "/@ViewContext.RouteData.Values["controller"]/" + tabID,
+                cache: false,
+                type: "get",
+                dataType: "html",
+                success: function (result) {
+                    $("#" + tabID).html(result);
+                }
 
-        })
-       $(this).tab('show')
-       });
-        </script>
-    }
+            })
+            $(this).tab('show')
+        });
+    </script>
+}
 
 

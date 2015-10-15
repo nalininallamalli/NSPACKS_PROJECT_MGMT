@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HackathonPMA.Models;
+
 
 namespace HackathonPMA.Controllers
 {
     public class AnalyticsController : Controller
     {
+        //ProjectDbContext projectDb = new ProjectDbContext();
+
         // GET: Analytics
         public ActionResult AnalyticsView()
         {
@@ -16,7 +20,9 @@ namespace HackathonPMA.Controllers
 
         public ActionResult _ViewByProjectTab()
         {
-            return PartialView();
+            ByProjectViewModel model = new ByProjectViewModel();
+            //model.ProjectList = new SelectList(projectDb.Projects.ToList(), "Name", "Name");
+            return PartialView(model);
         }
         public ActionResult _ViewByFundsTab()
         {
