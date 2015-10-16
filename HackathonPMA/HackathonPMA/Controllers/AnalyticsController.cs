@@ -10,7 +10,7 @@ namespace HackathonPMA.Controllers
 {
     public class AnalyticsController : Controller
     {
-        //ProjectDbContext projectDb = new ProjectDbContext();
+        Entities projectDb = new Entities();
 
         // GET: Analytics
         public ActionResult AnalyticsView()
@@ -21,7 +21,7 @@ namespace HackathonPMA.Controllers
         public ActionResult _ViewByProjectTab()
         {
             ByProjectViewModel model = new ByProjectViewModel();
-            //model.ProjectList = new SelectList(projectDb.Projects.ToList(), "Name", "Name");
+            model.ProjectList = new SelectList(projectDb.Projects.ToList(), "Name", "Name");
             return PartialView(model);
         }
         public ActionResult _ViewByFundsTab()
@@ -31,6 +31,23 @@ namespace HackathonPMA.Controllers
         public ActionResult _CustomViewTab()
         {
             return PartialView();
+        }
+        public ActionResult CustomChart()
+        {
+            return PartialView();
+        }
+        public ActionResult ProjectsFundsChart()
+        {
+            return PartialView();
+        }
+
+
+        [HttpPost, ActionName("Show Graph")]
+        [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        public ActionResult show_graph()
+        {
+            return PartialView("ProjectsFundsChart");
         }
     }
 }

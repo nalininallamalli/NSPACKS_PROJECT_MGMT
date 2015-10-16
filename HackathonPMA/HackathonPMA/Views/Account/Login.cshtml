@@ -4,6 +4,14 @@
     ViewBag.Title = "Log in";
 }
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $("#navMenu").hide();
+</script>
+
 <h2>@ViewBag.Title</h2>
 <div class="row">
     <div class="col-md-8">
@@ -59,6 +67,3 @@
 *@
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

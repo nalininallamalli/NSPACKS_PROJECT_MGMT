@@ -360,6 +360,7 @@
     <Content Include="Views\Analytics\CustomChart.cshtml" />
     <Content Include="Views\Analytics\ProjectsFundsChart.cshtml" />
     <Content Include="Views\Projects\Report.cshtml" />
+    <Content Include="Views\Analytics\ByProjectChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
