@@ -67,3 +67,10 @@
 }
 
 </table>
+<div style="padding:10px; border:1px solid black">
+
+    @Html.ActionLink("Generate PDF", "Report", new { id = "PDF" }) |
+    @Html.ActionLink("Generate Doc", "Report", new { id = "Word" }) |
+    @Html.ActionLink("Generate Excel", "Report", new { id = "Excel" }) |
+    @Html.ActionLink("Generate Image", "Report", new { id = "Image" })
+</div>
