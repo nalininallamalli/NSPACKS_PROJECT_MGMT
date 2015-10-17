@@ -190,6 +190,10 @@
     <Compile Include="Migrations\201510151120380_HackathonPMA.Models.ApplicationDbContext.Designer.cs">
       <DependentUpon>201510151120380_HackathonPMA.Models.ApplicationDbContext.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510172126152_HackathonPMA.Models.Entities.Project.cs" />
+    <Compile Include="Migrations\201510172126152_HackathonPMA.Models.Entities.Project.Designer.cs">
+      <DependentUpon>201510172126152_HackathonPMA.Models.Entities.Project.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AnalyticsViewModel.cs" />
@@ -381,6 +385,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510151120380_HackathonPMA.Models.ApplicationDbContext.resx">
       <DependentUpon>201510151120380_HackathonPMA.Models.ApplicationDbContext.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510172126152_HackathonPMA.Models.Entities.Project.resx">
+      <DependentUpon>201510172126152_HackathonPMA.Models.Entities.Project.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report.rdlc" />
   </ItemGroup>

@@ -10,4 +10,12 @@ namespace HackathonPMA.Models
         Male = 1,
         Female = 2
     }
+
+    public enum ProjectState
+    {
+        Open = 1,
+        Running = 2,
+        Paused = 3,
+        Closed = 4
+    }
 }

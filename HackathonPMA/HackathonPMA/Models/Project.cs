@@ -28,6 +28,10 @@ namespace HackathonPMA.Models
         public string City { get; set; }
         public string Location { get; set; }
         public string Category { get; set; }
+        public ProjectState State { get; set; }
+        public Boolean IsParent { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
     
         public virtual ICollection<EmployeeProject> EmployeeProjects { get; set; }
         public virtual ICollection<FundProject> FundProjects { get; set; }
