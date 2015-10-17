@@ -40,13 +40,17 @@ namespace HackathonPMA.Controllers
         {
             return PartialView();
         }
-
+        public ActionResult ByProjectChart()
+        {
+            return PartialView();
+        }
 
         [HttpPost, ActionName("Show Graph")]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "Admin")]
         public ActionResult show_graph()
         {
+
             return PartialView("ProjectsFundsChart");
         }
     }
