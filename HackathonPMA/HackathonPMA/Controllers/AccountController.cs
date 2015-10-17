@@ -224,7 +224,11 @@ namespace HackathonPMA.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            var Db = new ApplicationDbContext();
+            var model = new RegisterViewModel();
+            var list = Db.Roles.OrderBy(r => r.Name).ToList().Select(rr =>new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            model.Roles = (IEnumerable<SelectListItem>)list;
+            return View(model);
         }
 
         //
@@ -234,6 +238,10 @@ namespace HackathonPMA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var Db = new ApplicationDbContext();            
+            var list = Db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            model.Roles = (IEnumerable<SelectListItem>)list;
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Gender = model.Gender,
@@ -241,6 +249,7 @@ namespace HackathonPMA.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await UserManager.AddToRoleAsync(user.Id, model.Role);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
