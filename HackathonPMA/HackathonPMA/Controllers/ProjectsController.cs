@@ -12,6 +12,7 @@ using Microsoft.Reporting.WebForms;
 
 namespace HackathonPMA.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
         private Entities db = new Entities();
@@ -95,6 +96,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Create()
         {
             return View();
@@ -105,6 +107,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Create([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category,State")] Project project)
         {
             if (ModelState.IsValid)
@@ -118,6 +121,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -137,6 +141,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project)
         {
             if (ModelState.IsValid)
@@ -149,6 +154,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -166,6 +172,7 @@ namespace HackathonPMA.Controllers
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = db.Projects.Find(id);

@@ -10,6 +10,7 @@ using HackathonPMA.Models;
 
 namespace HackathonPMA.Controllers
 {
+    [Authorize]
     public class InventoriesController : Controller
     {
         private Entities db = new Entities();
@@ -46,6 +47,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Name,Description,Quantity,Price")] Inventory inventory)
         {
             if (ModelState.IsValid)
@@ -59,6 +61,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Inventories/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,6 +81,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,Quantity,Price")] Inventory inventory)
         {
             if (ModelState.IsValid)
@@ -90,6 +94,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Inventories/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

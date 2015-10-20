@@ -10,11 +10,13 @@ using HackathonPMA.Models;
 
 namespace HackathonPMA.Controllers
 {
+    [Authorize]
     public class FundsController : Controller
     {
         private Entities db = new Entities();
 
         // GET: Funds
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View(db.Funds.ToList());
@@ -36,6 +38,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Funds/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -46,6 +49,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
         {
             if (ModelState.IsValid)
@@ -78,6 +82,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
         {
             if (ModelState.IsValid)
@@ -90,6 +95,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Funds/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -107,6 +113,7 @@ namespace HackathonPMA.Controllers
         // POST: Funds/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Fund fund = db.Funds.Find(id);
