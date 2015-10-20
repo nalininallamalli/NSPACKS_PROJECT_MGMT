@@ -137,15 +137,68 @@ namespace HackathonPMA.Controllers
 
         //
         // GET: /Account/ListUsers
-        public ActionResult ListUsers()
+        public ActionResult ListUsers(string sortBy)
         {
+            ViewBag.FirstNameSort = string.IsNullOrEmpty(sortBy) ? "FirstName desc" : "";
+            ViewBag.LastNameSort = sortBy == "LastName" ? "LastName desc" : "LastName";
+            ViewBag.CitySort = sortBy == "City" ? "City desc" : "City";
+            ViewBag.StateSort = sortBy == "State" ? "State desc" : "State";
+            ViewBag.UserNameSort = sortBy == "UserName" ? "UserName desc" : "UserName";
+            ViewBag.GenderSort = sortBy == "Gender" ? "Gender desc" : "Gender";
+            /*
             var users = new List<ApplicationUser>();
             // Get the list of Users in this Role
             foreach (var user in UserManager.Users.ToList())
             {
                 users.Add(user);
             }
-            return View(users);
+            */
+            var users = from s in UserManager.Users
+                           select s;
+
+            switch (sortBy)
+            {
+                case "FirstName desc":
+                    users = users.OrderByDescending(s => s.FirstName);
+                    break;
+                case "FirstName":
+                    users = users.OrderBy(s => s.FirstName);
+                    break;
+                case "LastName desc":
+                    users = users.OrderByDescending(s => s.LastName);
+                    break;
+                case "LastName":
+                    users = users.OrderBy(s => s.LastName);
+                    break;
+                case "City desc":
+                    users = users.OrderByDescending(s => s.City);
+                    break;
+                case "City":
+                    users = users.OrderBy(s => s.City);
+                    break;
+                case "State":
+                    users = users.OrderBy(s => s.State);
+                    break;
+                case "State desc":
+                    users = users.OrderByDescending(s => s.State);
+                    break;
+                case "UserName":
+                    users = users.OrderBy(s => s.UserName);
+                    break;
+                case "UserName desc":
+                    users = users.OrderByDescending(s => s.UserName);
+                    break;
+                case "Gender":
+                    users = users.OrderBy(s => s.Gender);
+                    break;
+                case "Gender desc":
+                    users = users.OrderByDescending(s => s.Gender);
+                    break;
+                default:
+                    users = users.OrderBy(s => s.FirstName);
+                    break;
+            }
+            return View(users.ToList());
         }
 
         // GET: /Account/DetailtUser

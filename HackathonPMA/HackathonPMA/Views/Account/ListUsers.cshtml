@@ -6,25 +6,25 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.ActionLink("FirstName", "ListUsers", new { sortBy = ViewBag.FirstNameSort })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.ActionLink("LastName", "ListUsers", new { sortBy = ViewBag.LastNameSort })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.ActionLink("UserName", "ListUsers", new { sortBy = ViewBag.UserNameSort })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Gender)
+            @Html.ActionLink("Gender", "ListUsers", new { sortBy = ViewBag.GenderSort })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.PhoneNumber)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.ActionLink("City", "ListUsers", new { sortBy = ViewBag.CitySort })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.State)
+            @Html.ActionLink("State", "ListUsers", new { sortBy = ViewBag.StateSort })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Country)
