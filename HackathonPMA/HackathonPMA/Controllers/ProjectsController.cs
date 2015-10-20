@@ -18,9 +18,67 @@ namespace HackathonPMA.Controllers
         private Entities db = new Entities();
 
         // GET: Projects
-        public ActionResult Index()
+        public ActionResult Index(string sortBy)
         {
-            return View(db.Projects.ToList());
+            ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
+            ViewBag.LocationSort = sortBy == "Location" ? "Location desc" : "Location";
+            ViewBag.DescriptionSort = sortBy == "Description" ? "Description desc" : "Description";
+            ViewBag.CategorySort = sortBy == "Category" ? "Category desc" : "Category";
+            ViewBag.CitySort = sortBy == "City" ? "City desc" : "City";
+            ViewBag.StartDateSort = sortBy == "StartDate" ? "StartDate desc" : "StartDate";
+            ViewBag.EndDateSort = sortBy == "EndDate" ? "EndDate desc" : "EndDate";
+            var projects = from s in db.Projects
+                           select s;
+
+            switch (sortBy)
+            {
+                case "Name desc":
+                    projects = projects.OrderByDescending(s => s.Name);
+                    break;
+                case  "Name":
+                    projects = projects.OrderBy(s => s.Name);
+                    break;
+                case "Location desc":
+                    projects = projects.OrderByDescending(s => s.Location);
+                    break;
+                case "Location":
+                    projects = projects.OrderBy(s => s.Location);
+                    break;
+                case "StartDate desc":
+                    projects = projects.OrderByDescending(s => s.StartDate);
+                    break;
+                case "StartDate":
+                    projects = projects.OrderBy(s => s.StartDate);
+                    break;
+                case "EndDate desc":
+                    projects = projects.OrderByDescending(s => s.EndDate);
+                    break;
+                case "EndDate":
+                    projects = projects.OrderBy(s => s.EndDate);
+                    break;
+                case "Category desc":
+                    projects = projects.OrderByDescending(s => s.Category);
+                    break;
+                case "Category":
+                    projects = projects.OrderBy(s => s.Category);
+                    break;
+                case "City desc":
+                    projects = projects.OrderByDescending(s => s.City);
+                    break;
+                case "City":
+                    projects = projects.OrderBy(s => s.City);
+                    break;
+                case "Description desc":
+                    projects = projects.OrderByDescending(s => s.Description);
+                    break;
+                case "Description":
+                    projects = projects.OrderBy(s => s.Description);
+                    break;
+                default:
+                    projects = projects.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(projects.ToList());
         }
 
         public ActionResult Report(string id)
