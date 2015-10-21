@@ -32,13 +32,18 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - N-SPARKS Team</p>
-        </footer>
+    <div id="wrap">
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <div id="push"></div>
+        </div>
     </div>
+    <footer id="footer">
+        <div class="container">
+            <p>&copy; @DateTime.Now.Year - N-SPARKS Team</p>
+        </div>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
