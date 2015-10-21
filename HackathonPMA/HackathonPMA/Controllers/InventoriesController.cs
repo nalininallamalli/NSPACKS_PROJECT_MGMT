@@ -16,9 +16,46 @@ namespace HackathonPMA.Controllers
         private Entities db = new Entities();
 
         // GET: Inventories
-        public ActionResult Index()
+        public ActionResult Index(string sortBy)
         {
-            return View(db.Inventories.ToList());
+            ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
+            ViewBag.QuantitySort = sortBy == "Quantity" ? "Quantity desc" : "Quantity";
+            ViewBag.DescriptionSort = sortBy == "Description" ? "Description desc" : "Description";
+            ViewBag.PriceSort = sortBy == "Price" ? "Price desc" : "Price";
+
+            var inventories = from s in db.Inventories
+                        select s;
+            switch (sortBy)
+            {
+                case "Name desc":
+                    inventories = inventories.OrderByDescending(s => s.Name);
+                    break;
+                case "Name":
+                    inventories = inventories.OrderBy(s => s.Name);
+                    break;
+                case "Description desc":
+                    inventories = inventories.OrderByDescending(s => s.Description);
+                    break;
+                case "Description":
+                    inventories = inventories.OrderBy(s => s.Description);
+                    break;
+                case "Price desc":
+                    inventories = inventories.OrderByDescending(s => s.Price);
+                    break;
+                case "Price":
+                    inventories = inventories.OrderBy(s => s.Price);
+                    break;
+                case "Quantity desc":
+                    inventories = inventories.OrderByDescending(s => s.Quantity);
+                    break;
+                case "Quantity":
+                    inventories = inventories.OrderBy(s => s.Quantity);
+                    break;
+                default:
+                    inventories = inventories.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(inventories.ToList());
         }
 
         // GET: Inventories/Details/5

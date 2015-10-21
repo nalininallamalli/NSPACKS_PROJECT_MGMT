@@ -17,9 +17,39 @@ namespace HackathonPMA.Controllers
 
         // GET: Funds
         [Authorize(Roles = "Admin")]
-        public ActionResult Index()
+        public ActionResult Index(string sortBy)
         {
-            return View(db.Funds.ToList());
+            ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
+            ViewBag.AmountSort = sortBy == "Amount" ? "Amount desc" : "Amount";
+            ViewBag.DescriptionSort = sortBy == "Description" ? "Description desc" : "Description";
+
+            var funds = from s in db.Funds
+                           select s;
+            switch (sortBy)
+            {
+                case "Name desc":
+                    funds = funds.OrderByDescending(s => s.Name);
+                    break;
+                case "Name":
+                    funds = funds.OrderBy(s => s.Name);
+                    break;
+                case "Description desc":
+                    funds = funds.OrderByDescending(s => s.Description);
+                    break;
+                case "Description":
+                    funds = funds.OrderBy(s => s.Description);
+                    break;
+                case "Amount desc":
+                    funds = funds.OrderByDescending(s => s.Amount);
+                    break;
+                case "Amount":
+                    funds = funds.OrderBy(s => s.Amount);
+                    break;
+                default:
+                    funds = funds.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(funds.ToList());
         }
 
         // GET: Funds/Details/5
