@@ -86,6 +86,14 @@ namespace HackathonPMA.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
+
+        [Required]
+        [Display(Name = "AddressLine")]
+        public string AddressLine { get; set; }
+
+        [Display(Name = "Salary")]
+        public string Salary { get; set; }
+
         [Required]
         [Display(Name = "City")]
         public string City { get; set; }

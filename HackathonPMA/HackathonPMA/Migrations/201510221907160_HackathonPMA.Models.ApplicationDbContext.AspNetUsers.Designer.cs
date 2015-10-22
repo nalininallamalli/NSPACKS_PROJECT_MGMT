@@ -6,14 +6,14 @@ namespace HackathonPMA.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.1.1-30610")]
-    public sealed partial class InitialCreate : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
+    public sealed partial class HackathonPMAModelsApplicationDbContextAspNetUsers : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(HackathonPMAModelsApplicationDbContextAspNetUsers));
         
         string IMigrationMetadata.Id
         {
-            get { return "201510150945310_InitialCreate"; }
+            get { return "201510221907160_HackathonPMA.Models.ApplicationDbContext.AspNetUsers"; }
         }
         
         string IMigrationMetadata.Source

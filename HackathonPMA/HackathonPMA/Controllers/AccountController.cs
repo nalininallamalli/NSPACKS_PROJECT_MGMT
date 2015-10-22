@@ -237,6 +237,8 @@ namespace HackathonPMA.Controllers
                 user.State = model.State;
                 user.Country = model.Country;
                 user.Zip = model.Zip;
+                user.AddressLine = model.AddressLine;
+                user.Salary = model.Salary;
                 Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 await Db.SaveChangesAsync();
                 return RedirectToAction("ListUsers");
@@ -298,7 +300,7 @@ namespace HackathonPMA.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Gender = model.Gender,
-                PhoneNumber = model.PhoneNumber, City = model.City, State = model.State, Country = model.Country, Zip = model.Zip};
+                PhoneNumber = model.PhoneNumber, City = model.City, State = model.State, Country = model.Country, Zip = model.Zip, AddressLine = model.AddressLine, Salary = model.Salary};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

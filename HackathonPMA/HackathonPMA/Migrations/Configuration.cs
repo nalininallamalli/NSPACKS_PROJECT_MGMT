@@ -10,7 +10,6 @@ namespace HackathonPMA.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "HackathonPMA.Models.ApplicationDbContext";
         }
 
         protected override void Seed(HackathonPMA.Models.ApplicationDbContext context)

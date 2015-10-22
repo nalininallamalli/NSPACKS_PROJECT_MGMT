@@ -24,6 +24,8 @@ namespace HackathonPMA.Models
         public string State { get; set; }
         public string Country { get; set; }
         public string Zip { get; set; }
+        public string AddressLine { get; set; }
+        public string Salary { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
