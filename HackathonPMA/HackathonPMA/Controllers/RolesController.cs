@@ -19,9 +19,15 @@ namespace HackathonPMA.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Roles
-        public ActionResult Index()
+        public ActionResult Index(string searchBy)
         {
-            return View(db.Roles.ToList());
+            var roles = from s in db.Roles
+                        select s;
+            if (!String.IsNullOrEmpty(searchBy))
+            {
+                roles = roles.Where(s => s.Name.Contains(searchBy));
+            }
+            return View(roles.ToList());
         }
 
         // GET: Roles/Details/5

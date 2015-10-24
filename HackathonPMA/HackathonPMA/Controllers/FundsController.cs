@@ -17,7 +17,7 @@ namespace HackathonPMA.Controllers
 
         // GET: Funds
         [Authorize(Roles = "Admin")]
-        public ActionResult Index(string sortBy)
+        public ActionResult Index(string sortBy, string searchBy)
         {
             ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.AmountSort = sortBy == "Amount" ? "Amount desc" : "Amount";
@@ -25,6 +25,12 @@ namespace HackathonPMA.Controllers
 
             var funds = from s in db.Funds
                            select s;
+            if (!String.IsNullOrEmpty(searchBy))
+            {
+                funds = funds.Where(s => s.Name.Contains(searchBy)
+                                       || s.Amount.Contains(searchBy)
+                                       || s.Description.Contains(searchBy));
+            }
             switch (sortBy)
             {
                 case "Name desc":

@@ -18,7 +18,7 @@ namespace HackathonPMA.Controllers
         private Entities db = new Entities();
 
         // GET: Projects
-        public ActionResult Index(string sortBy)
+        public ActionResult Index(string sortBy, string searchBy)
         {
             ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.LocationSort = sortBy == "Location" ? "Location desc" : "Location";
@@ -29,6 +29,17 @@ namespace HackathonPMA.Controllers
             ViewBag.EndDateSort = sortBy == "EndDate" ? "EndDate desc" : "EndDate";
             var projects = from s in db.Projects
                            select s;
+
+            if (!String.IsNullOrEmpty(searchBy))
+            {
+                projects = projects.Where(s => s.Name.Contains(searchBy)
+                                       || s.Description.Contains(searchBy)
+                                       || s.Location.Contains(searchBy)
+                                       || s.Category.Contains(searchBy)
+                                       || s.City.Contains(searchBy)
+                                       || s.StartDate.ToString().Contains(searchBy)
+                                       || s.EndDate.ToString().Contains(searchBy));
+            }
 
             switch (sortBy)
             {

@@ -137,7 +137,7 @@ namespace HackathonPMA.Controllers
 
         //
         // GET: /Account/ListUsers
-        public ActionResult ListUsers(string sortBy)
+        public ActionResult ListUsers(string sortBy, string searchBy)
         {
             ViewBag.FirstNameSort = string.IsNullOrEmpty(sortBy) ? "FirstName desc" : "";
             ViewBag.LastNameSort = sortBy == "LastName" ? "LastName desc" : "LastName";
@@ -155,6 +155,16 @@ namespace HackathonPMA.Controllers
             */
             var users = from s in UserManager.Users
                            select s;
+
+            if (!String.IsNullOrEmpty(searchBy))
+            {
+                users = users.Where(s => s.FirstName.Contains(searchBy)
+                                       || s.LastName.Contains(searchBy)
+                                       || s.City.Contains(searchBy)
+                                       || s.State.Contains(searchBy)
+                                       || s.UserName.Contains(searchBy)
+                                       || s.Gender.ToString().Contains(searchBy));
+            }
 
             switch (sortBy)
             {

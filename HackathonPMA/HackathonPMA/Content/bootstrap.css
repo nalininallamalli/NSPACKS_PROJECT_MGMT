@@ -1411,6 +1411,9 @@ table {
 
 th {
   text-align: left;
+  text-emphasis-color:ButtonHighlight;
+  background-color: ButtonFace;
+  border:2px solid black;
 }
 
 .table {
@@ -1427,7 +1430,8 @@ th {
   padding: 8px;
   line-height: 1.428571429;
   vertical-align: top;
-  border-top: 1px solid #dddddd;
+ /* border-top: 1px solid #dddddd; */
+  border:1px solid black;
 }
 
 .table thead > tr > th {

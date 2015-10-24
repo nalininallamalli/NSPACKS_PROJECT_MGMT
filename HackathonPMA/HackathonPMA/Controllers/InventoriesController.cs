@@ -16,7 +16,7 @@ namespace HackathonPMA.Controllers
         private Entities db = new Entities();
 
         // GET: Inventories
-        public ActionResult Index(string sortBy)
+        public ActionResult Index(string sortBy, string searchBy)
         {
             ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.QuantitySort = sortBy == "Quantity" ? "Quantity desc" : "Quantity";
@@ -25,6 +25,14 @@ namespace HackathonPMA.Controllers
 
             var inventories = from s in db.Inventories
                         select s;
+            if (!String.IsNullOrEmpty(searchBy))
+            {
+                inventories = inventories.Where(s => s.Name.Contains(searchBy)
+                                       || s.Description.Contains(searchBy)
+                                       || s.Quantity.ToString().Contains(searchBy)
+                                       || s.Price.ToString().Contains(searchBy));
+            }
+
             switch (sortBy)
             {
                 case "Name desc":
