@@ -86,12 +86,26 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script>
+    <script>
 
         $(document).ready(function () {
-            $("#stDate").datepicker();
-            $("#edDate").datepicker();
+            $("#stDate").datepicker({
+                numberOfMonths: 1,
+                onSelect: function (selected) {
+                    var dt = new Date(selected);
+                    dt.setDate(dt.getDate());
+                    $("#edDate").datepicker("option", "minDate", dt);
+                }
+            });
+            $("#edDate").datepicker({
+                numberOfMonths: 1,
+                onSelect: function (selected) {
+                    var dt = new Date(selected);
+                    dt.setDate(dt.getDate());
+                    $("#stDate").datepicker("option", "maxDate", dt);
+                }
+            });
         });
 
-</script>
+    </script>
 }
