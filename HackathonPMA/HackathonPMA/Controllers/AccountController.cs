@@ -158,14 +158,6 @@ namespace HackathonPMA.Controllers
 
             ViewBag.CurrentFilter = searchBy;
 
-            /*
-            var users = new List<ApplicationUser>();
-            // Get the list of Users in this Role
-            foreach (var user in UserManager.Users.ToList())
-            {
-                users.Add(user);
-            }
-            */
             var users = from s in UserManager.Users
                            select s;
 
@@ -224,7 +216,17 @@ namespace HackathonPMA.Controllers
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
-            return View(users.ToPagedList(pageNumber, pageSize));
+
+            List<UserDetailsModel> modelList = new List<UserDetailsModel>();
+            foreach (var user in users.ToList())
+            {
+                UserDetailsModel model = new UserDetailsModel();
+                model.User = user;
+                model.Roles = UserManager.GetRoles(user.Id);
+                modelList.Add(model);
+            }
+            return View(modelList.ToPagedList(pageNumber, pageSize));
+            //return View(users.ToPagedList(pageNumber, pageSize));
            // return View(users.ToList());
         }
 

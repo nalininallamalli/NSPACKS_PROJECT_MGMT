@@ -1,6 +1,5 @@
-﻿@* @model IEnumerable<HackathonPMA.Models.ApplicationUser> *@
+﻿@model PagedList.IPagedList<HackathonPMA.Models.UserDetailsModel>
 
-@model PagedList.IPagedList<HackathonPMA.Models.ApplicationUser>
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -33,6 +32,9 @@
             @Html.ActionLink("UserName", "ListUsers", new { sortBy = ViewBag.UserNameSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
+            Roles
+        </th>
+        <th>
             @Html.ActionLink("Gender", "ListUsers", new { sortBy = ViewBag.GenderSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
@@ -47,27 +49,30 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
+            @Html.DisplayFor(modelItem => item.User.FirstName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LastName)
+            @Html.DisplayFor(modelItem => item.User.LastName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UserName)
+            @Html.DisplayFor(modelItem => item.User.UserName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Gender)
+            @Html.DisplayFor(modelItem => item.Roles)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.City)
+            @Html.DisplayFor(modelItem => item.User.Gender)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.State)
+            @Html.DisplayFor(modelItem => item.User.City)
         </td>
         <td>
-            @Html.ActionLink("Edit", "EditUser", new { id = item.Id }) |
-            @Html.ActionLink("Details", "DetailUser", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id })
+            @Html.DisplayFor(modelItem => item.User.State)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditUser", new { id = item.User.Id }) |
+            @Html.ActionLink("Details", "DetailUser", new { id = item.User.Id }) |
+            @Html.ActionLink("Delete", "DeleteUser", new { id = item.User.Id })
         </td>
     </tr>
 }
