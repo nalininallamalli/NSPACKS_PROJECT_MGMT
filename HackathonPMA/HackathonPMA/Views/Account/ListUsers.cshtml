@@ -1,14 +1,22 @@
-﻿@model IEnumerable<HackathonPMA.Models.ApplicationUser>
+﻿@* @model IEnumerable<HackathonPMA.Models.ApplicationUser> *@
 
-<h2>Stakeholders</h2>
+@model PagedList.IPagedList<HackathonPMA.Models.ApplicationUser>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Stakeholders";
+}
+
+<h3>Stakeholders</h3>
 
 <p>
     @Html.ActionLink("Register New User", "Register")
 </p>
-@using (Html.BeginForm())
+@using (Html.BeginForm("ListUsers", "Account", FormMethod.Get))
 {
     <p>
-        @Html.TextBox("searchBy")
+        @Html.TextBox("searchBy", ViewBag.CurrentFilter as string)
         <input type="submit" class="btn btn-default" value="Search" />
     </p>
 }
@@ -16,22 +24,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("FirstName", "ListUsers", new { sortBy = ViewBag.FirstNameSort })
+            @Html.ActionLink("FirstName", "ListUsers", new { sortBy = ViewBag.FirstNameSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("LastName", "ListUsers", new { sortBy = ViewBag.LastNameSort })
+            @Html.ActionLink("LastName", "ListUsers", new { sortBy = ViewBag.LastNameSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("UserName", "ListUsers", new { sortBy = ViewBag.UserNameSort })
+            @Html.ActionLink("UserName", "ListUsers", new { sortBy = ViewBag.UserNameSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Gender", "ListUsers", new { sortBy = ViewBag.GenderSort })
+            @Html.ActionLink("Gender", "ListUsers", new { sortBy = ViewBag.GenderSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("City", "ListUsers", new { sortBy = ViewBag.CitySort })
+            @Html.ActionLink("City", "ListUsers", new { sortBy = ViewBag.CitySort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("State", "ListUsers", new { sortBy = ViewBag.StateSort })
+            @Html.ActionLink("State", "ListUsers", new { sortBy = ViewBag.StateSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th></th>
     </tr>
@@ -65,3 +73,8 @@
 }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ListUsers",
+    new { page, sortBy = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

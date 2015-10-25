@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using HackathonPMA.Models;
 using System.Collections.Generic;
+using PagedList;
 
 namespace HackathonPMA.Controllers
 {
@@ -137,7 +138,7 @@ namespace HackathonPMA.Controllers
 
         //
         // GET: /Account/ListUsers
-        public ActionResult ListUsers(string sortBy, string searchBy)
+        public ActionResult ListUsers(string sortBy, string currentFilter, string searchBy, int? page)
         {
             ViewBag.FirstNameSort = string.IsNullOrEmpty(sortBy) ? "FirstName desc" : "";
             ViewBag.LastNameSort = sortBy == "LastName" ? "LastName desc" : "LastName";
@@ -145,6 +146,18 @@ namespace HackathonPMA.Controllers
             ViewBag.StateSort = sortBy == "State" ? "State desc" : "State";
             ViewBag.UserNameSort = sortBy == "UserName" ? "UserName desc" : "UserName";
             ViewBag.GenderSort = sortBy == "Gender" ? "Gender desc" : "Gender";
+
+            if (searchBy != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchBy = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchBy;
+
             /*
             var users = new List<ApplicationUser>();
             // Get the list of Users in this Role
@@ -208,7 +221,11 @@ namespace HackathonPMA.Controllers
                     users = users.OrderBy(s => s.FirstName);
                     break;
             }
-            return View(users.ToList());
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(users.ToPagedList(pageNumber, pageSize));
+           // return View(users.ToList());
         }
 
         // GET: /Account/DetailtUser

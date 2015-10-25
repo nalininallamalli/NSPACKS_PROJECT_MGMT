@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HackathonPMA.Models;
+using PagedList;
 
 namespace HackathonPMA.Controllers
 {
@@ -17,11 +18,23 @@ namespace HackathonPMA.Controllers
 
         // GET: Funds
         [Authorize(Roles = "Admin")]
-        public ActionResult Index(string sortBy, string searchBy)
+        public ActionResult Index(string sortBy, string currentFilter, string searchBy, int? page)
         {
+            ViewBag.CurrentSort = sortBy;
             ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.AmountSort = sortBy == "Amount" ? "Amount desc" : "Amount";
             ViewBag.DescriptionSort = sortBy == "Description" ? "Description desc" : "Description";
+
+            if (searchBy != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchBy = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchBy;
 
             var funds = from s in db.Funds
                            select s;
@@ -55,7 +68,11 @@ namespace HackathonPMA.Controllers
                     funds = funds.OrderBy(s => s.Name);
                     break;
             }
-            return View(funds.ToList());
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(funds.ToPagedList(pageNumber, pageSize));
+           // return View(funds.ToList());
         }
 
         // GET: Funds/Details/5

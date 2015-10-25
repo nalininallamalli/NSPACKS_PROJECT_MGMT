@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using HackathonPMA.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
-
+using PagedList;
 
 namespace HackathonPMA.Controllers
 {
@@ -19,15 +19,46 @@ namespace HackathonPMA.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Roles
-        public ActionResult Index(string searchBy)
+        public ActionResult Index(string sortBy, string currentFilter, string searchBy, int? page)
         {
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
+            //ViewBag.DescriptionSort = sortBy == "Description" ? "Description desc" : "Description";
+
+            if (searchBy != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchBy = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchBy;
+
             var roles = from s in db.Roles
                         select s;
+            switch (sortBy)
+            {
+                case "Name desc":
+                    roles = roles.OrderByDescending(s => s.Name);
+                    break;
+                case "Name":
+                    roles = roles.OrderBy(s => s.Name);
+                    break;
+                default:
+                    roles = roles.OrderBy(s => s.Name);
+                    break;
+            }
             if (!String.IsNullOrEmpty(searchBy))
             {
                 roles = roles.Where(s => s.Name.Contains(searchBy));
             }
-            return View(roles.ToList());
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(roles.ToPagedList(pageNumber, pageSize));
+           // return View(roles.ToList());
         }
 
         // GET: Roles/Details/5

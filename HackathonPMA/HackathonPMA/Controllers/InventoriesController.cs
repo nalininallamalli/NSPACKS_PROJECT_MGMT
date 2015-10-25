@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HackathonPMA.Models;
+using PagedList;
 
 namespace HackathonPMA.Controllers
 {
@@ -16,12 +17,24 @@ namespace HackathonPMA.Controllers
         private Entities db = new Entities();
 
         // GET: Inventories
-        public ActionResult Index(string sortBy, string searchBy)
+        public ActionResult Index(string sortBy, string currentFilter, string searchBy, int? page)
         {
+            ViewBag.CurrentSort = sortBy;
             ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.QuantitySort = sortBy == "Quantity" ? "Quantity desc" : "Quantity";
             ViewBag.DescriptionSort = sortBy == "Description" ? "Description desc" : "Description";
             ViewBag.PriceSort = sortBy == "Price" ? "Price desc" : "Price";
+
+            if (searchBy != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchBy = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchBy;
 
             var inventories = from s in db.Inventories
                         select s;
@@ -63,7 +76,11 @@ namespace HackathonPMA.Controllers
                     inventories = inventories.OrderBy(s => s.Name);
                     break;
             }
-            return View(inventories.ToList());
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(inventories.ToPagedList(pageNumber, pageSize));
+           // return View(inventories.ToList());
         }
 
         // GET: Inventories/Details/5

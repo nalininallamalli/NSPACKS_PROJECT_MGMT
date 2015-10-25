@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using HackathonPMA.Models;
 using System.IO;
 using Microsoft.Reporting.WebForms;
+using PagedList;
 
 namespace HackathonPMA.Controllers
 {
@@ -18,7 +19,7 @@ namespace HackathonPMA.Controllers
         private Entities db = new Entities();
 
         // GET: Projects
-        public ActionResult Index(string sortBy, string searchBy)
+        public ActionResult Index(string sortBy, string currentFilter, string searchBy, int? page)
         {
             ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.LocationSort = sortBy == "Location" ? "Location desc" : "Location";
@@ -27,6 +28,18 @@ namespace HackathonPMA.Controllers
             ViewBag.CitySort = sortBy == "City" ? "City desc" : "City";
             ViewBag.StartDateSort = sortBy == "StartDate" ? "StartDate desc" : "StartDate";
             ViewBag.EndDateSort = sortBy == "EndDate" ? "EndDate desc" : "EndDate";
+
+            if (searchBy != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchBy = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchBy;
+
             var projects = from s in db.Projects
                            select s;
 
@@ -89,7 +102,12 @@ namespace HackathonPMA.Controllers
                     projects = projects.OrderBy(s => s.Name);
                     break;
             }
-            return View(projects.ToList());
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(projects.ToPagedList(pageNumber, pageSize));
+
+           // return View(projects.ToList());
         }
 
         public ActionResult Report(string id)

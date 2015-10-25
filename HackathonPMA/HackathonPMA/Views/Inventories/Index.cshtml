@@ -1,18 +1,22 @@
-﻿@model IEnumerable<HackathonPMA.Models.Inventory>
+﻿@*@model IEnumerable<HackathonPMA.Models.Inventory> *@
+
+@model PagedList.IPagedList<HackathonPMA.Models.Inventory>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Inventories";
 }
 
-<h2>Inventories</h2>
+<h3>Inventories</h3>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Inventories", FormMethod.Get))
 {
     <p>
-        @Html.TextBox("searchBy")
+        @Html.TextBox("searchBy", ViewBag.CurrentFilter as string)
         <input type="submit" class="btn btn-default" value="Search" />
     </p>
 }
@@ -20,16 +24,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortBy = ViewBag.NameSort })
+            @Html.ActionLink("Name", "Index", new { sortBy = ViewBag.NameSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Description", "Index", new { sortBy = ViewBag.DescriptionSort })
+            @Html.ActionLink("Description", "Index", new { sortBy = ViewBag.DescriptionSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Quantity", "Index", new { sortBy = ViewBag.QuantitySort })
+            @Html.ActionLink("Quantity", "Index", new { sortBy = ViewBag.QuantitySort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Price", "Index", new { sortBy = ViewBag.PriceSort })
+            @Html.ActionLink("Price", "Index", new { sortBy = ViewBag.PriceSort, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th></th>
     </tr>
@@ -57,3 +61,8 @@
 }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortBy = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

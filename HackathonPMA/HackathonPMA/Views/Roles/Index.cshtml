@@ -1,14 +1,22 @@
-﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+﻿@* @model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> *@
 
-<h2>Roles</h2>
+@model PagedList.IPagedList<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Roles";
+}
+
+<h3>Roles</h3>
 
 <p>
     @Html.ActionLink("Create New Role", "Create")
 </p>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Roles", FormMethod.Get))
 {
     <p>
-        @Html.TextBox("searchBy")
+        @Html.TextBox("searchBy", ViewBag.CurrentFilter as string)
         <input type="submit" class="btn btn-default" value="Search" />
     </p>
 }
@@ -17,7 +25,8 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+               @* @Html.DisplayNameFor(model => model.Name) *@
+                @Html.ActionLink("Name", "Index", new { sortBy = ViewBag.NameSort, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th></th>
         </tr>
@@ -36,3 +45,8 @@
     }
     
     </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortBy = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
