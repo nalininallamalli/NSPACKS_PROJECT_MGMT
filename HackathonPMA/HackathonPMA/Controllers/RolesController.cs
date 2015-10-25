@@ -19,6 +19,7 @@ namespace HackathonPMA.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Roles
+        [Authorize(Roles = "Admin")]
         public ActionResult Index(string sortBy, string currentFilter, string searchBy, int? page)
         {
             ViewBag.CurrentSort = sortBy;
@@ -62,6 +63,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Roles/Details/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -87,6 +89,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Name")] IdentityRole role)
         {
             if (ModelState.IsValid)
@@ -119,6 +122,7 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Name")] IdentityRole role)
         {
             if (ModelState.IsValid)
@@ -131,6 +135,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Roles/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -148,6 +153,7 @@ namespace HackathonPMA.Controllers
         // POST: Roles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(string id)
         {
             IdentityRole aspNetRole = db.Roles.Find(id);
