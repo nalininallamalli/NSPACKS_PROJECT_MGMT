@@ -231,9 +231,14 @@ namespace HackathonPMA.Controllers
         // GET: /Account/DetailtUser
         public ActionResult DetailUser(string id)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.Id == id);
-            return View(user);
+            var model = new UserDetailsModel
+            {
+                Id = id,
+                User = UserManager.FindById(id),
+                Roles = UserManager.GetRoles(id)
+
+            };
+            return View(model);
         }
 
         //[Authorize(Roles = "Admin")]
@@ -279,13 +284,18 @@ namespace HackathonPMA.Controllers
         //[Authorize(Roles = "Admin")]
         public ActionResult DeleteUser(string id = null)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.Id == id);
-            if (user == null)
+            var model = new UserDetailsModel
+            {
+                Id = id,
+                User = UserManager.FindById(id),
+                Roles = UserManager.GetRoles(id)
+
+            };
+            if (model.User == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(model);
         }
 
         // POST: Account/DeleteUser

@@ -63,6 +63,13 @@ namespace HackathonPMA.Models
         public bool RememberMe { get; set; }
     }
 
+    public class UserDetailsModel
+    {
+        public string Id { get; set; }
+        public ApplicationUser User { get; set; }
+        public IList<string> Roles { get; set; }
+    }
+
     public class RegisterViewModel
     {
         [Required]
