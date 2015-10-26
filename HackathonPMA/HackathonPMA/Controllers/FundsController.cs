@@ -126,25 +126,17 @@ namespace HackathonPMA.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category,State")] Project project, string btnAction)//ToAdd
+        [Authorize(Roles = "Admin")]
+        public ActionResult Create([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
         {
             if (ModelState.IsValid)
             {
-                db.Projects.Add(project);
+                db.Funds.Add(fund);
                 db.SaveChanges();
-                //ToAdd: start
-                int id = project.Id;
-                if (btnAction == "Next")
-                {
-                    TempData["pid"] = id;
-                    return RedirectToAction("shMapping", "Account");
-                }
-                //ToAdd:ends
                 return RedirectToAction("Index");
             }
 
-            return View(project);
+            return View(fund);
         }
 
 
