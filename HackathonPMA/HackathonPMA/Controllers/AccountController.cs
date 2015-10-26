@@ -108,6 +108,13 @@ namespace HackathonPMA.Controllers
             }
             return RedirectToAction("shMapping", "Account");
         }
+
+        [HttpPost]
+        public ActionResult LoadUsers(string roleid)
+        {
+            var users = UserManager.Users.Where(item => item.Roles.FirstOrDefault().RoleId == roleid).Select(x => x);
+            return Json(users.ToList());
+        }
         //
         // POST: /Account/Login
         [HttpPost]
