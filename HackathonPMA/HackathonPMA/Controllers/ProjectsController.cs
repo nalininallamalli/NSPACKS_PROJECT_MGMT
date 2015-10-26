@@ -10,7 +10,7 @@ using HackathonPMA.Models;
 using System.IO;
 using Microsoft.Reporting.WebForms;
 using PagedList;
-
+k
 namespace HackathonPMA.Controllers
 {
     [Authorize]
@@ -195,12 +195,19 @@ namespace HackathonPMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Manager")]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category,State")] Project project)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category,State")] Project project, string btnAction)
         {
             if (ModelState.IsValid)
             {
                 db.Projects.Add(project);
                 db.SaveChanges();
+                 //ToAdd: start
+                int id = project.Id;
+                if (btnAction == "Next")
+                {
+                    TempData["pid"] = id;
+                    return RedirectToAction("shMapping", "Account");
+                }
                 return RedirectToAction("Index");
             }
 

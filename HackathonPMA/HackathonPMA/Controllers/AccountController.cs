@@ -17,6 +17,7 @@ namespace HackathonPMA.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private Entities db = new Entities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -62,7 +63,51 @@ namespace HackathonPMA.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+        //ToAdd: start
+        public ActionResult shMapping()
+        {
+            if (Convert.ToString(TempData["pid"]) == "")
+            {
+                return RedirectToAction("Index", "Projects");
+            }
+            TempData["pid"] = TempData["pid"];
+            var Db = new ApplicationDbContext();
+            var model = new RegisterViewModel();
+            var list = Db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Id.ToString(), Text = rr.Name }).ToList();
+            model.Roles = (IEnumerable<SelectListItem>)list;
+            return View(model);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult shMapping(string hdnUsr, string btnAction)
+        {
+            var Db = new ApplicationDbContext();
+            foreach (string s in hdnUsr.Split('#'))
+            {
+                if (s != null && s != "")
+                {
+                    var cnt = 0;
+                    if (db.EmployeeProjects.Count() > 0)
+                        cnt = db.EmployeeProjects.Max(x => x.Id);
+
+                    EmployeeProject ep = new EmployeeProject();
+                    ep.Id = cnt + 1;
+                    ep.EmployeeId = s;
+                    ep.ProjectId = Convert.ToInt32(TempData["pid"]);
+
+                    db.EmployeeProjects.Add(ep);
+
+                    db.SaveChanges();
+                }
+            }
+
+            if (btnAction == "Next")
+            {
+                return RedirectToAction("fundsMapping", "Funds");
+            }
+            return RedirectToAction("shMapping", "Account");
+        }
         //
         // POST: /Account/Login
         [HttpPost]

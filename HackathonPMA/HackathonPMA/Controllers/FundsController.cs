@@ -90,30 +90,63 @@ namespace HackathonPMA.Controllers
             return View(fund);
         }
 
-        // GET: Funds/Create
-        [Authorize(Roles = "Admin")]
+        //// GET: Funds/Create
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
+
+        //// POST: Funds/Create
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult Create([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Funds.Add(fund);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    return View(fund);
+        //}
+        // GET: Projects/Create
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Funds/Create
+        // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
+        [Authorize(Roles = "Admin, Manager")]
+        public ActionResult Create([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category,State")] Project project, string btnAction)//ToAdd
         {
             if (ModelState.IsValid)
             {
-                db.Funds.Add(fund);
+                db.Projects.Add(project);
                 db.SaveChanges();
+                //ToAdd: start
+                int id = project.Id;
+                if (btnAction == "Next")
+                {
+                    TempData["pid"] = id;
+                    return RedirectToAction("shMapping", "Account");
+                }
+                //ToAdd:ends
                 return RedirectToAction("Index");
             }
 
-            return View(fund);
+            return View(project);
         }
+
 
         // GET: Funds/Edit/5
         public ActionResult Edit(int? id)
@@ -146,7 +179,24 @@ namespace HackathonPMA.Controllers
             }
             return View(fund);
         }
+        //ToAdd: start
+        public ActionResult fundsMapping()
+        {
+            var funds = from s in db.Funds
+                        select s;
 
+            List<Fund> lst = funds.ToList();
+
+            return View(lst);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult fundsMapping(List<Fund> lst)
+        {
+            //ToDo: funds mapping save logic
+            return View();
+        }
         // GET: Funds/Delete/5
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
