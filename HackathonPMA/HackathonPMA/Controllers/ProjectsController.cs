@@ -236,12 +236,19 @@ namespace HackathonPMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Manager")]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project, string btnAction)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
+                //ToAdd:start
+                int id = project.Id;
+                if (btnAction == "Next")
+                {
+                    TempData["pid"] = id;
+                    return RedirectToAction("shMapping", "Account");
+                }
                 return RedirectToAction("Index");
             }
             return View(project);
