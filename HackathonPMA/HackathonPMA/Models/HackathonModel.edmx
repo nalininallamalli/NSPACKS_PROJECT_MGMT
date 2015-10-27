@@ -81,14 +81,16 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="FundId" Type="int" />
           <Property Name="ProjectId" Type="int" />
-          <Property Name="Amount" Type="float" />
+          <Property Name="TotalAmount" Type="nchar" MaxLength="20" />
+          <Property Name="SpentAmount" Type="nchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Funds">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Amount" Type="nchar" MaxLength="10" />
+          <Property Name="TotalAmount" Type="nchar" MaxLength="20" />
+          <Property Name="SpentAmount" Type="nchar" MaxLength="20" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
@@ -354,7 +356,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="FundId" Type="Int32" />
           <Property Name="ProjectId" Type="Int32" />
-          <Property Name="Amount" Type="Double" />
+          <Property Name="TotalAmount" Type="String" Unicode="true" />
+          <Property Name="SpentAmount" Type="String" Nullable="true" Unicode="true" />
           <NavigationProperty Name="Fund" Relationship="Self.FK_dbo_FundProject_dbo_Funds_Id" FromRole="FundProject" ToRole="Funds" />
           <NavigationProperty Name="Project" Relationship="Self.FK_dbo_FundProject_dbo_Projects_Id" FromRole="FundProject" ToRole="Projects" />
         </EntityType>
@@ -363,9 +366,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="TotalAmount" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SpentAmount" Type="String" Nullable="true" Unicode="true" />
           <NavigationProperty Name="FundProjects" Relationship="Self.FK_dbo_FundProject_dbo_Funds_Id" FromRole="Funds" ToRole="FundProject" />
         </EntityType>
         <EntityType Name="Inventory">
@@ -597,7 +601,8 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FundId" ColumnName="FundId" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="SpentAmount" ColumnName="SpentAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -605,9 +610,10 @@
             <EntityTypeMapping TypeName="Model.Fund">
               <MappingFragment StoreEntitySet="Funds">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SpentAmount" ColumnName="SpentAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

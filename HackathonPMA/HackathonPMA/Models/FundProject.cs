@@ -17,7 +17,8 @@ namespace HackathonPMA.Models
         public int Id { get; set; }
         public Nullable<int> FundId { get; set; }
         public Nullable<int> ProjectId { get; set; }
-        public Nullable<double> Amount { get; set; }
+        public string TotalAmount { get; set; }
+        public string SpentAmount { get; set; }
     
         public virtual Fund Fund { get; set; }
         public virtual Project Project { get; set; }

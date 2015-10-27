@@ -41,7 +41,7 @@ namespace HackathonPMA.Controllers
             if (!String.IsNullOrEmpty(searchBy))
             {
                 funds = funds.Where(s => s.Name.Contains(searchBy)
-                                       || s.Amount.Contains(searchBy)
+                                       || s.TotalAmount.Contains(searchBy)
                                        || s.Description.Contains(searchBy));
             }
             switch (sortBy)
@@ -59,10 +59,10 @@ namespace HackathonPMA.Controllers
                     funds = funds.OrderBy(s => s.Description);
                     break;
                 case "Amount desc":
-                    funds = funds.OrderByDescending(s => s.Amount);
+                    funds = funds.OrderByDescending(s => s.TotalAmount);
                     break;
                 case "Amount":
-                    funds = funds.OrderBy(s => s.Amount);
+                    funds = funds.OrderBy(s => s.TotalAmount);
                     break;
                 default:
                     funds = funds.OrderBy(s => s.Name);
@@ -103,7 +103,7 @@ namespace HackathonPMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
+        public ActionResult Create([Bind(Include = "Id,TotalAmount,Description,Name")] Fund fund)
         {
             if (ModelState.IsValid)
             {
@@ -137,7 +137,7 @@ namespace HackathonPMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
+        public ActionResult Edit([Bind(Include = "Id,TotalAmount,Description,Name")] Fund fund)
         {
             if (ModelState.IsValid)
             {
