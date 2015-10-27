@@ -295,7 +295,7 @@ namespace HackathonPMA.Controllers
             return View(model);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult EditUser(string id)
         {
             var Db = new ApplicationDbContext();
@@ -305,7 +305,7 @@ namespace HackathonPMA.Controllers
 
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(string id, ApplicationUser model)
         {
@@ -335,7 +335,7 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Account/DeleteUser/
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteUser(string id = null)
         {
             var model = new UserDetailsModel
@@ -355,7 +355,7 @@ namespace HackathonPMA.Controllers
         // POST: Account/DeleteUser
         [HttpPost, ActionName("DeleteUser")]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete_User(string id)
         {
             var Db = new ApplicationDbContext();
@@ -367,7 +367,7 @@ namespace HackathonPMA.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public ActionResult Register()
         {
             var Db = new ApplicationDbContext();
@@ -380,7 +380,7 @@ namespace HackathonPMA.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {

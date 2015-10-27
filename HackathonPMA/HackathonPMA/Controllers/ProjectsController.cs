@@ -199,6 +199,9 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.IsParent = true;
+                project.CreatedOn = DateTime.Now;
+                project.ModifiedOn = DateTime.Now;
                 db.Projects.Add(project);
                 db.SaveChanges();
                  //ToAdd: start
@@ -240,7 +243,16 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(project).State = EntityState.Modified;
+                Project p = db.Projects.Find(project.Id);
+                p.Name = project.Name;
+                p.Description = project.Description;
+                p.StartDate = project.StartDate;
+                p.EndDate = project.EndDate;
+                p.City = project.City;
+                p.Location = project.Location;
+                p.Category = project.Category;
+                p.ModifiedOn = DateTime.Now;
+                db.Entry(p).State = EntityState.Modified;
                 db.SaveChanges();
                 //ToAdd:start
                 int id = project.Id;

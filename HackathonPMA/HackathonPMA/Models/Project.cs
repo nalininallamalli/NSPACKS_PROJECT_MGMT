@@ -29,7 +29,7 @@ namespace HackathonPMA.Models
         public string Location { get; set; }
         public string Category { get; set; }
         public ProjectState State { get; set; }
-        public Boolean IsParent { get; set; }
+        public bool IsParent { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
     
