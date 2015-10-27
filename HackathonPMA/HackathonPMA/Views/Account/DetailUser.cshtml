@@ -90,7 +90,19 @@
         </dd>
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "EditUser", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "ListUsers")
-</p>
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Admin"))
+    {
+        <p>
+            @Html.ActionLink("Edit", "EditUser", new { id = Model.Id }) |
+            @Html.ActionLink("Back to List", "ListUsers")
+        </p>
+    }
+    else
+    {
+        <p>            
+            @Html.ActionLink("Back to List", "ListUsers")
+        </p>
+    }
+}
