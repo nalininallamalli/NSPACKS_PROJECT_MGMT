@@ -290,5 +290,14 @@ namespace HackathonPMA.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public JsonResult doesProjectNameExist(string Name, string oldName)
+        {
+            if (oldName.Equals("create") || (Name.Trim().ToLower() != oldName.Trim().ToLower()))
+            {
+                return Json(!db.Projects.Any(x => x.Name == Name), JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }

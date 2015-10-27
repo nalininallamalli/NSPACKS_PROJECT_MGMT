@@ -244,6 +244,9 @@
     <Compile Include="Models\Project.cs">
       <DependentUpon>HackathonModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\_Fund.cs" />
+    <Compile Include="Models\_Inventory.cs" />
+    <Compile Include="Models\_Project.cs" />
     <Compile Include="ProjectDataSet1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -90,38 +90,14 @@ namespace HackathonPMA.Controllers
             return View(fund);
         }
 
-        //// GET: Funds/Create
-        //[Authorize(Roles = "Admin")]
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: Funds/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
-        //public ActionResult Create([Bind(Include = "Id,Amount,Description,Name")] Fund fund)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Funds.Add(fund);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(fund);
-        //}
-        // GET: Projects/Create
-        [Authorize(Roles = "Admin, Manager")]
+        // GET: Funds/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Projects/Create
+        // POST: Funds/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -224,6 +200,15 @@ namespace HackathonPMA.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult doesFundNameExist(string Name, string oldName)
+        {
+            if (oldName.Equals("create") || (Name.Trim().ToLower() != oldName.Trim().ToLower()))
+            { 
+                return Json(!db.Funds.Any(x => x.Name == Name), JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }
