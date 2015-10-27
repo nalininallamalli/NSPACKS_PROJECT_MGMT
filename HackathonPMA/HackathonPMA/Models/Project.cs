@@ -32,6 +32,7 @@ namespace HackathonPMA.Models
         public bool IsParent { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
+        public Nullable<double> TotalAllocatedAmount { get; set; }
     
         public virtual ICollection<EmployeeProject> EmployeeProjects { get; set; }
         public virtual ICollection<FundProject> FundProjects { get; set; }

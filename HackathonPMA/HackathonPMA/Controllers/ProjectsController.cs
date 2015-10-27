@@ -202,6 +202,7 @@ namespace HackathonPMA.Controllers
                 project.IsParent = true;
                 project.CreatedOn = DateTime.Now;
                 project.ModifiedOn = DateTime.Now;
+                project.TotalAllocatedAmount = 10000;
                 db.Projects.Add(project);
                 db.SaveChanges();
                  //ToAdd: start

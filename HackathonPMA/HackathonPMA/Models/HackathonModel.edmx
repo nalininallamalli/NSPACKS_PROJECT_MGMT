@@ -119,6 +119,7 @@
           <Property Name="IsParent" Type="bit"  />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="TotalAllocatedAmount" Type="float" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -400,6 +401,7 @@
           <Property Name="IsParent" Type="Boolean" Nullable="false" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3"/>
           <Property Name="ModifiedOn" Type="DateTime" Precision="3"/>
+          <Property Name="TotalAllocatedAmount" Type="Double" />
           <NavigationProperty Name="EmployeeProjects" Relationship="Self.FK_dbo_EmployeeProject_dbo_Projects_Id" FromRole="Projects" ToRole="EmployeeProject" />
           <NavigationProperty Name="FundProjects" Relationship="Self.FK_dbo_FundProject_dbo_Projects_Id" FromRole="Projects" ToRole="FundProject" />
         </EntityType>
@@ -648,6 +650,7 @@
                 <ScalarProperty Name="IsParent" ColumnName="IsParent"  />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="TotalAllocatedAmount" ColumnName="TotalAllocatedAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
