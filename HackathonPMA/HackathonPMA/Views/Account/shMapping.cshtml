@@ -72,14 +72,16 @@
                                 "</td><td><input type='checkbox' id='chkshMap' value='" + data[i].Id + "' /></td></tr>");                          
 
                         }
-                        selecteduserid.value = "";
+                        // selecteduserid.value = "";
+                        $('#selecteduserid').val("");
                     }
                 });
             });
             //Binding click event on dynamic created element
             $(document).on('click', "#chkshMap", function () {              
                 var x = this;
-                selecteduserid.value = selecteduserid.value + "#" + x.value;
+                // selecteduserid.value = selecteduserid.value + "#" + x.value;
+                $('#selecteduserid').val($('#selecteduserid').val() + "#" + x.value);
             });
 
 
@@ -94,7 +96,8 @@
 
             function chkUsr()
             {
-                if (selecteduserid.value == "") {
+                //if (selecteduserid.value == "") {
+                if ($('#selecteduserid').val() == "") {
                     alert('Please select user..!');
 
                     return false;
