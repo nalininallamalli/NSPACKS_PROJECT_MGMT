@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Web.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace HackathonPMA.Models
 {
@@ -21,5 +22,24 @@ namespace HackathonPMA.Models
             [Required]
             public string Name { get; set; }
         }
+    }
+
+    public class Employee
+    {
+
+        public ApplicationUser user {get; set; }
+        public string roleName { get; set;}
+    }
+
+    public class ProjectDetailModel
+    {
+
+        public ProjectDetailModel()
+        {
+            this.stakeholders = new List<Employee>();
+        }
+        public Project project {get; set;}
+        public Double SpentAmount { get; set; }
+        public IList<Employee> stakeholders { get; set; }
     }
 }

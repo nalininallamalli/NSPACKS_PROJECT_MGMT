@@ -9,6 +9,8 @@
 
 namespace HackathonPMA.Models
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Collections.Generic;
     
@@ -18,6 +20,9 @@ namespace HackathonPMA.Models
         {
             this.EmployeeProjects = new HashSet<EmployeeProject>();
             this.FundProjects = new HashSet<FundProject>();
+
+            this.applicationDbContext = new ApplicationDbContext();
+            this.userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.applicationDbContext));
         }
     
         public int Id { get; set; }
@@ -29,10 +34,21 @@ namespace HackathonPMA.Models
         public string Location { get; set; }
         public string Category { get; set; }
         public ProjectState State { get; set; }
-        public Boolean IsParent { get; set; }
+        public bool IsParent { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
-    
+        public Nullable<double> TotalAllocatedAmount { get; set; }
+
+        /// <summary>
+        /// Application DB context
+        /// </summary>
+        protected ApplicationDbContext applicationDbContext { get; set; }
+
+        /// <summary>
+        /// User manager - attached to application DB context
+        /// </summary>
+        protected UserManager<ApplicationUser> userManager { get; set; }
+
         public virtual ICollection<EmployeeProject> EmployeeProjects { get; set; }
         public virtual ICollection<FundProject> FundProjects { get; set; }
     }

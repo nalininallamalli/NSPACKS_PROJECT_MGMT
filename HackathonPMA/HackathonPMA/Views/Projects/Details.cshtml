@@ -1,74 +1,157 @@
-﻿@model HackathonPMA.Models.Project
+﻿@*@model HackathonPMA.Models.Project*@
+@model HackathonPMA.Models.ProjectDetailModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Project Details</h2>
 
 <div>
     <h4>Project</h4>
     <hr />
     <dl class="dl-horizontal">
+        @Html.HiddenFor(model => model.project.Id)
+
+
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.project.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.project.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.project.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.project.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayNameFor(model => model.project.StartDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StartDate)
+            @Html.DisplayFor(model => model.project.StartDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayNameFor(model => model.project.EndDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EndDate)
+            @Html.DisplayFor(model => model.project.EndDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayNameFor(model => model.project.City)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.City)
+            @Html.DisplayFor(model => model.project.City)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.project.Location)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Location)
+            @Html.DisplayFor(model => model.project.Location)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.project.Category)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Category)
+            @Html.DisplayFor(model => model.project.Category)
         </dd>
+        <dt>
+            Created On
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.project.CreatedOn)
+        </dd>
+        <dt>
+            Last Modified On
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.project.ModifiedOn)
+        </dd>
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                <dt>
+                    Allocated Amount
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.project.TotalAllocatedAmount)
+                </dd>
+                <dt>
+                    Spent Amount
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.SpentAmount)
+                </dd>
+            }
+        }
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+
+        <h4>Associate Stakeholders</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("FirstName", "ListUsers", new { sortBy = ViewBag.FirstNameSort, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("LastName", "ListUsers", new { sortBy = ViewBag.LastNameSort, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("UserName", "ListUsers", new { sortBy = ViewBag.UserNameSort, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            Roles
+        </th>
+    <tr>
+@foreach (var item in Model.stakeholders)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.user.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.user.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.user.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.roleName)
+        </td>
+    </tr>
+}
+</table>
+    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole("Admin"))
+        {
+                <p>
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.project.Id }) |
+                    @Html.ActionLink("Back to List", "Index")
+                </p>
+        }
+        else
+        {
+            @Html.ActionLink("Back to List", "Index")
+        }
+    }

@@ -8,8 +8,12 @@ using System.Web;
 using System.Web.Mvc;
 using HackathonPMA.Models;
 using System.IO;
+using Microsoft.Owin.Security;
 using Microsoft.Reporting.WebForms;
 using PagedList;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+
 
 namespace HackathonPMA.Controllers
 {
@@ -40,7 +44,27 @@ namespace HackathonPMA.Controllers
 
             ViewBag.CurrentFilter = searchBy;
 
-            var projects = from s in db.Projects
+            List<Project> selProjects = new List<Project>();
+
+            if (!User.IsInRole("Admin"))
+            {
+                string userId = User.Identity.GetUserId();
+                var empProjects = db.EmployeeProjects;
+
+                foreach (var ep in empProjects.ToList())
+                {
+                    if(ep.EmployeeId.Equals(userId))
+                    {
+                        Project p = db.Projects.Find(ep.ProjectId);
+                        selProjects.Add(p);
+                    }
+                }
+            } else {
+                selProjects = db.Projects.ToList();
+            }
+
+
+            var projects = from s in selProjects
                            select s;
 
             if (!String.IsNullOrEmpty(searchBy))
@@ -179,9 +203,93 @@ namespace HackathonPMA.Controllers
             {
                 return HttpNotFound();
             }
+
+            double spentAmount = 0;
+            var fundProjects = db.FundProjects;
+
+            foreach (var fp in fundProjects.ToList())
+            {
+                if (fp.ProjectId == project.Id)
+                {
+                    spentAmount = spentAmount + Convert.ToDouble(fp.SpentAmount);
+                }
+            }
+            
+            ProjectDetailModel model = new ProjectDetailModel();            
+            model.SpentAmount = spentAmount;
+            model.project = project;
+            var applicationDbContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(applicationDbContext));
+
+            var eps = db.EmployeeProjects;
+            foreach (var ep in eps.ToList())
+            {
+                if (ep.ProjectId == project.Id)
+                {
+                    var Db = new ApplicationDbContext();
+                    var user = Db.Users.Find(ep.EmployeeId);
+                    if(user != null)
+                    {
+                        Employee employee = new Employee();
+                        employee.user = user;
+                        var roles = userManager.GetRoles(user.Id); 
+                        
+                        if (roles != null)
+                            employee.roleName = roles.First();
+                        else
+                            employee.roleName = "";
+                        model.stakeholders.Add(employee);
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+        // GET: Projects/Create
+        [Authorize(Roles = "Admin, Manager")]
+        public ActionResult CreateSubProject(int Id)
+        {
+            Project project = db.Projects.Find(Id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
             return View(project);
         }
 
+        // POST: Projects/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
+        public ActionResult CreateSubProject([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project)
+        {
+            if (ModelState.IsValid)
+            {
+                //Project mainproject = db.Projects.Find(project.Id);
+                Project subProject = new Project();
+
+                subProject.StartDate = project.StartDate;
+                subProject.EndDate = project.EndDate;
+                subProject.City = project.City;
+                subProject.Location = project.Location;
+
+                subProject.Name = project.Name;
+                subProject.Description = project.Description;
+                subProject.Category = project.Category;
+
+                subProject.CreatedOn = DateTime.Now;
+                subProject.ModifiedOn = DateTime.Now;
+                
+                db.Projects.Add(subProject);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(project);
+        }
         // GET: Projects/Create
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult Create()
@@ -199,6 +307,10 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.IsParent = true;
+                project.CreatedOn = DateTime.Now;
+                project.ModifiedOn = DateTime.Now;
+                project.TotalAllocatedAmount = 10000;
                 db.Projects.Add(project);
                 db.SaveChanges();
                  //ToAdd: start
@@ -240,7 +352,16 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(project).State = EntityState.Modified;
+                Project p = db.Projects.Find(project.Id);
+                p.Name = project.Name;
+                p.Description = project.Description;
+                p.StartDate = project.StartDate;
+                p.EndDate = project.EndDate;
+                p.City = project.City;
+                p.Location = project.Location;
+                p.Category = project.Category;
+                p.ModifiedOn = DateTime.Now;
+                db.Entry(p).State = EntityState.Modified;
                 db.SaveChanges();
                 //ToAdd:start
                 int id = project.Id;
