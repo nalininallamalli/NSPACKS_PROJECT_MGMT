@@ -38,6 +38,10 @@ namespace HackathonPMA.Models
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
         public Nullable<double> TotalAllocatedAmount { get; set; }
+        public Nullable<double> TotalSpentAmount { get; set; }
+        public string SubProjectIds { get; set; }
+        public int ParentProjectId { get; set; }
+        public Nullable<Int32> TotalSubProjects { get; set; }
 
         /// <summary>
         /// Application DB context

@@ -268,9 +268,11 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Project mainproject = db.Projects.Find(project.Id);
-                Project subProject = new Project();
+                Project mainproject = db.Projects.Find(project.Id);
+                mainproject.TotalSubProjects++;
+                db.Entry(mainproject).State = EntityState.Modified;
 
+                Project subProject = new Project();
                 subProject.StartDate = project.StartDate;
                 subProject.EndDate = project.EndDate;
                 subProject.City = project.City;
@@ -282,8 +284,14 @@ namespace HackathonPMA.Controllers
 
                 subProject.CreatedOn = DateTime.Now;
                 subProject.ModifiedOn = DateTime.Now;
-                
+                subProject.TotalSpentAmount = 0;
+                subProject.ParentProjectId = project.Id;
+                subProject.TotalSubProjects = 0;
+                subProject.TotalAllocatedAmount = 0;
+                subProject.IsParent = false;
+
                 db.Projects.Add(subProject);
+                
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -311,6 +319,8 @@ namespace HackathonPMA.Controllers
                 project.CreatedOn = DateTime.Now;
                 project.ModifiedOn = DateTime.Now;
                 project.TotalAllocatedAmount = 10000;
+                project.TotalSpentAmount = 0;
+                project.TotalSubProjects = 0;
                 db.Projects.Add(project);
                 db.SaveChanges();
                  //ToAdd: start
@@ -399,6 +409,16 @@ namespace HackathonPMA.Controllers
         {
             Project project = db.Projects.Find(id);
             db.Projects.Remove(project);
+
+            if (project.IsParent == false)
+            {
+                Project mainProject = db.Projects.Find(project.ParentProjectId);
+                if (mainProject != null)
+                {
+                    mainProject.TotalSubProjects--;
+                    db.Entry(mainProject).State = EntityState.Modified;
+                }
+            }
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -120,6 +120,10 @@
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="ModifiedOn" Type="datetime" />
           <Property Name="TotalAllocatedAmount" Type="float" />
+          <Property Name="TotalSpentAmount" Type="float" />
+          <Property Name="ParentProjectId" Type="int"/>
+          <Property Name="TotalSubProjects" Type="int"/>
+          <Property Name="SubProjectIds" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -402,6 +406,10 @@
           <Property Name="CreatedOn" Type="DateTime" Precision="3"/>
           <Property Name="ModifiedOn" Type="DateTime" Precision="3"/>
           <Property Name="TotalAllocatedAmount" Type="Double" />
+          <Property Name="TotalSpentAmount" Type="Double" />
+          <Property Name="ParentProjectId" Type="Int32"/>
+          <Property Name="TotalSubProjects" Type="Int32"/>
+          <Property Name="SubProjectIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="EmployeeProjects" Relationship="Self.FK_dbo_EmployeeProject_dbo_Projects_Id" FromRole="Projects" ToRole="EmployeeProject" />
           <NavigationProperty Name="FundProjects" Relationship="Self.FK_dbo_FundProject_dbo_Projects_Id" FromRole="Projects" ToRole="FundProject" />
         </EntityType>
@@ -651,6 +659,10 @@
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
                 <ScalarProperty Name="TotalAllocatedAmount" ColumnName="TotalAllocatedAmount" />
+                <ScalarProperty Name="TotalSpentAmount" ColumnName="TotalSpentAmount" />
+                <ScalarProperty Name="ParentProjectId" ColumnName="ParentProjectId" />
+                <ScalarProperty Name="TotalSubProjects" ColumnName="TotalSubProjects"/>
+                <ScalarProperty Name="SubProjectIds" ColumnName="SubProjectIds" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
