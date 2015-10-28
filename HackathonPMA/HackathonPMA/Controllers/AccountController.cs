@@ -106,7 +106,7 @@ namespace HackathonPMA.Controllers
             {
                 return RedirectToAction("fundsMapping", "Funds");
             }
-            return RedirectToAction("shMapping", "Account");
+            return RedirectToAction("Index", "projects");
         }
 
         [HttpPost]
