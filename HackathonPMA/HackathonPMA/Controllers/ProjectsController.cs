@@ -208,6 +208,50 @@ namespace HackathonPMA.Controllers
 
         // GET: Projects/Create
         [Authorize(Roles = "Admin, Manager")]
+        public ActionResult CreateSubProject(int Id)
+        {
+            Project project = db.Projects.Find(Id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            return View(project);
+        }
+
+        // POST: Projects/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
+        public ActionResult CreateSubProject([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project)
+        {
+            if (ModelState.IsValid)
+            {
+                //Project mainproject = db.Projects.Find(project.Id);
+                Project subProject = new Project();
+
+                subProject.StartDate = project.StartDate;
+                subProject.EndDate = project.EndDate;
+                subProject.City = project.City;
+                subProject.Location = project.Location;
+
+                subProject.Name = project.Name;
+                subProject.Description = project.Description;
+                subProject.Category = project.Category;
+
+                subProject.CreatedOn = DateTime.Now;
+                subProject.ModifiedOn = DateTime.Now;
+                
+                db.Projects.Add(subProject);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(project);
+        }
+        // GET: Projects/Create
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Create()
         {
             return View();
