@@ -300,32 +300,58 @@ namespace HackathonPMA.Controllers
         {
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.Id == id);
-            return View(user);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            EditUserViewModel model = new EditUserViewModel();
+
+            var userRoles = UserManager.GetRoles(user.Id);
+            var list = Db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem 
+            {
+                Selected = userRoles.Contains(rr.Name),
+                Value = rr.Name.ToString(), 
+                Text = rr.Name }).ToList();
+
+            model.user = user;
+            model.Roles = (IEnumerable<SelectListItem>)list;
+            return View(model);
         }
 
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditUser(string id, ApplicationUser model)
+        public async Task<ActionResult> EditUser(string id, EditUserViewModel model)
         {
+            var Db = new ApplicationDbContext();
+            var list = Db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            model.Roles = (IEnumerable<SelectListItem>)list;
+
             if (ModelState.IsValid)
             {
-                var Db = new ApplicationDbContext();
                 var user = Db.Users.First(u => u.Id == id);
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.Email = model.Email;
-                user.UserName = model.Email;
-                user.Gender = model.Gender;
-                user.PhoneNumber = model.PhoneNumber;
-                user.City = model.City;
-                user.State = model.State;
-                user.Country = model.Country;
-                user.Zip = model.Zip;
-                user.AddressLine = model.AddressLine;
-                user.Salary = model.Salary;
+                user.FirstName = model.user.FirstName;
+                user.LastName = model.user.LastName;
+                user.Email = model.user.Email;
+                user.UserName = model.user.Email;
+                user.Gender = model.user.Gender;
+                user.PhoneNumber = model.user.PhoneNumber;
+                user.City = model.user.City;
+                user.State = model.user.State;
+                user.Country = model.user.Country;
+                user.Zip = model.user.Zip;
+                user.AddressLine = model.user.AddressLine;
+                user.Salary = model.user.Salary;
                 Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+
+                var Roles = UserManager.GetRoles(id);
+                if(!Roles.First().Equals(model.Role))
+                { 
+                    await UserManager.AddToRoleAsync(user.Id, model.Role);
+                    await UserManager.RemoveFromRoleAsync(user.Id, Roles.First());
+                }
+
                 await Db.SaveChangesAsync();
                 return RedirectToAction("ListUsers");
             }

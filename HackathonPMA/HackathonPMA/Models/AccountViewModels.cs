@@ -70,6 +70,13 @@ namespace HackathonPMA.Models
         public IList<string> Roles { get; set; }
     }
 
+    public class EditUserViewModel
+    {
+        public ApplicationUser user { get; set; }
+        public string Role { get; set; }
+        public IEnumerable<System.Web.Mvc.SelectListItem> Roles { get; set; }
+    }
+
     public class RegisterViewModel
     {
         [Required]
