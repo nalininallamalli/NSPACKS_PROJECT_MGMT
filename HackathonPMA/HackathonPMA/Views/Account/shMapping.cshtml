@@ -21,29 +21,50 @@
             @Html.DropDownListFor(m => m.Role, Model.Roles, "Select...", new { @class = "form-control", @id = "ddlRole" })
         </div>
     </div>
+
     <input id="selecteduserid" type="hidden" name="hdnUsr" value=""/>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+        <div class="col-md-offset-2 col-md-10 border:1px solid black">
             <table id="tbDetails" class="table">
                 <thead>
                     <tr>
-                        <td>FirstName</td>
+                        @*<td>FirstName</td>
                         <td>LastName</td>
                         <td>UserName</td>
                         <td>Gender</td>
                         <td>City</td>
                         <td>State</td>
-                        <td />
+                        <td />*@
+                        <th>
+                            @Html.ActionLink("FirstName", "Index", new { sortBy = ViewBag.FirstNameSort, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th>
+                            @Html.ActionLink("LastName", "Index", new { sortBy = ViewBag.LastNameSort, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th>
+                            @Html.ActionLink("EmailID", "Index", new { sortBy = ViewBag.EmailIDSort, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Gender", "Index", new { sortBy = ViewBag.GenderSort, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th>
+                            @Html.ActionLink("City", "Index", new { sortBy = ViewBag.CitySort, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th>
+                            @Html.ActionLink("State", "Index", new { sortBy = ViewBag.StateSort, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+<tbody></tbody>
             </table>
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" name="btnAction" id="btnActionSave" value="Save" class="btn btn-default" />
-            <input type="submit" name="btnAction" id="btnActionNext"  value="Next" class="btn btn-default" />
+            <input type="submit" name="btnAction" id="btnActionNext" value="Next" class="btn btn-default" />
+            <input type="submit" name="btnAction" id="btnActionSave" value="Finish" class="btn btn-default" />
+            
         </div>
     </div>
 }
@@ -86,10 +107,10 @@
 
 
             //Binding click event on static elemnts
-            $("input#btnActionSave").on('click', function () {
-                return chkUsr();          
+            //$("input#btnActionSave").on('click', function () {
+            //    return chkUsr();          
                
-            });
+            //});
             $("input#btnActionNext").on('click', function () {                
                 return chkUsr();
             });
