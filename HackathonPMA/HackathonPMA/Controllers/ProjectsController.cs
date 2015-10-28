@@ -8,8 +8,12 @@ using System.Web;
 using System.Web.Mvc;
 using HackathonPMA.Models;
 using System.IO;
+using Microsoft.Owin.Security;
 using Microsoft.Reporting.WebForms;
 using PagedList;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+
 
 namespace HackathonPMA.Controllers
 {
@@ -40,7 +44,27 @@ namespace HackathonPMA.Controllers
 
             ViewBag.CurrentFilter = searchBy;
 
-            var projects = from s in db.Projects
+            List<Project> selProjects = new List<Project>();
+
+            if (!User.IsInRole("Admin"))
+            {
+                string userId = User.Identity.GetUserId();
+                var empProjects = db.EmployeeProjects;
+
+                foreach (var ep in empProjects.ToList())
+                {
+                    if(ep.EmployeeId.Equals(userId))
+                    {
+                        Project p = db.Projects.Find(ep.ProjectId);
+                        selProjects.Add(p);
+                    }
+                }
+            } else {
+                selProjects = db.Projects.ToList();
+            }
+
+
+            var projects = from s in selProjects
                            select s;
 
             if (!String.IsNullOrEmpty(searchBy))
