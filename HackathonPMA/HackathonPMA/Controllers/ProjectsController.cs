@@ -203,6 +203,18 @@ namespace HackathonPMA.Controllers
             {
                 return HttpNotFound();
             }
+
+            double spentAmount = 0;
+            var fundProjects = db.FundProjects;
+
+            foreach (var fp in fundProjects.ToList())
+            {
+                if (fp.ProjectId == project.Id)
+                {
+                    spentAmount = spentAmount + Convert.ToDouble(fp.SpentAmount);
+                }
+            }
+            ViewBag.SpentAmount = spentAmount;
             return View(project);
         }
 

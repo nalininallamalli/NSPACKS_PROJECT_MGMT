@@ -79,7 +79,26 @@
         <dd>
             @Html.DisplayFor(model => model.ModifiedOn)
         </dd>
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Admin"))
+    {
+        <dt>
+            Allocated Amount
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.TotalAllocatedAmount)
+        </dd>
+        <dt>
+            Spent Amount
+        </dt>
+
+        <dd>
+            @ViewBag.SpentAmount
+        </dd>
+    }
+}
     </dl>
 </div>
 
