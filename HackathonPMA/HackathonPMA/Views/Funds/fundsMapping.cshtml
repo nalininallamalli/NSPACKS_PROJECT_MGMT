@@ -10,6 +10,7 @@
 @using (Html.BeginForm("fundsMapping", "Funds", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    <input id="hdnFunds" type="hidden" name="hdnFunds" value="" />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <table id="tbDetails" class="table">
@@ -31,9 +32,14 @@
                     </th>
                     <th></th>
                 </tr>
-                
+                @{
+    int counter = 0;
+    var val = "";
+                }
                 @foreach (var item in Model)
                 {
+                    counter++;
+                    val = @item.TotalAmount;
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
@@ -45,13 +51,10 @@
                             @Html.DisplayFor(modelItem => item.TotalAmount)
                         </td>
                         <td>
-                            @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
-                            <input type="text" id="inputPerc" />
+                            <input type="text" id="perc" class="number-only" onkeyup="AllAmt(this.value, @item.Id, @item.TotalAmount, 'sAmt' + @counter.ToString());" />
                         </td>
                         <td>
-                            <input type="text" id="inputAmt" />
+                            @Html.LabelFor(modelItem => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })
                         </td>
                     </tr>
                 }
@@ -61,18 +64,64 @@
             @{
     if (Model.Count() <1 )
     {
-        <div>Funds are not available.. Please add funds.</div>
+                <div>Funds are not available.. Please add funds.</div>
     }
-    
+
             }
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" name="btnAction" id="btnActionSave" value="Save" class="btn btn-default" />
+            <input type="submit" name="btnAction" id="btnActionSave" value="Finish" class="btn btn-default" />
+            <input type="submit" name="btnAction" id="btnActionSave" value="Back" class="btn btn-default" />
         </div>
     </div>
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        $(function(){
+
+            $('.number-only').keypress(function(e) {
+                if(isNaN(this.value+""+String.fromCharCode(e.charCode))) return false;
+            })
+            .on("cut copy paste",function(e){
+                e.preventDefault();
+            });
+
+        });
+
+        function AllAmt(per,fid, amt, cntrl)
+        {
+            if(per=="-")
+                per=0
+            if(per<0)
+                per=0
+            if(per>100 )
+                per = 100;
+            var hdnval = "";
+            var ext = 0;
+            var x = ((per * amt) / 100);;
+            // selecteduserid.value = selecteduserid.value + "#" + x.value;
+            var arr = $('#hdnFunds').val().split("#");
+            debugger;
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i] != "") {
+                    var arr1 = arr[i].split(",");
+                    if (arr1[0] == fid) {
+                        arr1[1] = x;
+                        ext = 1;
+                    }
+                    hdnval = hdnval + "#" + arr1[0] + "," + arr1[1];
+                }
+            }
+            if (ext == 0)
+                hdnval = hdnval + "#" + fid + "," + x;
+
+            $('#hdnFunds').val(hdnval);
+
+            $('#'+cntrl).text((per*amt)/100);
+        }
+    </script>
 }

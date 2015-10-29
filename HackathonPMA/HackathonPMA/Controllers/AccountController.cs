@@ -60,20 +60,26 @@ namespace HackathonPMA.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if(User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
         //ToAdd: start
         public ActionResult shMapping()
         {
-            if (Convert.ToString(TempData["pid"]) == "")
-            {
-                return RedirectToAction("Index", "Projects");
-            }
-            TempData["pid"] = TempData["pid"];
+            //if (Convert.ToString(TempData["pid"]) == "")
+            //{
+            //    return RedirectToAction("Index", "Projects");
+            //}
+            //TempData["pid"] = TempData["pid"];
+            TempData["project"] = TempData["project"];
+            TempData["fundsMapping"] = TempData["fundsMapping"];
             var Db = new ApplicationDbContext();
             var model = new RegisterViewModel();
-            var list = Db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Id.ToString(), Text = rr.Name }).ToList();
+            var list = Db.Roles.OrderBy(r => r.Name).Where(adm => adm.Name != "Admin").ToList()
+                .Select(rr => new SelectListItem { Value = rr.Id.ToString(), Text = rr.Name })
+                .ToList();
             model.Roles = (IEnumerable<SelectListItem>)list;
             return View(model);
         }
@@ -82,6 +88,24 @@ namespace HackathonPMA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult shMapping(string hdnUsr, string btnAction)
         {
+            TempData["project"] = TempData["project"];
+            TempData["fundsMapping"] = TempData["fundsMapping"];
+            TempData["hdnUsr"] = hdnUsr;
+            if (btnAction == "Back")
+            {
+                
+                return RedirectToAction("create", "Projects");
+            }
+            if (btnAction == "Next")
+            {
+                return RedirectToAction("fundsMapping", "Funds");
+            }
+            //ToDo chk for page
+            Project project = (Project)TempData["project"];
+            db.Projects.Add(project);
+            db.SaveChanges();
+            //ToAdd: start
+            int id = project.Id;
             var Db = new ApplicationDbContext();
             foreach (string s in hdnUsr.Split('#'))
             {
@@ -94,7 +118,7 @@ namespace HackathonPMA.Controllers
                     EmployeeProject ep = new EmployeeProject();
                     ep.Id = cnt + 1;
                     ep.EmployeeId = s;
-                    ep.ProjectId = Convert.ToInt32(TempData["pid"]);
+                    ep.ProjectId = Convert.ToInt32(id);
 
                     db.EmployeeProjects.Add(ep);
 
@@ -102,10 +126,7 @@ namespace HackathonPMA.Controllers
                 }
             }
 
-            if (btnAction == "Next")
-            {
-                return RedirectToAction("fundsMapping", "Funds");
-            }
+           
             return RedirectToAction("Index", "projects");
         }
 

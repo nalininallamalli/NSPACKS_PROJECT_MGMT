@@ -317,7 +317,13 @@ namespace HackathonPMA.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult Create()
         {
-            return View();
+            if (TempData["project"] != null)
+            {
+                TempData["project"] = TempData["project"];
+                Project project = (Project)TempData["project"];
+                return View(project);
+            }
+            return View();  
         }
 
         // POST: Projects/Create
@@ -337,15 +343,18 @@ namespace HackathonPMA.Controllers
                 project.TotalSpentAmount = 0;
                 project.TotalSubProjects = 0;
                 project.SubProjectIds = "";
+
+                if (btnAction == "Next")
+                {
+                    //TempData["pid"] = id;//
+                    TempData["project"] = project;
+                    return RedirectToAction("shMapping", "Account");
+                }
                 db.Projects.Add(project);
                 db.SaveChanges();
                  //ToAdd: start
                 int id = project.Id;
-                if (btnAction == "Next")
-                {
-                    TempData["pid"] = id;
-                    return RedirectToAction("shMapping", "Account");
-                }
+                
                 return RedirectToAction("Index");
             }
 

@@ -150,6 +150,9 @@ namespace HackathonPMA.Controllers
         //ToAdd: start
         public ActionResult fundsMapping()
         {
+            TempData["project"] = TempData["project"];
+            //TempData["fundsMapping"] = TempData["fundsMapping"];
+            TempData["hdnUsr"] = TempData["hdnUsr"];
             var funds = from s in db.Funds
                         select s;
 
@@ -160,10 +163,64 @@ namespace HackathonPMA.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult fundsMapping(List<Fund> lst)
+        public ActionResult fundsMapping(List<Fund> lst, string hdnFunds, string btnAction)
         {
-            //ToDo: funds mapping save logic
-            return View();
+            TempData["project"] = TempData["project"];
+            //TempData["fundsMapping"] = TempData["fundsMapping"];
+            TempData["hdnUsr"] = TempData["hdnUsr"];
+            var hdnUsr = Convert.ToString(TempData["hdnUsr"]);
+            if (btnAction == "Back")
+            {
+                TempData["fundsMapping"] = lst;
+                return RedirectToAction("shMapping", "Account");
+            }
+            //ToDo chk for page
+            Project project = (Project)TempData["project"];
+            db.Projects.Add(project);
+            db.SaveChanges();
+            //ToAdd: start
+            int id = project.Id;
+            var Db = new ApplicationDbContext();
+            foreach (string s in hdnUsr.Split('#'))
+            {
+                if (s != null && s != "")
+                {
+                    var cnt = 0;
+                    if (db.EmployeeProjects.Count() > 0)
+                        cnt = db.EmployeeProjects.Max(x => x.Id);
+
+                    EmployeeProject ep = new EmployeeProject();
+                    ep.Id = cnt + 1;
+                    ep.EmployeeId = s;
+                    ep.ProjectId = Convert.ToInt32(id);
+
+                    db.EmployeeProjects.Add(ep);
+
+                    db.SaveChanges();
+                }
+            }
+            //foreach (Fund f in lst)
+            foreach (string s in hdnFunds.Split('#'))
+            {
+                if (s != null && s != "")
+                {
+                    var cnt = 0;
+                    if (db.FundProjects.Count() > 0)
+                        cnt = db.FundProjects.Max(x => x.Id);
+
+                    FundProject fp = new FundProject();
+                    fp.Id = cnt + 1;
+                    fp.FundId = Convert.ToInt32(s.Split(',')[0]);
+                    fp.SpentAmount = Convert.ToString(s.Split(',')[1]);
+                    fp.ProjectId = Convert.ToInt32(id);
+
+                    db.FundProjects.Add(fp);
+
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
         }
         // GET: Funds/Delete/5
         [Authorize(Roles = "Admin")]
