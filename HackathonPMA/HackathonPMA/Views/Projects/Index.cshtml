@@ -10,9 +10,15 @@
 
 <h3>Projects</h3>
 
-<p>
-    @Html.ActionLink("Create New Project", "Create")
-</p>
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    if ((User.IsInRole("Admin")) || ((User.IsInRole("Manager"))))
+    {
+        <p>
+            @Html.ActionLink("Create New Project", "Create")
+        </p>
+    }
+}
 @using (Html.BeginForm("Index", "Projects", FormMethod.Get))
 {
     <p>
@@ -80,7 +86,7 @@
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
             @Html.ActionLink("Details", "Details", new { id = item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-            @Html.ActionLink("SubProject", "CreateSubProject", new { id = item.Id })
+            @Html.ActionLink("Add SubProject", "CreateSubProject", new { id = item.Id })
         </td>
     }
     else

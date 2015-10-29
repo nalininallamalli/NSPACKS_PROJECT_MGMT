@@ -8,10 +8,15 @@
 }
 
 <h3>Stakeholders</h3>
-
-<p>
-    @Html.ActionLink("Register New User", "Register")
-</p>
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Admin"))
+    {
+        <p>
+            @Html.ActionLink("Register New User", "Register")
+        </p>
+    }
+}
 @using (Html.BeginForm("ListUsers", "Account", FormMethod.Get))
 {
     <p>
