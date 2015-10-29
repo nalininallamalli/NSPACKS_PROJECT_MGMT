@@ -83,6 +83,23 @@
         <dd>
             @Html.DisplayFor(model => model.project.ModifiedOn)
         </dd>
+
+        <dt>
+            Number of SubProjects
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.project.TotalSubProjects)
+        </dd>
+
+        <dt>
+            Sub project Names
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.project.SubProjectIds)
+        </dd>
+
         @if (HttpContext.Current.User.Identity.IsAuthenticated)
         {
             if (User.IsInRole("Admin"))
