@@ -269,8 +269,22 @@ namespace HackathonPMA.Controllers
             if (ModelState.IsValid)
             {
                 Project mainproject = db.Projects.Find(project.Id);
-                mainproject.TotalSubProjects++;
-                db.Entry(mainproject).State = EntityState.Modified;
+                if (mainproject != null)
+                {
+                    mainproject.TotalSubProjects++;
+                    if (mainproject.SubProjectIds != null)
+                    {
+                        if (mainproject.SubProjectIds.Length > 0) { 
+                            mainproject.SubProjectIds = string.Concat(mainproject.SubProjectIds, ",");
+                        }
+                        mainproject.SubProjectIds = string.Concat(mainproject.SubProjectIds, project.Name);
+                    }
+                    else
+                    {
+                        mainproject.SubProjectIds = project.Name;
+                    }
+                    db.Entry(mainproject).State = EntityState.Modified;
+                }
 
                 Project subProject = new Project();
                 subProject.StartDate = project.StartDate;
@@ -289,6 +303,7 @@ namespace HackathonPMA.Controllers
                 subProject.TotalSubProjects = 0;
                 subProject.TotalAllocatedAmount = 0;
                 subProject.IsParent = false;
+                subProject.SubProjectIds = "";
 
                 db.Projects.Add(subProject);
                 
@@ -321,6 +336,7 @@ namespace HackathonPMA.Controllers
                 project.TotalAllocatedAmount = 10000;
                 project.TotalSpentAmount = 0;
                 project.TotalSubProjects = 0;
+                project.SubProjectIds = "";
                 db.Projects.Add(project);
                 db.SaveChanges();
                  //ToAdd: start
@@ -408,16 +424,30 @@ namespace HackathonPMA.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = db.Projects.Find(id);
-            db.Projects.Remove(project);
-
-            if (project.IsParent == false)
+            if (project != null)
             {
-                Project mainProject = db.Projects.Find(project.ParentProjectId);
-                if (mainProject != null)
+                int parentProjId = project.ParentProjectId;
+                if (parentProjId > 0)
                 {
-                    mainProject.TotalSubProjects--;
-                    db.Entry(mainProject).State = EntityState.Modified;
+                    Project mainProject = db.Projects.Find(project.ParentProjectId);
+                    if (mainProject != null)
+                    {
+                        mainProject.TotalSubProjects--;
+                        string subProjNames = mainProject.SubProjectIds;
+                        if((subProjNames != null) && (subProjNames.Length > 0))
+                        {
+                            List<string> subProjs = subProjNames.Split(',').ToList<string>();
+                            if(subProjs.Contains(project.Name))
+                            {
+                                subProjs.Remove(project.Name);
+                                mainProject.SubProjectIds = string.Join(",", subProjs);
+                            }
+                        }
+                        db.Entry(mainProject).State = EntityState.Modified;
+                    }
                 }
+
+                db.Projects.Remove(project);
             }
             db.SaveChanges();
             return RedirectToAction("Index");
