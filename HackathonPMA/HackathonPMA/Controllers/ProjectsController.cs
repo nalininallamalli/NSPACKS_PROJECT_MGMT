@@ -464,6 +464,10 @@ namespace HackathonPMA.Controllers
 
         public JsonResult doesProjectNameExist(string Name, string oldName)
         {
+            if (Name.Contains(','))
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
             if (oldName.Equals("create") || (Name.Trim().ToLower() != oldName.Trim().ToLower()))
             {
                 return Json(!db.Projects.Any(x => x.Name == Name), JsonRequestBehavior.AllowGet);

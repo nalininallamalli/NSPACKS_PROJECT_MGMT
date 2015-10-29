@@ -16,7 +16,7 @@ namespace HackathonPMA.Models
                 "doesProjectNameExist", 
                 "Projects",
                 AdditionalFields = "oldName",
-                ErrorMessage = "Project name already exists. Please enter a different product name.",
+                ErrorMessage = "Project name already exists or contains invalid character ','. Please enter valid Name.",
                 HttpMethod = "POST"
             )]
             [Required]
