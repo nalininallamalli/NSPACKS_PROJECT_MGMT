@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using HackathonPMA.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PagedList;
+using Microsoft.AspNet.Identity;
 
 namespace HackathonPMA.Controllers
 {
@@ -79,8 +80,9 @@ namespace HackathonPMA.Controllers
         }
 
         // GET: Roles/Create
-        public ActionResult Create()
+        public ActionResult Create(string message = "")
         {
+            ViewBag.Message = message;
             return View();
         }
 
@@ -93,9 +95,20 @@ namespace HackathonPMA.Controllers
         public ActionResult Create([Bind(Include = "Id,Name")] IdentityRole role)
         {
             if (ModelState.IsValid)
-            {                
-                db.Roles.Add(role);
-                db.SaveChanges();
+            {
+                string message = "This role name has already been used";
+                RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(
+                    new RoleStore<IdentityRole>(new ApplicationDbContext()));
+                if (!_roleManager.RoleExists(role.Name))
+                {
+                    db.Roles.Add(role);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ViewBag.Message = message;
+                    return View();
+                }
                 return RedirectToAction("Index");
             }
 
@@ -160,6 +173,15 @@ namespace HackathonPMA.Controllers
             db.Roles.Remove(aspNetRole);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public JsonResult doesRoleNameExist(string Name, string oldName)
+        {
+            if (oldName.Equals("create") || (Name.Trim().ToLower() != oldName.Trim().ToLower()))
+            {
+                return Json(!db.Roles.Any(x => x.Name == Name), JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

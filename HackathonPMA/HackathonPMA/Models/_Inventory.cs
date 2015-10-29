@@ -15,7 +15,7 @@ namespace HackathonPMA.Models
                 "doesInventoryNameExist",
                 "Inventories",
                 AdditionalFields = "oldName",
-                ErrorMessage = "Inventory name already exists. Please enter a different product name.",
+                ErrorMessage = "Inventory name already exists. Please enter a different inventory name.",
                 HttpMethod = "POST"
             )]
             [Required]

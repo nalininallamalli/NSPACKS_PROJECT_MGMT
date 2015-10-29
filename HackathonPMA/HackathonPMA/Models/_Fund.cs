@@ -15,7 +15,7 @@ namespace HackathonPMA.Models
                 "doesFundNameExist",
                 "Funds",
                 AdditionalFields = "oldName",
-                ErrorMessage = "Fund name already exists. Please enter a different product name.",
+                ErrorMessage = "Fund name already exists. Please enter a different fund name.",
                 HttpMethod = "POST"
             )]
             [Required]
