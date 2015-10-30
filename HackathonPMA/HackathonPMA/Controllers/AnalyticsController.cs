@@ -11,6 +11,7 @@ namespace HackathonPMA.Controllers
     public class AnalyticsController : Controller
     {
         Entities projectDb = new Entities();
+        ProjectsController projController = new ProjectsController();
 
         // GET: Analytics
         public ActionResult AnalyticsView(string ProjectName)
@@ -84,6 +85,8 @@ namespace HackathonPMA.Controllers
         }
         public ActionResult CustomChart()
         {
+            //projectDb.Projects.GroupBy(pp => pp.City).Select(p2 => new { p2.Name, p2. });
+          //  projectDb.EmployeeProjects.ToList().Count(e => e.EmployeeId)
             return PartialView();
         }
         public ActionResult ProjectsFundsChart()
@@ -121,11 +124,64 @@ namespace HackathonPMA.Controllers
         }
 
         // POST: /Analytics/ByProjectChart
-        public ActionResult ByProjectChart()
+        public ActionResult ByProjectChart(ByProjectViewModel model)
         {
-           
-           // projectDb.Projects.Count(projectDb.Projects.Where())
+           List<Project> projList = new List<Project>();
+
+           findSubProjects(model.ProjectName, projList);
+           /* from student in db.Students
+               group student by student.EnrollmentDate into dateGroup */
+            List<string> projNameList = new List<string>();
+            List<double> projFundList = new List<double>();
+
+            for(int i=0; i < projList.Count; i++){
+                projNameList.Add(projList.ElementAt(i).Name + " (Rs." + projList.ElementAt(i).TotalAllocatedAmount + ")");
+                projFundList.Add(projList.ElementAt(i).TotalAllocatedAmount);
+            }
+
+            Project parent = projController.FindProjectByName(model.ProjectName);
+            if (parent != null) {
+                var remaining = parent.TotalAllocatedAmount - parent.TotalSpentAmount;
+                projNameList.Add(model.ProjectName + " (Rs." + remaining + ")");
+                projFundList.Add(remaining);
+            }
+
+            var xValue = projNameList.ToArray();
+            var yValue = projFundList.ToArray();
+
+            ViewBag.xCol = xValue;
+            ViewBag.yCol = yValue;
             return PartialView(); //ByProjectChart
+        }
+
+        private void findSubProjects(string projName, List<Project> projList)
+        {
+           Project project = projController.FindProjectByName(projName);
+            
+           if (project != null)
+           {
+               //projList.Add(project);
+
+               if (project.TotalSubProjects > 0)
+               {
+                   string subPs = project.SubProjectIds;
+                   if ((subPs != null) && (subPs.Length > 0))
+                   {
+                       List<string> subPsList = subPs.Split(',').ToList<string>();
+                       foreach (string p in subPsList)
+                       {
+                           Project subp = projController.FindProjectByName(p);
+                           projList.Add(subp);
+
+                           if (subp != null)
+                           {
+                               findSubProjects(p, projList);
+                           }
+                       }
+
+                   }
+               }
+           }
         }
 
         // POST: /Analytics/ShowGraph
