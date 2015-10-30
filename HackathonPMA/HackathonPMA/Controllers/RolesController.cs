@@ -160,6 +160,14 @@ namespace HackathonPMA.Controllers
             {
                 return HttpNotFound();
             }
+            string userId = User.Identity.GetUserId();
+            ApplicationDbContext db1 = new ApplicationDbContext();
+            var users = db1.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(id)).ToList();
+            if (users.Count > 0)
+            {
+                // Users exist in the selected Role
+                ViewBag.Message = "There are users associated with selected Role. Unassociate them from this role and try deleting the role";                
+            }
             return View(role);
         }
 
@@ -170,6 +178,16 @@ namespace HackathonPMA.Controllers
         public ActionResult DeleteConfirmed(string id)
         {
             IdentityRole aspNetRole = db.Roles.Find(id);
+
+            string userId = User.Identity.GetUserId();
+            ApplicationDbContext db1 = new ApplicationDbContext();
+            var users = db1.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(id)).ToList();
+            if (users.Count > 0)
+            {
+                // Users exist in the selected Role
+                return RedirectToAction("Delete");
+            }
+
             db.Roles.Remove(aspNetRole);
             db.SaveChanges();
             return RedirectToAction("Index");
