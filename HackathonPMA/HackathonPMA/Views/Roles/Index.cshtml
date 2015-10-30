@@ -36,11 +36,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
+
+@if ((item.Name.Equals("Admin") || item.Name.Equals("Individual") || item.Name.Equals("Manager")))
+{
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                
             </td>
+}
+else
+{
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+}
         </tr>
     }
     
