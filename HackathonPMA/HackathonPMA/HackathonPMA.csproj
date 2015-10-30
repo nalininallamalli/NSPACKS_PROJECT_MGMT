@@ -189,9 +189,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510221907160_HackathonPMA.Models.ApplicationDbContext.AspNetUsers.cs" />
-    <Compile Include="Migrations\201510221907160_HackathonPMA.Models.ApplicationDbContext.AspNetUsers.Designer.cs">
-      <DependentUpon>201510221907160_HackathonPMA.Models.ApplicationDbContext.AspNetUsers.cs</DependentUpon>
+    <Compile Include="Migrations\201510291701159_HackhatonPMA.Models.Entities.cs" />
+    <Compile Include="Migrations\201510291701159_HackhatonPMA.Models.Entities.Designer.cs">
+      <DependentUpon>201510291701159_HackhatonPMA.Models.Entities.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -247,6 +247,7 @@
     <Compile Include="Models\_Fund.cs" />
     <Compile Include="Models\_Inventory.cs" />
     <Compile Include="Models\_Project.cs" />
+    <Compile Include="Models\_Role.cs" />
     <Compile Include="ProjectDataSet1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -390,8 +391,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510221907160_HackathonPMA.Models.ApplicationDbContext.AspNetUsers.resx">
-      <DependentUpon>201510221907160_HackathonPMA.Models.ApplicationDbContext.AspNetUsers.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201510291701159_HackhatonPMA.Models.Entities.resx">
+      <DependentUpon>201510291701159_HackhatonPMA.Models.Entities.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report.rdlc" />
   </ItemGroup>
