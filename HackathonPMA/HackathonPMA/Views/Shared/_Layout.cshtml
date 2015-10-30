@@ -22,19 +22,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul id="navMenu" class="nav navbar-nav">
-                    <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
-                    <li>@Html.ActionLink("Stakeholders", "ListUsers", "Account")</li>
 @if (HttpContext.Current.User.Identity.IsAuthenticated)
 {
+                    <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
+                    <li>@Html.ActionLink("Stakeholders", "ListUsers", "Account")</li>
+
     if (User.IsInRole("Admin"))
     { 
                     <li>@Html.ActionLink("Funds", "Index", "Funds")</li>
                     <li>@Html.ActionLink("Roles", "Index", "Roles")</li>
                     <li>@Html.ActionLink("Inventory", "Index", "Inventories")</li>
     }
-}
                     <li>@Html.ActionLink("Analytics", "AnalyticsView", "Analytics")</li>
-
+    
+}
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
