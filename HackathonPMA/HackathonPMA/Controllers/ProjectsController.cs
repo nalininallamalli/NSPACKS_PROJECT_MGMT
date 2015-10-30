@@ -206,7 +206,9 @@ namespace HackathonPMA.Controllers
 
             ProjectDetailModel model = new ProjectDetailModel();            
             model.project = project;
-            model.spendingDetails = project.SpendingDetails.Split('^').ToList<string>();
+            if (project.SpendingDetails != null)
+                model.spendingDetails = project.SpendingDetails.Split('^').ToList<string>();
+
             var applicationDbContext = new ApplicationDbContext();
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(applicationDbContext));
 
@@ -523,6 +525,8 @@ namespace HackathonPMA.Controllers
                     if (mainProject != null)
                     {
                         mainProject.TotalSubProjects--;
+                        Double childRemainingAmount = project.TotalAllocatedAmount - project.TotalSpentAmount;
+                        mainProject.TotalSpentAmount = mainProject.TotalSpentAmount + childRemainingAmount;
                         string subProjNames = mainProject.SubProjectIds;
                         if((subProjNames != null) && (subProjNames.Length > 0))
                         {

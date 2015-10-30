@@ -37,6 +37,7 @@ namespace HackathonPMA.Models
         public ProjectDetailModel()
         {
             this.stakeholders = new List<Employee>();
+            this.spendingDetails = new List<string>();
         }
         public Project project {get; set;}
         public IList<Employee> stakeholders { get; set; }
