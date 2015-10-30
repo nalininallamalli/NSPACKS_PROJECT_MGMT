@@ -12,6 +12,10 @@
         <h3>Create Sub Project</h3>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @if (ViewBag.Message != "")
+        {
+            <p style="color: red">@ViewBag.Message</p>
+        }
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
@@ -69,13 +73,30 @@
                 @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
             </div>
         </div>
+        <dl class="dl-horizontal">
+            <dt>
+                Available Fund Amount
+            </dt>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" name="btnAction" value="Create" class="btn btn-default" />
+            <dd>
+                @ViewBag.AvailableAmount
+            </dd>
+
+            <dt>
+                Assign Fund Amount
+            </dt>
+
+            <dd>
+                @Html.TextBox("amount")
+            </dd>
+        </dl>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" name="btnAction" value="Create" class="btn btn-default" />
+                </div>
             </div>
-        </div>
-    </div>
+</div>
 }
 
 <div>

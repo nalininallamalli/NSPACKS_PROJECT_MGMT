@@ -303,6 +303,8 @@ namespace HackathonPMA.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.AvailableAmount = project.TotalAllocatedAmount - project.TotalSpentAmount;
+            project.TotalAllocatedAmount = 0;
             return View(project);
         }
 
@@ -312,14 +314,30 @@ namespace HackathonPMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Manager")]
-        public ActionResult CreateSubProject([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project)
+        public ActionResult CreateSubProject([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project, string amount)
         {
             if (ModelState.IsValid)
             {
+                Double allocatedAmount = 0;
                 Project mainproject = db.Projects.Find(project.Id);
                 if (mainproject != null)
                 {
+                    var remaining = mainproject.TotalAllocatedAmount - mainproject.TotalSpentAmount;
+                    if (!amount.All(char.IsDigit))
+                    {
+                        ViewBag.AvailableAmount = mainproject.TotalAllocatedAmount - mainproject.TotalSpentAmount;
+                        ViewBag.message = "Allocated Amount should be valid number";
+                        return View(project);
+                    }
+                    allocatedAmount = Convert.ToDouble(amount);
+                    if (remaining < allocatedAmount)
+                    {
+                        ViewBag.AvailableAmount = mainproject.TotalAllocatedAmount - mainproject.TotalSpentAmount;
+                        ViewBag.message = "Allocated Amount can not be more than Available Amount";
+                        return View(project);
+                    }
                     mainproject.TotalSubProjects++;
+                    mainproject.TotalSpentAmount = mainproject.TotalSpentAmount + allocatedAmount;
                     if (mainproject.SubProjectIds != null)
                     {
                         if (mainproject.SubProjectIds.Length > 0) { 
@@ -349,7 +367,7 @@ namespace HackathonPMA.Controllers
                 subProject.TotalSpentAmount = 0;
                 subProject.ParentProjectId = project.Id;
                 subProject.TotalSubProjects = 0;
-                subProject.TotalAllocatedAmount = 0;
+                subProject.TotalAllocatedAmount = allocatedAmount;
                 subProject.IsParent = false;
                 subProject.SubProjectIds = "";
 
