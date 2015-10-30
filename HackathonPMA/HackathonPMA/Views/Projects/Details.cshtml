@@ -82,7 +82,7 @@
         <dd>
             @Html.DisplayFor(model => model.project.ModifiedOn)
         </dd>
-
+        <br> 
         <dt>
             Number of SubProjects
         </dt>
@@ -98,7 +98,7 @@
         <dd>
             @Html.DisplayFor(model => model.project.SubProjectIds)
         </dd>
-
+        <br>
         @if (HttpContext.Current.User.Identity.IsAuthenticated)
         {
             if (User.IsInRole("Admin"))
@@ -131,7 +131,7 @@ foreach (var item in Model.spendingDetails)
     </dl>
 </div>
 
-
+<br>
         <h4>Associate Stakeholders</h4>
 <table class="table">
     <tr>

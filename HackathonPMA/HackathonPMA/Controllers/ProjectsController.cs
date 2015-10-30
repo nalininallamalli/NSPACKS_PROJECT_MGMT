@@ -325,13 +325,16 @@ namespace HackathonPMA.Controllers
                 if (mainproject != null)
                 {
                     var remaining = mainproject.TotalAllocatedAmount - mainproject.TotalSpentAmount;
-                    if (!amount.All(char.IsDigit))
-                    {
-                        ViewBag.AvailableAmount = mainproject.TotalAllocatedAmount - mainproject.TotalSpentAmount;
-                        ViewBag.message = "Allocated Amount should be valid number";
-                        return View(project);
+                    if((amount != null) && (amount.Length > 0))
+                    { 
+                        if (!amount.All(char.IsDigit))
+                        {
+                            ViewBag.AvailableAmount = mainproject.TotalAllocatedAmount - mainproject.TotalSpentAmount;
+                            ViewBag.message = "Allocated Amount should be valid number";
+                            return View(project);
+                        }
+                        allocatedAmount = Convert.ToDouble(amount);
                     }
-                    allocatedAmount = Convert.ToDouble(amount);
                     if (remaining < allocatedAmount)
                     {
                         ViewBag.AvailableAmount = mainproject.TotalAllocatedAmount - mainproject.TotalSpentAmount;
@@ -526,7 +529,7 @@ namespace HackathonPMA.Controllers
                     {
                         mainProject.TotalSubProjects--;
                         Double childRemainingAmount = project.TotalAllocatedAmount - project.TotalSpentAmount;
-                        mainProject.TotalSpentAmount = mainProject.TotalSpentAmount + childRemainingAmount;
+                        mainProject.TotalSpentAmount = mainProject.TotalSpentAmount - childRemainingAmount;
                         string subProjNames = mainProject.SubProjectIds;
                         if((subProjNames != null) && (subProjNames.Length > 0))
                         {
