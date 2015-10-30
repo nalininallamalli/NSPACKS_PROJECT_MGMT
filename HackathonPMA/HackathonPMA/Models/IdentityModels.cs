@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -23,8 +24,13 @@ namespace HackathonPMA.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
+
+        [RegularExpression("([0-9]*)", ErrorMessage = "Zip code must be a number")]
         public string Zip { get; set; }
+
         public string AddressLine { get; set; }
+
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Salary must be a number")]
         public string Salary { get; set; }
     }
 

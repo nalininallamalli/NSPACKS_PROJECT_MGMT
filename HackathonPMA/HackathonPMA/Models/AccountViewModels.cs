@@ -98,6 +98,7 @@ namespace HackathonPMA.Models
 
         [Required]
         [Display(Name = "Phone Number")]
+        [RegularExpression("([0-9]*)", ErrorMessage = "Phone number must be a number")]
         public string PhoneNumber { get; set; }
 
 
@@ -106,6 +107,7 @@ namespace HackathonPMA.Models
         public string AddressLine { get; set; }
 
         [Display(Name = "Salary")]
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Salary must be a number")]
         public string Salary { get; set; }
 
         [Required]
@@ -122,6 +124,7 @@ namespace HackathonPMA.Models
 
         [Required]
         [Display(Name = "Zip")]
+        [RegularExpression("([0-9]*)", ErrorMessage = "zip code must be a number")]
         public string Zip { get; set; }
 
         [Required]

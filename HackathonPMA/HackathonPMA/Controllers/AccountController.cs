@@ -359,6 +359,10 @@ namespace HackathonPMA.Controllers
             if (ModelState.IsValid)
             {
                 var user = Db.Users.First(u => u.Id == id);
+                if (user == null)
+                {
+                    return HttpNotFound();
+                }
                 user.FirstName = model.user.FirstName;
                 user.LastName = model.user.LastName;
                 user.Email = model.user.Email;

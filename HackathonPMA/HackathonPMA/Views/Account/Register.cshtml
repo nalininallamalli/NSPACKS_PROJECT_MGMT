@@ -56,7 +56,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" , @type = "number" })
         </div>
     </div>
     <div class="form-group">
@@ -86,13 +86,13 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Zip, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Zip, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Zip, new { @class = "form-control" , @type = "number" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Salary, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Salary, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Salary, new { @class = "form-control" , @type = "number" })
         </div>
     </div>
     <div class="form-group">

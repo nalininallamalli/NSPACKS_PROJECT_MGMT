@@ -11,6 +11,7 @@ namespace HackathonPMA.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class Fund
     {
@@ -20,9 +21,18 @@ namespace HackathonPMA.Models
         }
     
         public int Id { get; set; }
+
+        [Required]
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Total Amount must be a number")]
         public string TotalAmount { get; set; }
+
+        [Required]
         public string Description { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Spent Amount must be a number")]
         public string SpentAmount { get; set; }
     
         public virtual ICollection<FundProject> FundProjects { get; set; }

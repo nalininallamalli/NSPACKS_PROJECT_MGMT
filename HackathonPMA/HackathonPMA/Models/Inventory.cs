@@ -11,13 +11,22 @@ namespace HackathonPMA.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class Inventory
     {
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string Description { get; set; }
+
+        [Required]
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Quantity must be a number")]
         public Nullable<int> Quantity { get; set; }
+
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Price must be a number")]
         public Nullable<double> Price { get; set; }
     }
 }
