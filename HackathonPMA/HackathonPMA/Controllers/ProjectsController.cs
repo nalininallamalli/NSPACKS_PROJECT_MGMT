@@ -204,20 +204,9 @@ namespace HackathonPMA.Controllers
                 return HttpNotFound();
             }
 
-            double spentAmount = 0;
-            var fundProjects = db.FundProjects;
-
-            foreach (var fp in fundProjects.ToList())
-            {
-                if (fp.ProjectId == project.Id)
-                {
-                    spentAmount = spentAmount + Convert.ToDouble(fp.SpentAmount);
-                }
-            }
-            
             ProjectDetailModel model = new ProjectDetailModel();            
-            model.SpentAmount = spentAmount;
             model.project = project;
+            model.spendingDetails = project.SpendingDetails.Split('^').ToList<string>();
             var applicationDbContext = new ApplicationDbContext();
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(applicationDbContext));
 
@@ -241,6 +230,65 @@ namespace HackathonPMA.Controllers
                         model.stakeholders.Add(employee);
                     }
                 }
+            }
+
+            return View(model);
+        }
+
+        
+        public ActionResult AddSpendings(int Id)
+        {
+            Project project = db.Projects.Find(Id);
+            if(project == null)
+            {
+                return HttpNotFound();
+            }
+            EditProjectSpendingsModel model = new EditProjectSpendingsModel();
+            model.Id = Id;
+            model.projectName = project.Name;
+            model.AvailableAmount = project.TotalAllocatedAmount-project.TotalSpentAmount;
+            return View(model);
+        }
+
+        // POST: Projects/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddSpendings(EditProjectSpendingsModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Project project = db.Projects.Find(model.Id);
+                if(project != null)
+                {
+                    var spentAmount = project.TotalSpentAmount + Convert.ToDouble(model.spentAmount);
+                    if(project.TotalAllocatedAmount < spentAmount)
+                    {
+                        ViewBag.Message = "Spent Amount can not exceed Available Amount";
+                        return View(model);
+                    }
+                    project.TotalSpentAmount = spentAmount;
+                    project.ModifiedOn = DateTime.Now;
+
+                    string temp = model.spentAmount;
+                    temp = string.Concat(temp, ":");
+                    temp = string.Concat(temp, model.spendingDesc);
+
+                    if ((project.SpendingDetails != null) && (project.SpendingDetails.Length > 0))
+                    {
+                        temp = string.Concat("^", temp);
+                        project.SpendingDetails = string.Concat(project.SpendingDetails, temp);                        
+                    }
+                    else
+                    {
+                        project.SpendingDetails = temp;
+                    }
+                    db.Entry(project).State = EntityState.Modified;
+                    db.SaveChanges();
+                }               
+                
+                return RedirectToAction("Index");
             }
 
             return View(model);

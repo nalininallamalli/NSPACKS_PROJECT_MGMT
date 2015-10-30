@@ -37,11 +37,12 @@ namespace HackathonPMA.Models
         public bool IsParent { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
-        public Nullable<double> TotalAllocatedAmount { get; set; }
-        public Nullable<double> TotalSpentAmount { get; set; }
+        public double TotalAllocatedAmount { get; set; }
+        public double TotalSpentAmount { get; set; }
         public string SubProjectIds { get; set; }
         public int ParentProjectId { get; set; }
         public Nullable<Int32> TotalSubProjects { get; set; }
+        public string SpendingDetails { get; set; }
 
         /// <summary>
         /// Application DB context

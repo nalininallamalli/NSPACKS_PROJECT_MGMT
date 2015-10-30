@@ -39,7 +39,21 @@ namespace HackathonPMA.Models
             this.stakeholders = new List<Employee>();
         }
         public Project project {get; set;}
-        public Double SpentAmount { get; set; }
         public IList<Employee> stakeholders { get; set; }
+        public IList<string> spendingDetails { get; set; }
+    }
+
+    public class EditProjectSpendingsModel
+    {
+        public int Id { get; set; }
+        public string projectName { get; set; }
+        public Double AvailableAmount { get; set; }
+
+        [Required]
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Spent Amount must be a number")]
+        public string spentAmount {get; set;}
+
+        [Required]
+        public string spendingDesc {get; set;}
     }
 }

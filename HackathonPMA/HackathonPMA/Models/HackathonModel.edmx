@@ -124,6 +124,7 @@
           <Property Name="ParentProjectId" Type="int"/>
           <Property Name="TotalSubProjects" Type="int"/>
           <Property Name="SubProjectIds" Type="nvarchar(max)" />
+          <Property Name="SpendingDetails" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -409,6 +410,7 @@
           <Property Name="TotalSpentAmount" Type="Double" />
           <Property Name="ParentProjectId" Type="Int32"/>
           <Property Name="TotalSubProjects" Type="Int32"/>
+          <Property Name="SpendingDetails" Type="String" MaxLength="Max" FixedLength="false" Unicode="true"  />
           <Property Name="SubProjectIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="EmployeeProjects" Relationship="Self.FK_dbo_EmployeeProject_dbo_Projects_Id" FromRole="Projects" ToRole="EmployeeProject" />
           <NavigationProperty Name="FundProjects" Relationship="Self.FK_dbo_FundProject_dbo_Projects_Id" FromRole="Projects" ToRole="FundProject" />
@@ -663,6 +665,7 @@
                 <ScalarProperty Name="ParentProjectId" ColumnName="ParentProjectId" />
                 <ScalarProperty Name="TotalSubProjects" ColumnName="TotalSubProjects"/>
                 <ScalarProperty Name="SubProjectIds" ColumnName="SubProjectIds" />
+                <ScalarProperty Name="SpendingDetails" ColumnName="SpendingDetails" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

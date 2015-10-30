@@ -1,0 +1,75 @@
+﻿@model HackathonPMA.Models.EditProjectSpendingsModel
+
+@{
+    ViewBag.Title = "Add Spendings";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Add Project Spending Details</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @if (ViewBag.Message != "")
+        {
+            <p style="color: red">@ViewBag.Message</p>
+        }
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.AvailableAmount)
+        @Html.HiddenFor(model => model.projectName)
+        @Html.HiddenFor(model => model.Id)
+        <div>
+        <dl class="dl-horizontal">
+            <dt>
+                Project Name
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.projectName)
+            </dd>
+
+            <dt>
+                Available Amount
+            </dt>
+
+            <dd>
+                @Model.AvailableAmount
+            </dd>
+
+            <dt>
+                Spent Amount
+            </dt>
+
+            <dd>
+                @Html.EditorFor(model => model.spentAmount, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                @Html.ValidationMessageFor(model => model.spentAmount, "", new { @class = "text-danger" })
+            </dd>
+
+            <dt>
+                Spending Details
+            </dt>
+
+            <dd>
+                @Html.TextAreaFor(model => model.spendingDesc, 5, 400, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.spendingDesc, "", new { @class = "text-danger" })
+            </dd>
+        </dl>
+        </div>
+        
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

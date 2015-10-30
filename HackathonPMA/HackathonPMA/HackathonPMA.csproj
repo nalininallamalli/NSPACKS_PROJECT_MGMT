@@ -376,6 +376,8 @@
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Funds\fundsMapping.cshtml" />
     <Content Include="Views\Projects\CreateSubProject.cshtml" />
+    <Content Include="Views\Account\shMapping.cshtml" />
+    <Content Include="Views\Projects\AddSpendings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
