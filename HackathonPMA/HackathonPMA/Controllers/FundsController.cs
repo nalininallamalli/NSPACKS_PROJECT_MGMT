@@ -165,6 +165,13 @@ namespace HackathonPMA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult fundsMapping(List<Fund> lst, string hdnFunds, string btnAction)
         {
+            if (btnAction == "Cancel")
+            {
+                TempData["project"] = null;
+                TempData["hdnUsr"] = null;
+                TempData["fundsMapping"] = null;
+                return RedirectToAction("Index", "Projects");
+            }
             TempData["project"] = TempData["project"];
             //TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = TempData["hdnUsr"];

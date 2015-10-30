@@ -336,14 +336,20 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (btnAction == "Cancel")
+                {
+                    TempData["project"] = null;
+                    TempData["hdnUsr"] = null;
+                    TempData["fundsMapping"] = null;
+                    return RedirectToAction("Index");
+                }
                 project.IsParent = true;
                 project.CreatedOn = DateTime.Now;
                 project.ModifiedOn = DateTime.Now;
                 project.TotalAllocatedAmount = 10000;
                 project.TotalSpentAmount = 0;
                 project.TotalSubProjects = 0;
-                project.SubProjectIds = "";
-
+                project.SubProjectIds = "";                
                 if (btnAction == "Next")
                 {
                     //TempData["pid"] = id;//

@@ -88,18 +88,25 @@ namespace HackathonPMA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult shMapping(string hdnUsr, string btnAction)
         {
+            if (btnAction == "Cancel")
+            {
+                TempData["project"] = null;
+                TempData["hdnUsr"] = null;
+                TempData["fundsMapping"] = null;
+                return RedirectToAction("Index", "Projects");
+            }
             TempData["project"] = TempData["project"];
             TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = hdnUsr;
             if (btnAction == "Back")
-            {
-                
+            {                
                 return RedirectToAction("create", "Projects");
             }
             if (btnAction == "Next")
             {
                 return RedirectToAction("fundsMapping", "Funds");
             }
+
             //ToDo chk for page
             Project project = (Project)TempData["project"];
             db.Projects.Add(project);
