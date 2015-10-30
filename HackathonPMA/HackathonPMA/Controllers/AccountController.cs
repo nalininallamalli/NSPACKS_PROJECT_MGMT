@@ -75,6 +75,9 @@ namespace HackathonPMA.Controllers
             //TempData["pid"] = TempData["pid"];
             TempData["project"] = TempData["project"];
             TempData["fundsMapping"] = TempData["fundsMapping"];
+            ViewBag.hdnUsr = TempData["hdnUsr"];
+            ViewBag.hdnRid = TempData["hdnRid"];
+            TempData["hdnFunds"] = TempData["hdnFunds"];
             var Db = new ApplicationDbContext();
             var model = new RegisterViewModel();
             var list = Db.Roles.OrderBy(r => r.Name).Where(adm => adm.Name != "Admin").ToList()
@@ -86,7 +89,7 @@ namespace HackathonPMA.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult shMapping(string hdnUsr, string btnAction)
+        public ActionResult shMapping(string hdnUsr,string hdnRid, string btnAction)
         {
             if (btnAction == "Cancel")
             {
@@ -98,6 +101,8 @@ namespace HackathonPMA.Controllers
             TempData["project"] = TempData["project"];
             TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = hdnUsr;
+            TempData["hdnRid"] = hdnRid;
+            TempData["hdnFunds"] = TempData["hdnFunds"];
             if (btnAction == "Back")
             {                
                 return RedirectToAction("create", "Projects");

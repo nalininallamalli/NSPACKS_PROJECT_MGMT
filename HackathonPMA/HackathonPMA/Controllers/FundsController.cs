@@ -151,13 +151,24 @@ namespace HackathonPMA.Controllers
         public ActionResult fundsMapping()
         {
             TempData["project"] = TempData["project"];
+            TempData["hdnRid"] = TempData["hdnRid"];
             //TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = TempData["hdnUsr"];
+            TempData["hdnFunds"] = TempData["hdnFunds"];
+            ViewBag.hdnUsr = TempData["hdnFunds"];
+            var hdnFunds= Convert.ToString( TempData["hdnFunds"]);
             var funds = from s in db.Funds
                         select s;
 
             List<Fund> lst = funds.ToList();
 
+             foreach (string s in hdnFunds.Split('#'))
+             {
+                 if (s != null && s != "")
+                 {
+                     lst.First(d => d.Id == Convert.ToInt32(s.Split(',')[0])).SpentAmount = s.Split(',')[1];
+                 }
+             }
             return View(lst);
         }
 
@@ -173,8 +184,10 @@ namespace HackathonPMA.Controllers
                 return RedirectToAction("Index", "Projects");
             }
             TempData["project"] = TempData["project"];
+            TempData["hdnRid"] = TempData["hdnRid"];
             //TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = TempData["hdnUsr"];
+            TempData["hdnFunds"] = hdnFunds;
             var hdnUsr = Convert.ToString(TempData["hdnUsr"]);
             if (btnAction == "Back")
             {
@@ -207,10 +220,17 @@ namespace HackathonPMA.Controllers
                 }
             }
             //foreach (Fund f in lst)
+            var sAmt = 0;
             foreach (string s in hdnFunds.Split('#'))
             {
                 if (s != null && s != "")
                 {
+                    Fund p = db.Funds.Find(s.Split(',')[0]);
+                    p.SpentAmount = Convert.ToInt16(p.SpentAmount) + s.Split(',')[1];
+                    sAmt += Convert.ToInt16(p.SpentAmount);
+                    db.Entry(p).State = EntityState.Modified;
+                    db.SaveChanges();
+
                     var cnt = 0;
                     if (db.FundProjects.Count() > 0)
                         cnt = db.FundProjects.Max(x => x.Id);
@@ -226,6 +246,12 @@ namespace HackathonPMA.Controllers
                     db.SaveChanges();
                 }
             }
+            Project pe = db.Projects.Find(id);
+            pe.TotalAllocatedAmount = Convert.ToInt16(pe.TotalAllocatedAmount) + sAmt;
+            db.Entry(pe).State = EntityState.Modified;
+            db.SaveChanges();
+
+
 
             return RedirectToAction("Index", "Home");
         }

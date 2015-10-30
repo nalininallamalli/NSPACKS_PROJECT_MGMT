@@ -25,6 +25,9 @@
                         @Html.ActionLink("Amount", "Index", new { sortBy = ViewBag.AmountSort })
                     </th>
                     <th>
+                        Remaning Amt
+                    </th>
+                    <th>
                         Choose Share (%)
                     </th>
                     <th>
@@ -35,10 +38,16 @@
                 @{
     int counter = 0;
     var val = "";
+    var t = 0;
+    var perc = 0;
                 }
                 @foreach (var item in Model)
                 {
                     counter++;
+                    if (@ViewBag.hdnUsr == null)
+                    { t = Convert.ToInt32(item.TotalAmount) - Convert.ToInt32(item.SpentAmount); }
+                    else
+                    { t = Convert.ToInt32(item.TotalAmount); }
                     val = @item.TotalAmount;
                     <tr>
                         <td>
@@ -51,10 +60,17 @@
                             @Html.DisplayFor(modelItem => item.TotalAmount)
                         </td>
                         <td>
-                            <input type="text" id="perc" class="number-only" onkeyup="AllAmt(this.value, @item.Id, @item.TotalAmount, 'sAmt' + @counter.ToString());" />
+                            @t
                         </td>
                         <td>
-                            @Html.LabelFor(modelItem => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })
+                        <input type="text" id="perc" class="number-only" onkeyup="AllAmt(this.value, @item.Id, @item.TotalAmount, 'sAmt' + @counter.ToString());" />
+                        </td>
+                        <td>
+                            @*@Html.LabelFor(modelItem => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })*@
+
+                            @Html.LabelFor(f => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })
+
+                            @Html.DisplayFor(f => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })
                         </td>
                     </tr>
                 }
@@ -62,9 +78,9 @@
             </table>
 
             @{
-    if (Model.Count() <1 )
+    if (Model.Count() < 1)
     {
-                <div>Funds are not available.. Please add funds.</div>
+        <div>Funds are not available.. Please add funds.</div>
     }
 
             }
@@ -72,9 +88,11 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" name="btnAction" id="btnActionSave" value="Back" class="btn btn-default" />
-            <input type="submit" name="btnAction" id="btnActionSave" value="Finish" class="btn btn-default" />            
-            <input type="submit" name="btnAction" id="btnActionSave" value="Cancel" class="btn btn-default" />
+            <input type="hidden" name="btnAction" id="hdnValue" />
+
+            <input type="submit" id="btnActionSave" value="Back" class="btn btn-default" onclick='$("#hdnValue").val("Back")' />
+            <input type="submit" id="btnActionSave" value="Finish" class="btn btn-default" onclick='$("#hdnValue").val("Finish")' />
+            <input type="submit" id="btnActionSave" value="Cancel" class="btn btn-default" onclick='$("#hdnValue").val("Cancel")' />
         </div>
     </div>
 }

@@ -21,7 +21,9 @@
             @Html.DropDownListFor(m => m.Role, Model.Roles, "Select...", new { @class = "form-control", @id = "ddlRole" })
         </div>
     </div>
-    <input id="selecteduserid" type="hidden" name="hdnUsr" value=""/>
+    <input id="selecteduserid" type="hidden" name="hdnUsr" value="@ViewBag.hdnUsr" />
+<input id="selecteduserid1" type="hidden" name="hdnUsr1" value="@ViewBag.hdnUsr" />
+<input id="hdnRid" type="hidden" name="hdnRid" value="@ViewBag.hdnRid" />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <table id="tbDetails" class="table">
@@ -42,10 +44,12 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" name="btnAction" id="btnActionBack" value="Back" class="btn btn-default  cancel" />
-            <input type="submit" name="btnAction" id="btnActionNext" value="Next" class="btn btn-default  cancel" />
-            <input type="submit" name="btnAction" id="btnActionSave" value="Finish" class="btn btn-default  cancel" />            
-            <input type="submit" name="btnAction" id="btnActionSave" value="Cancel" class="btn btn-default cancel" />            
+            <input type="hidden" name="btnAction" id="hdnValue" />
+
+            <input type="submit" id="btnActionBack" value="Back" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Back")' />
+            <input type="submit" id="btnActionNext" value="Next" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Next")' />
+            <input type="submit" id="btnActionSave" value="Finish" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Finish")' />            
+            <input type="submit" id="btnActionSave" value="Cancel" class="btn btn-default cancel" onclick='$("#hdnValue").val("Cancel")' />            
         </div>
     </div>
 }
@@ -56,8 +60,13 @@
     <script>
 
         $(function () {
+            $(document).ready(function () {
+                $("#ddlRole").val($('#hdnRid').val());
+                $("#ddlRole").change();
+            });
             $('select#ddlRole').change(function () {
                 var roleid = $(this).val();
+                $('#hdnRid').val(roleid);
                 //loadings users from database - related to role selecteds
                 $.ajax({
                     url: 'LoadUsers',
@@ -67,23 +76,38 @@
                     contentType: 'application/json',
                     success: function (data) {
                         $("#tbDetails > tbody").html("");
+                        // selecteduserid.value = "";
+                        $('#selecteduserid').val("");
                         for (var i = 0; i < data.length; i++) {
+                            var val = "";
+                            if ($('#selecteduserid1').val().toString().indexOf(data[i].Id) > -1) {
+                                val = "checked=checked";
+                                $('#selecteduserid').val($('#selecteduserid').val() + "#" + data[i].Id);
+                            }
                             $("#tbDetails").append("<tr><td>" + data[i].FirstName + "</td><td>" + data[i].LastName + "</td><td>"
                                 + data[i].UserName + "</td><td>" + data[i].Gender + "</td><td>" + data[i].City + "</td><td>" + data[i].State +
                                 //"</td><td><input type='checkbox' id='chkshMap' onclick='AddRemoveUser(this," + data[i].Id+ ");' /></td></tr>");
-                                "</td><td><input type='checkbox' id='chkshMap' value='" + data[i].Id + "' /></td></tr>");                          
+                                "</td><td><input type='checkbox' id='chkshMap' value='" + data[i].Id     
+                                + "' " + val + " /></td></tr>");
 
                         }
                         // selecteduserid.value = "";
-                        $('#selecteduserid').val("");
+                        $('#selecteduserid1').val("")
                     }
                 });
             });
             //Binding click event on dynamic created element
             $(document).on('click', "#chkshMap", function () {              
                 var x = this;
-                // selecteduserid.value = selecteduserid.value + "#" + x.value;
-                $('#selecteduserid').val($('#selecteduserid').val() + "#" + x.value);
+                if (x.checked) {
+                    if ($('#selecteduserid').val().toString().indexOf(x.value) < 0)
+                    { $('#selecteduserid').val($('#selecteduserid').val() + "#" + x.value); }
+                }
+                else {
+                    if ($('#selecteduserid').val().toString().indexOf(x.value) > -1)
+                    { $('#selecteduserid').val($('#selecteduserid').val().toString().replace("#" + x.value,"")); }
+                }
+                
             });
 
 

@@ -368,6 +368,12 @@ namespace HackathonPMA.Controllers
             if (TempData["project"] != null)
             {
                 TempData["project"] = TempData["project"];
+
+                TempData["fundsMapping"] = TempData["fundsMapping"];
+                TempData["hdnUsr"] = TempData["hdnUsr"];
+                TempData["hdnRid"] = TempData["hdnRid"];
+
+
                 Project project = (Project)TempData["project"];
                 return View(project);
             }
@@ -402,6 +408,9 @@ namespace HackathonPMA.Controllers
                 {
                     //TempData["pid"] = id;//
                     TempData["project"] = project;
+                    TempData["fundsMapping"] = TempData["fundsMapping"];
+                    TempData["hdnUsr"] = TempData["hdnUsr"];
+                    TempData["hdnRid"] = TempData["hdnRid"];
                     return RedirectToAction("shMapping", "Account");
                 }
                 db.Projects.Add(project);
