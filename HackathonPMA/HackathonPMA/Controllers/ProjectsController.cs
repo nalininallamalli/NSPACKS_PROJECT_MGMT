@@ -512,6 +512,18 @@ namespace HackathonPMA.Controllers
             return View(project);
         }
 
+        public Project FindProjectByName(string name)
+        {
+
+            List<Project> allProjects = db.Projects.ToList();
+            foreach  (Project p in allProjects)
+            {
+                if (p.Name.Equals(name))
+                    return p;
+            }
+            return null;
+        }
+
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -521,6 +533,27 @@ namespace HackathonPMA.Controllers
             Project project = db.Projects.Find(id);
             if (project != null)
             {
+                //Remove all child projects
+                if(project.TotalSubProjects > 0)
+                {
+                    string subPs = project.SubProjectIds;
+                    if((subPs != null) && (subPs.Length > 0))
+                    {
+                        List<string> subPsList = subPs.Split(',').ToList<string>();
+                        foreach (string p in subPsList)
+                        {
+                            Project subp = FindProjectByName(p);
+                            if(subp != null)
+                            {
+                                DeleteConfirmed(subp.Id);
+                            }
+                        }
+                        
+                    }
+
+                }
+
+                //update the parent project's subprojectcount 
                 int parentProjId = project.ParentProjectId;
                 if (parentProjId > 0)
                 {

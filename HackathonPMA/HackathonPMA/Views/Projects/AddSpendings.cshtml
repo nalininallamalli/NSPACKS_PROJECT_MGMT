@@ -1,7 +1,7 @@
 ﻿@model HackathonPMA.Models.EditProjectSpendingsModel
 
 @{
-    ViewBag.Title = "Add Spendings";
+    ViewBag.Title = "Add Expenses";
 }
 
 @using (Html.BeginForm())
@@ -9,7 +9,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Add Project Spending Details</h4>
+        <h4>Add Project Expense Details</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @if (ViewBag.Message != "")
@@ -39,7 +39,7 @@
             </dd>
 
             <dt>
-                Spent Amount
+                Expense Amount
             </dt>
 
             <dd>
@@ -48,7 +48,7 @@
             </dd>
 
             <dt>
-                Spending Details
+                Expense Details
             </dt>
 
             <dd>
