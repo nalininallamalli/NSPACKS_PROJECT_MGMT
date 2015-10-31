@@ -1,4 +1,5 @@
 # NSPACKS_PROJECT_MGMT
 Project Management App for GHCI 2015
 
-#This is test edit to check push access.
+Project Management App.ppt
+Explains Technologies used, Functionalities implemented, Schema design, web service design, Deployment steps.
