@@ -186,6 +186,11 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="FundsDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FundsDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -287,6 +292,17 @@
     <Content Include="ProjectDataSet.xsc">
       <DependentUpon>ProjectDataSet.xsd</DependentUpon>
     </Content>
+    <Content Include="FundsDataSet.xsc">
+      <DependentUpon>FundsDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="FundsDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>FundsDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="FundsDataSet.xss">
+      <DependentUpon>FundsDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="ProjectDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>ProjectDataSet1.Designer.cs</LastGenOutput>
@@ -295,6 +311,7 @@
     <Content Include="ProjectDataSet.xss">
       <DependentUpon>ProjectDataSet.xsd</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\HackathonPMA.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -380,6 +397,7 @@
     <Content Include="Views\Projects\AddSpendings.cshtml" />
     <Content Include="Views\Analytics\FundsInventoryChart.cshtml" />
     <Content Include="Views\Analytics\ProjEmployeeChart.cshtml" />
+    <Content Include="Views\Funds\Report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -398,6 +416,7 @@
     <EmbeddedResource Include="Migrations\201510291701159_HackhatonPMA.Models.Entities.resx">
       <DependentUpon>201510291701159_HackhatonPMA.Models.Entities.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\FundsReport.rdlc" />
     <EmbeddedResource Include="Reports\Report.rdlc" />
   </ItemGroup>
   <PropertyGroup>

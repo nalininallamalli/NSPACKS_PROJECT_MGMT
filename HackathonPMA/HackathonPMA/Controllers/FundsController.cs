@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 using HackathonPMA.Models;
 using PagedList;
 using System.Data.Entity.Validation;
+using Microsoft.Reporting.WebForms;
 
 namespace HackathonPMA.Controllers
 {
@@ -24,6 +26,7 @@ namespace HackathonPMA.Controllers
             ViewBag.CurrentSort = sortBy;
             ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.AmountSort = sortBy == "Amount" ? "Amount desc" : "Amount";
+            ViewBag.SpentAmountSort = sortBy == "SpentAmount" ? "SpentAmount desc" : "SpentAmount";
             ViewBag.DescriptionSort = sortBy == "Description" ? "Description desc" : "Description";
 
             if (searchBy != null)
@@ -65,6 +68,12 @@ namespace HackathonPMA.Controllers
                 case "Amount":
                     funds = funds.OrderBy(s => s.TotalAmount);
                     break;
+                case "SpentAmount desc":
+                    funds = funds.OrderByDescending(s => s.SpentAmount);
+                    break;
+                case "SpentAmount":
+                    funds = funds.OrderBy(s => s.SpentAmount);
+                    break;
                 default:
                     funds = funds.OrderBy(s => s.Name);
                     break;
@@ -74,6 +83,63 @@ namespace HackathonPMA.Controllers
             int pageNumber = (page ?? 1);
             return View(funds.ToPagedList(pageNumber, pageSize));
            // return View(funds.ToList());
+        }
+        public ActionResult Report(string id)
+        {
+            LocalReport lr = new LocalReport();
+
+            string path = Path.Combine(Server.MapPath("~/Reports"), "FundsReport.rdlc");
+            if (System.IO.File.Exists(path))
+            {
+                lr.ReportPath = path;
+            }
+            else
+            {
+                return View("Index");
+            }
+
+            List<Fund> cm = new List<Fund>();
+
+            using (Entities es = new Entities())
+            {
+                cm = es.Funds.ToList();
+            }
+
+            ReportDataSource rd = new ReportDataSource("FundsDataSet", cm);
+            lr.DataSources.Add(rd);
+
+            string reportType = id;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+
+            string deviceInfo =
+
+            "<DeviceInfo>" +
+            "  <OutputFormat>" + id + "</OutputFormat>" +
+            "  <PageWidth>8.5in</PageWidth>" +
+            "  <PageHeight>11in</PageHeight>" +
+            "  <MarginTop>0.5in</MarginTop>" +
+            "  <MarginLeft>1in</MarginLeft>" +
+            "  <MarginRight>1in</MarginRight>" +
+            "  <MarginBottom>0.5in</MarginBottom>" +
+            "</DeviceInfo>";
+
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+
+            renderedBytes = lr.Render(
+                reportType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+
+
+            return File(renderedBytes, mimeType);
         }
 
         // GET: Funds/Details/5

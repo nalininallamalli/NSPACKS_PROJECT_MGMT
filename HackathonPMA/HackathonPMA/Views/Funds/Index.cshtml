@@ -31,6 +31,9 @@
         <th>
             @Html.ActionLink("Amount", "Index", new { sortBy = ViewBag.AmountSort, currentFilter = ViewBag.CurrentFilter })
         </th>
+        <th>
+            @Html.ActionLink("SpentAmount", "Index", new { sortBy = ViewBag.AmountSort, currentFilter = ViewBag.CurrentFilter })
+        </th>
         <th></th>
     </tr>
 
@@ -46,6 +49,9 @@
             @Html.DisplayFor(modelItem => item.TotalAmount)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.SpentAmount)
+        </td>
+        <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })
@@ -59,3 +65,12 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortBy = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+
+<div style="padding:10px; border:1px solid black">
+
+    @Html.ActionLink("Generate PDF", "Report", new { id = "PDF" }) |
+    @Html.ActionLink("Generate Doc", "Report", new { id = "Word" }) |
+    @Html.ActionLink("Generate Excel", "Report", new { id = "Excel" }) |
+    @Html.ActionLink("Generate Image", "Report", new { id = "Image" })
+</div>
