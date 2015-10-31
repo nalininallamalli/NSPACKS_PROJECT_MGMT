@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using HackathonPMA.Models;
 using PagedList;
+using System.Data.Entity.Validation;
 
 namespace HackathonPMA.Controllers
 {
@@ -155,20 +156,50 @@ namespace HackathonPMA.Controllers
             //TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = TempData["hdnUsr"];
             TempData["hdnFunds"] = TempData["hdnFunds"];
-            ViewBag.hdnUsr = TempData["hdnFunds"];
+            ViewBag.hdnFunds = TempData["hdnFunds"];
+            TempData["isEdit"] = TempData["isEdit"];
+
+            Project project = (Project)TempData["project"];
+            var fp = from s in db.FundProjects
+                     where s.ProjectId == project.Id
+                     select s;
+
+            if (Convert.ToString(TempData["isEdit"]) == "1")
+            {
+                
+                var fund = "";
+                foreach (FundProject e in fp)
+                {
+                    fund += "#" + e.FundId + "," + e.SpentAmount.Trim();
+                }
+                TempData["hdnFunds"] = fund;
+                ViewBag.hdnFunds = TempData["hdnFunds"];
+            }
             var hdnFunds= Convert.ToString( TempData["hdnFunds"]);
             var funds = from s in db.Funds
                         select s;
 
             List<Fund> lst = funds.ToList();
 
-             foreach (string s in hdnFunds.Split('#'))
-             {
-                 if (s != null && s != "")
-                 {
-                     lst.First(d => d.Id == Convert.ToInt32(s.Split(',')[0])).SpentAmount = s.Split(',')[1];
-                 }
-             }
+            foreach (string s in hdnFunds.Split('#'))
+            {
+                if (s != null && s != "")
+                {
+                    if (Convert.ToString(TempData["isEdit"]) == "1")
+                    {
+                        var rem = Convert.ToInt32(lst.First(d => d.Id == Convert.ToInt32(s.Split(',')[0])).SpentAmount) - Convert.ToInt32(s.Split(',')[1]);
+                        lst.First(d => d.Id == Convert.ToInt32(s.Split(',')[0])).SpentAmount=Convert.ToString(rem);
+                            
+                    }
+                }
+            }
+             TempData["project"] = TempData["project"];
+             TempData["hdnRid"] = TempData["hdnRid"];
+             //TempData["fundsMapping"] = TempData["fundsMapping"];
+             TempData["hdnUsr"] = TempData["hdnUsr"];
+             TempData["hdnFunds"] = TempData["hdnFunds"];
+             ViewBag.hdnFunds = TempData["hdnFunds"];
+             TempData["isEdit"] = TempData["isEdit"];
             return View(lst);
         }
 
@@ -181,14 +212,19 @@ namespace HackathonPMA.Controllers
                 TempData["project"] = null;
                 TempData["hdnUsr"] = null;
                 TempData["fundsMapping"] = null;
+                TempData["hdnUsr"] = null;
+                TempData["hdnRid"] = null;
+
+                TempData["hdnFunds"] = null;
+                TempData["isEdit"] = null;
                 return RedirectToAction("Index", "Projects");
             }
             TempData["project"] = TempData["project"];
             TempData["hdnRid"] = TempData["hdnRid"];
-            //TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = TempData["hdnUsr"];
             TempData["hdnFunds"] = hdnFunds;
             var hdnUsr = Convert.ToString(TempData["hdnUsr"]);
+            TempData["isEdit"] = TempData["isEdit"];
             if (btnAction == "Back")
             {
                 TempData["fundsMapping"] = lst;
@@ -196,11 +232,41 @@ namespace HackathonPMA.Controllers
             }
             //ToDo chk for page
             Project project = (Project)TempData["project"];
+
+            if (Convert.ToString(TempData["isEdit"]) == "1")
+            {
+                Project p = db.Projects.Find(project.Id);
+                p.Name = project.Name;
+                p.Description = project.Description;
+                p.StartDate = project.StartDate;
+                p.EndDate = project.EndDate;
+                p.City = project.City;
+                p.Location = project.Location;
+                p.Category = project.Category;
+                p.ModifiedOn = DateTime.Now;
+                db.Entry(p).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            else
+            {
             db.Projects.Add(project);
             db.SaveChanges();
+            }
             //ToAdd: start
             int id = project.Id;
             var Db = new ApplicationDbContext();
+            if (Convert.ToString(TempData["isEdit"]) == "1")
+            {
+                
+                var ep = from s in db.EmployeeProjects
+                         where s.ProjectId == id
+                         select s;
+                
+                foreach (EmployeeProject e in ep)
+                {
+                    db.EmployeeProjects.Remove(e);
+                }
+            }
             foreach (string s in hdnUsr.Split('#'))
             {
                 if (s != null && s != "")
@@ -221,39 +287,95 @@ namespace HackathonPMA.Controllers
             }
             //foreach (Fund f in lst)
             var sAmt = 0;
+            var rsAmt = 0.1;
+            if (Convert.ToString(TempData["isEdit"]) == "1")
+            {
+
+                var fp = from s in db.FundProjects
+                         where s.ProjectId == id
+                         select s;
+                var fundItr = fp.ToList();
+
+                foreach (FundProject e in fundItr)
+                {
+                    rsAmt += Convert.ToDouble(e.SpentAmount.Trim());
+
+                    Fund p = db.Funds.Find(e.FundId);
+
+                    if (p.SpentAmount == null)
+                        p.SpentAmount = "0.0";
+                    p.SpentAmount = Convert.ToString(Convert.ToInt32(Convert.ToDouble(p.SpentAmount.Trim()) - Convert.ToDouble(e.SpentAmount.Trim()))  ) ;
+                    
+                    p.SpentAmount = Convert.ToString(Convert.ToInt32(Convert.ToDouble(p.SpentAmount.Trim())));
+
+                    p.TotalAmount = Convert.ToString(Convert.ToInt32(Convert.ToDouble(p.TotalAmount.Trim())));
+
+                    if (p.SpentAmount == "0" || Convert.ToInt32(p.SpentAmount)<0)
+                        p.SpentAmount = null;
+                    foreach (FundProject f in p.FundProjects)
+                    {
+                        if (f.SpentAmount == null)
+                            f.SpentAmount = "0.0";
+
+                        f.SpentAmount = Convert.ToString(Convert.ToInt32(Convert.ToDouble(Convert.ToString(f.SpentAmount).Trim())));
+                        if (f.SpentAmount == "0" || Convert.ToInt32(f.SpentAmount) < 0)
+                            f.SpentAmount = null;
+                    }
+
+                    db.Entry(p).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    db.FundProjects.Remove(e);
+                }
+               
+            }
             foreach (string s in hdnFunds.Split('#'))
             {
                 if (s != null && s != "")
                 {
-                    Fund p = db.Funds.Find(s.Split(',')[0]);
-                    p.SpentAmount = Convert.ToInt16(p.SpentAmount) + s.Split(',')[1];
-                    sAmt += Convert.ToInt16(p.SpentAmount);
-                    db.Entry(p).State = EntityState.Modified;
-                    db.SaveChanges();
+                        var idf = Convert.ToInt32(s.Split(',')[0]);
+                        Fund p = db.Funds.Find(idf);
+                        p.TotalAmount = p.TotalAmount.Trim();
+                        if (p.SpentAmount == null)
+                            p.SpentAmount = "0.0";
+                        p.SpentAmount = Convert.ToString(Convert.ToInt32(Convert.ToDouble(Convert.ToString(p.SpentAmount).Trim()) + Convert.ToDouble(s.Split(',')[1])));
+                        sAmt += Convert.ToInt32(Convert.ToDouble(s.Split(',')[1]));
+                        //sAmt += Convert.ToInt32(Convert.ToInt32(s.Split(',')[1]));
+                        p.SpentAmount = p.SpentAmount.Trim();
+                        db.Entry(p).State = EntityState.Modified;
+                        db.SaveChanges();
 
-                    var cnt = 0;
-                    if (db.FundProjects.Count() > 0)
-                        cnt = db.FundProjects.Max(x => x.Id);
+                        var cnt = 0;
+                        if (db.FundProjects.Count() > 0)
+                            cnt = db.FundProjects.Max(x => x.Id);
 
-                    FundProject fp = new FundProject();
-                    fp.Id = cnt + 1;
-                    fp.FundId = Convert.ToInt32(s.Split(',')[0]);
-                    fp.SpentAmount = Convert.ToString(s.Split(',')[1]);
-                    fp.ProjectId = Convert.ToInt32(id);
+                        FundProject fp = new FundProject();
+                        fp.Id = cnt + 1;
+                        fp.FundId = Convert.ToInt32(s.Split(',')[0]);
+                        //fp.SpentAmount = Convert.ToString(s.Split(',')[1]);
+                        fp.SpentAmount = Convert.ToString(Convert.ToInt32(Convert.ToDouble(s.Split(',')[1])));
+                        fp.SpentAmount = fp.SpentAmount.Trim();
+                        fp.ProjectId = Convert.ToInt32(id);
 
-                    db.FundProjects.Add(fp);
+                        db.FundProjects.Add(fp);
 
-                    db.SaveChanges();
+                        db.SaveChanges();
                 }
             }
             Project pe = db.Projects.Find(id);
-            pe.TotalAllocatedAmount = Convert.ToInt16(pe.TotalAllocatedAmount) + sAmt;
+            pe.TotalAllocatedAmount = Convert.ToInt32(pe.TotalAllocatedAmount) - rsAmt + sAmt;
             db.Entry(pe).State = EntityState.Modified;
             db.SaveChanges();
 
+            TempData["project"] = null;
+            TempData["hdnUsr"] = null;
+            TempData["fundsMapping"] = null;
+            TempData["hdnUsr"] = null;
+            TempData["hdnRid"] = null;
+            TempData["isEdit"] = null;
 
-
-            return RedirectToAction("Index", "Home");
+            TempData["hdnFunds"] = null;
+            return RedirectToAction("Index", "Projects");
         }
         // GET: Funds/Delete/5
         [Authorize(Roles = "Admin")]

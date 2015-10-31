@@ -78,12 +78,39 @@ namespace HackathonPMA.Controllers
             ViewBag.hdnUsr = TempData["hdnUsr"];
             ViewBag.hdnRid = TempData["hdnRid"];
             TempData["hdnFunds"] = TempData["hdnFunds"];
+            TempData["isEdit"] = TempData["isEdit"];
             var Db = new ApplicationDbContext();
+            if (Convert.ToString(TempData["isEdit"]) == "1" && Convert.ToString(TempData["hdnUsr"]) == "")
+            {
+                var z = "";
+
+                Project project = (Project)TempData["project"];
+                var ep = from s in db.EmployeeProjects
+                         where s.ProjectId == project.Id
+                         select s;
+                var usr = "";
+                foreach (EmployeeProject e in ep)
+                {
+                    usr += "#" + e.EmployeeId;
+                   
+                    //var z1 = db.AspNetUsers.Where(item => item.Id == "0f3d796a-af0d-445c-9f5c-c4ad7624df45").Select(x => x.AspNetRoles.FirstOrDefault().Id).ToList();
+                    var z1 = db.AspNetUsers.Where(item => item.Id ==e.EmployeeId).Select(x => x.AspNetRoles.FirstOrDefault().Id).ToList();
+                    z = z1[0];
+                }
+                ViewBag.hdnRid = z;
+                ViewBag.hdnUsr = usr;
+                TempData["hdnUsr"] = usr;
+                TempData["hdnRid"] = z;
+            }
             var model = new RegisterViewModel();
             var list = Db.Roles.OrderBy(r => r.Name).Where(adm => adm.Name != "Admin").ToList()
                 .Select(rr => new SelectListItem { Value = rr.Id.ToString(), Text = rr.Name })
                 .ToList();
             model.Roles = (IEnumerable<SelectListItem>)list;
+            TempData["project"] = TempData["project"];
+            TempData["isEdit"] = TempData["isEdit"];
+            TempData["fundsMapping"] = TempData["fundsMapping"];            
+            TempData["hdnFunds"] = TempData["hdnFunds"];
             return View(model);
         }
 
@@ -96,24 +123,33 @@ namespace HackathonPMA.Controllers
                 TempData["project"] = null;
                 TempData["hdnUsr"] = null;
                 TempData["fundsMapping"] = null;
+                TempData["isEdit"] = null;
                 return RedirectToAction("Index", "Projects");
             }
             TempData["project"] = TempData["project"];
+            TempData["isEdit"] = TempData["isEdit"];
             TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = hdnUsr;
             TempData["hdnRid"] = hdnRid;
             TempData["hdnFunds"] = TempData["hdnFunds"];
+            Project project = (Project)TempData["project"];
+
             if (btnAction == "Back")
-            {                
-                return RedirectToAction("create", "Projects");
+            {
+                if (Convert.ToString(TempData["isEdit"]) == "1")
+                {
+                    return RedirectToAction("Edit", "Projects", new { id = project.Id });
+                }
+                return RedirectToAction("Create", "Projects");
             }
             if (btnAction == "Next")
             {
+                TempData["project"] = TempData["project"];
                 return RedirectToAction("fundsMapping", "Funds");
             }
 
             //ToDo chk for page
-            Project project = (Project)TempData["project"];
+            
             db.Projects.Add(project);
             db.SaveChanges();
             //ToAdd: start

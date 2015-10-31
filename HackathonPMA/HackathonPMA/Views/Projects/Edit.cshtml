@@ -75,8 +75,11 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" name="btnAction" value="Save" class="btn btn-default" />@*//ToAdd*@
-                <input type="submit" name="btnAction" value="Next" class="btn btn-default" />@*//ToAdd*@
+                <input type="hidden" name="btnAction" id="hdnValue" />
+
+                <input type="submit" value="Next" class="btn btn-default" onclick='$("#hdnValue").val("Next")' />
+                <input type="submit" value="Finish" class="btn btn-default" onclick='$("#hdnValue").val("Finish")' />
+                <input type="submit" value="Cancel" class="btn btn-default" onclick='$("#hdnValue").val("Cancel")' /> 
             </div>
         </div>
     </div>

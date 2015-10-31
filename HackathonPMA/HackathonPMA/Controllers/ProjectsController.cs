@@ -395,7 +395,7 @@ namespace HackathonPMA.Controllers
                 TempData["fundsMapping"] = TempData["fundsMapping"];
                 TempData["hdnUsr"] = TempData["hdnUsr"];
                 TempData["hdnRid"] = TempData["hdnRid"];
-
+                TempData["hdnFunds"] = TempData["hdnFunds"];
 
                 Project project = (Project)TempData["project"];
                 return View(project);
@@ -423,7 +423,7 @@ namespace HackathonPMA.Controllers
                 project.IsParent = true;
                 project.CreatedOn = DateTime.Now;
                 project.ModifiedOn = DateTime.Now;
-                project.TotalAllocatedAmount = 10000;
+                project.TotalAllocatedAmount = 0;
                 project.TotalSpentAmount = 0;
                 project.TotalSubProjects = 0;
                 project.SubProjectIds = "";                
@@ -434,6 +434,7 @@ namespace HackathonPMA.Controllers
                     TempData["fundsMapping"] = TempData["fundsMapping"];
                     TempData["hdnUsr"] = TempData["hdnUsr"];
                     TempData["hdnRid"] = TempData["hdnRid"];
+                    TempData["hdnFunds"] = TempData["hdnFunds"];
                     return RedirectToAction("shMapping", "Account");
                 }
                 db.Projects.Add(project);
@@ -451,11 +452,26 @@ namespace HackathonPMA.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult Edit(int? id)
         {
+            Project project;
+            if (TempData["project"] != null)
+            {
+                
+                TempData["project"] = TempData["project"];
+                TempData["isEdit"] = TempData["isEdit"];
+                TempData["fundsMapping"] = TempData["fundsMapping"];
+                TempData["hdnUsr"] = TempData["hdnUsr"];
+                TempData["hdnRid"] = TempData["hdnRid"];
+                TempData["hdnFunds"] = TempData["hdnFunds"];
+
+                 project = (Project)TempData["project"];
+                return View(project);
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Project project = db.Projects.Find(id);
+            }                            
+            
+             project = db.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -471,8 +487,23 @@ namespace HackathonPMA.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,StartDate,EndDate,City,Location,Category")] Project project, string btnAction)
         {
+            TempData["project"] = TempData["project"];
+            TempData["isEdit"] = TempData["isEdit"];
+            TempData["fundsMapping"] = TempData["fundsMapping"];
+            TempData["hdnUsr"] = TempData["hdnUsr"];
+            TempData["hdnRid"] = TempData["hdnRid"];
+            TempData["hdnFunds"] = TempData["hdnFunds"];
+
             if (ModelState.IsValid)
             {
+               
+                if (btnAction == "Cancel")
+                {
+                    TempData["project"] = null;
+                    TempData["hdnUsr"] = null;
+                    TempData["fundsMapping"] = null;
+                    return RedirectToAction("Index");
+                }
                 Project p = db.Projects.Find(project.Id);
                 p.Name = project.Name;
                 p.Description = project.Description;
@@ -482,15 +513,23 @@ namespace HackathonPMA.Controllers
                 p.Location = project.Location;
                 p.Category = project.Category;
                 p.ModifiedOn = DateTime.Now;
-                db.Entry(p).State = EntityState.Modified;
-                db.SaveChanges();
-                //ToAdd:start
-                int id = project.Id;
+                
                 if (btnAction == "Next")
                 {
-                    TempData["pid"] = id;
+                    //TempData["pid"] = id;//
+                    TempData["isEdit"] = "1";                    
+                    TempData["project"] = p;
+                    TempData["fundsMapping"] = TempData["fundsMapping"];
+                    TempData["hdnUsr"] = TempData["hdnUsr"];
+                    TempData["hdnRid"] = TempData["hdnRid"];
+                    TempData["hdnFunds"] = TempData["hdnFunds"];
+
                     return RedirectToAction("shMapping", "Account");
                 }
+
+                db.Entry(p).State = EntityState.Modified;
+                db.SaveChanges();
+                //ToAdd: start
                 return RedirectToAction("Index");
             }
             return View(project);
