@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using HackathonPMA.Models;
 using System.Collections.Generic;
 using PagedList;
+using System.Data.Entity;
 
 namespace HackathonPMA.Controllers
 {
@@ -150,11 +151,66 @@ namespace HackathonPMA.Controllers
 
             //ToDo chk for page
             
-            db.Projects.Add(project);
-            db.SaveChanges();
+            //db.Projects.Add(project);
+            //db.SaveChanges();
+            ////ToAdd: start
+            //int id = project.Id;
+            //var Db = new ApplicationDbContext();
+            //foreach (string s in hdnUsr.Split('#'))
+            //{
+            //    if (s != null && s != "")
+            //    {
+            //        var cnt = 0;
+            //        if (db.EmployeeProjects.Count() > 0)
+            //            cnt = db.EmployeeProjects.Max(x => x.Id);
+
+            //        EmployeeProject ep = new EmployeeProject();
+            //        ep.Id = cnt + 1;
+            //        ep.EmployeeId = s;
+            //        ep.ProjectId = Convert.ToInt32(id);
+
+            //        db.EmployeeProjects.Add(ep);
+
+            //        db.SaveChanges();
+            //    }
+            //}
+
+            //Project project = (Project)TempData["project"];
+
+            if (Convert.ToString(TempData["isEdit"]) == "1")
+            {
+                Project p = db.Projects.Find(project.Id);
+                p.Name = project.Name;
+                p.Description = project.Description;
+                p.StartDate = project.StartDate;
+                p.EndDate = project.EndDate;
+                p.City = project.City;
+                p.Location = project.Location;
+                p.Category = project.Category;
+                p.ModifiedOn = DateTime.Now;
+                db.Entry(p).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Projects.Add(project);
+                db.SaveChanges();
+            }
             //ToAdd: start
             int id = project.Id;
             var Db = new ApplicationDbContext();
+            if (Convert.ToString(TempData["isEdit"]) == "1")
+            {
+
+                var ep = from s in db.EmployeeProjects
+                         where s.ProjectId == id
+                         select s;
+
+                foreach (EmployeeProject e in ep)
+                {
+                    db.EmployeeProjects.Remove(e);
+                }
+            }
             foreach (string s in hdnUsr.Split('#'))
             {
                 if (s != null && s != "")
@@ -173,7 +229,13 @@ namespace HackathonPMA.Controllers
                     db.SaveChanges();
                 }
             }
-
+            TempData["project"] = null;
+            TempData["hdnUsr"] = null;
+            TempData["fundsMapping"] = null;
+            TempData["hdnUsr"] = null;
+            TempData["hdnRid"] = null;
+            TempData["isEdit"] = null;
+            TempData["hdnFunds"] = null;
            
             return RedirectToAction("Index", "projects");
         }

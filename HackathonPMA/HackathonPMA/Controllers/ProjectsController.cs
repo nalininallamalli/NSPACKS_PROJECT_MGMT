@@ -441,7 +441,15 @@ namespace HackathonPMA.Controllers
                 db.SaveChanges();
                  //ToAdd: start
                 int id = project.Id;
-                
+
+                TempData["project"] = null;
+                TempData["hdnUsr"] = null;
+                TempData["fundsMapping"] = null;
+                TempData["hdnUsr"] = null;
+                TempData["hdnRid"] = null;
+                TempData["isEdit"] = null;
+                TempData["hdnFunds"] = null;
+
                 return RedirectToAction("Index");
             }
 
@@ -529,6 +537,13 @@ namespace HackathonPMA.Controllers
 
                 db.Entry(p).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["project"] = null;
+                TempData["hdnUsr"] = null;
+                TempData["fundsMapping"] = null;
+                TempData["hdnUsr"] = null;
+                TempData["hdnRid"] = null;
+                TempData["isEdit"] = null;
+                TempData["hdnFunds"] = null;
                 //ToAdd: start
                 return RedirectToAction("Index");
             }

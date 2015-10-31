@@ -373,7 +373,6 @@ namespace HackathonPMA.Controllers
             TempData["hdnUsr"] = null;
             TempData["hdnRid"] = null;
             TempData["isEdit"] = null;
-
             TempData["hdnFunds"] = null;
             return RedirectToAction("Index", "Projects");
         }
