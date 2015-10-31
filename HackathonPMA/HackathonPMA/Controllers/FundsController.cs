@@ -174,6 +174,9 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
+                Double spentAmount = 0;
+                fund.SpentAmount = Convert.ToString(spentAmount).Trim();
+                fund.TotalAmount = fund.TotalAmount.Trim();
                 db.Funds.Add(fund);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -195,6 +198,8 @@ namespace HackathonPMA.Controllers
             {
                 return HttpNotFound();
             }
+            fund.TotalAmount = fund.TotalAmount.Trim();
+            fund.SpentAmount = fund.SpentAmount.Trim();
             return View(fund);
         }
 
@@ -208,7 +213,16 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(fund).State = EntityState.Modified;
+                Fund f = db.Funds.Find(fund.Id);
+                if(f == null)
+                {
+                    return HttpNotFound();
+                }
+                f.Name = fund.Name;
+                f.Description = fund.Description;
+                f.TotalAmount = fund.TotalAmount.Trim();
+                f.SpentAmount = f.SpentAmount.Trim();
+                db.Entry(f).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
