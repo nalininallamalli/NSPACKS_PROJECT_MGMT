@@ -287,7 +287,7 @@ namespace HackathonPMA.Controllers
             }
             //foreach (Fund f in lst)
             var sAmt = 0;
-            var rsAmt = 0.1;
+            var rsAmt = 0.0;
             if (Convert.ToString(TempData["isEdit"]) == "1")
             {
 
