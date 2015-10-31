@@ -1,11 +1,19 @@
 ﻿@{
+    var xColumn = ViewBag.xCol;
+    var yColumn = ViewBag.yCol;
+
+    foreach (string item in xColumn)
+    {
+       @Html.ActionLink(item, "ByProjectChart", "Analytics");
+      //  item = "<a href="~/Views/Analytics/ByProjectChart.cshtml">item</a>";
+    }
     var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
         .AddTitle("Project-Fund Chart")
         .AddLegend("Percentage Distribution")
         .AddSeries(
             name: "Project-Funds",
-            xValue: ViewBag.xCol,
-            yValues: ViewBag.yCol,
+            xValue: xColumn,
+            yValues: yColumn,
             xField: "Projects", yFields: "Funds", chartType: "pie")
             .Write();
 

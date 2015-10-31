@@ -1,0 +1,22 @@
+﻿@{
+    var xColumn = ViewBag.xCol;
+    var yColumn = ViewBag.yCol;
+    var zColumn = ViewBag.zCol;
+    var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
+        .AddTitle("Projects Fund & Inventory Distribution")
+        .AddLegend("Number of Funds and Inventories per project")
+        .AddSeries(
+            name: "Allocated Funds",
+        // xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
+        // yValues: new[] { "2", "6", "4", "5", "3" },
+            xValue: xColumn,
+            yValues: yColumn,
+            xField: "Projects", yFields: "Funds", chartType: "line")
+        .AddSeries(
+           name: "Allocated Inventory",
+                yValues: zColumn,
+                 chartType: "line"
+           )
+        .Write();
+}
+

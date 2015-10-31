@@ -18,8 +18,6 @@ namespace HackathonPMA.Controllers
         {
             var model = new ByProjectViewModel();
 
-            var totalFund = projectDb.Funds.ToList().Sum(f => Convert.ToDouble(f.TotalAmount));
-            var result = projectDb.Projects.ToList().Where(p => p.IsParent).OrderBy(p => p.Name).Select(pp => new {pp.Name, amount = Convert.ToDouble(pp.TotalAllocatedAmount)}).ToArray();
            /* var yValues = (from p in projectDb.Projects
                            join f in projectDb.FundProjects on p.Id equals f.ProjectId
                            group f by f.ProjectId into projGroup
@@ -29,26 +27,6 @@ namespace HackathonPMA.Controllers
                                amount = projGroup.Sum(fp => Convert.ToDouble(fp.TotalAmount))
                            });*/
             
-            List<string> projNameList = new List<string>();
-            List<double> projellocatedList = new List<double>();
-            double projectsTotal = 0;
-            for (int index = 0; index < result.Length; index++)
-            {
-                projNameList.Add(result.ElementAt(index).Name);
-                projellocatedList.Add(result.ElementAt(index).amount);
-                projectsTotal += result.ElementAt(index).amount;
-            }
-            if (totalFund > projectsTotal) {
-                projNameList.Add("Unallocated");
-                projellocatedList.Add(totalFund - projectsTotal);
-            }
-
-            var xValue = projNameList.ToArray();
-            var yValue = projellocatedList.ToArray();
-
-            ViewBag.xCol = xValue;
-            ViewBag.yCol = yValue;
-
             if (ProjectName != null)
             {
                 var listLocations = projectDb.Projects.Where(r => r.Name.Equals(ProjectName)).OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Location.ToString(), Text = rr.Location }).ToList();
@@ -85,8 +63,77 @@ namespace HackathonPMA.Controllers
         }
         public ActionResult CustomChart()
         {
-            //projectDb.Projects.GroupBy(pp => pp.City).Select(p2 => new { p2.Name, p2. });
+            var result = projectDb.Projects.Where(p => p.IsParent.Equals(true)).Select(pp => new { pp.Name, pp.TotalAllocatedAmount, pp.TotalSpentAmount }).ToArray();
+            List<string> projNameList = new List<string>();
+            List<double> projectallocatedList = new List<double>();
+            List<double> projectInvList = new List<double>();
+
+            for (int index = 0; index < result.Length; index++)
+            {
+                var tempAmount = result.ElementAt(index).TotalAllocatedAmount;
+                var availableAmount = (result.ElementAt(index).TotalAllocatedAmount - result.ElementAt(index).TotalSpentAmount);
+
+                projNameList.Add(result.ElementAt(index).Name);
+                projectallocatedList.Add(tempAmount);
+                projectInvList.Add(availableAmount);
+            }
+            ViewBag.xCol = projNameList.ToArray();
+            ViewBag.yCol = projectallocatedList.ToArray();
+            ViewBag.zCol = projectInvList.ToArray();
+
+           // projectDb.EmployeeProjects.Where(p1 => parentProj.Select(p2 => p2.Id).Contains(p1.)).Select(p3 => p3.EmployeeId);
+            //projectDb.Projects.GroupBy(pp => pp.City).Where();
           //  projectDb.EmployeeProjects.ToList().Count(e => e.EmployeeId)
+            return PartialView();
+        }
+
+        public ActionResult ProjEmployeeChart()
+        {
+            var parentProj = projectDb.Projects.ToList().Where(p => p.IsParent.Equals(true));
+            var eps = projectDb.EmployeeProjects;
+            int empCount = 0;
+            List<string> pNameList = new List<string>();
+            List<int> countList = new List<int>();
+
+            foreach (var project in parentProj)
+            {
+                foreach (var ep in eps.ToList())
+                {
+                    if (ep.ProjectId == project.Id)
+                    {
+                        empCount++;
+                    }
+                }
+                pNameList.Add(project.Name);
+                countList.Add(empCount);
+                empCount = 0;
+            }
+
+            ViewBag.aCol = pNameList.ToArray();
+            ViewBag.bCol = countList.ToArray();
+
+            return PartialView();
+        }
+
+        public ActionResult FundsInventoryChart() {
+            var result = projectDb.Projects.Where(p => p.IsParent.Equals(true)).Select(pp => new { pp.Name, pp.TotalAllocatedAmount, pp.TotalSpentAmount }).ToArray();
+            List<string> projNameList = new List<string>();
+            List<double> projectallocatedList = new List<double>();
+            List<double> projectInvList = new List<double>();
+
+            for (int index = 0; index < result.Length; index++)
+            {
+                var tempAmount = result.ElementAt(index).TotalAllocatedAmount;
+                var availableAmount = (result.ElementAt(index).TotalAllocatedAmount - result.ElementAt(index).TotalSpentAmount);
+
+                projNameList.Add(result.ElementAt(index).Name);
+                projectallocatedList.Add(tempAmount);
+                projectInvList.Add(availableAmount);
+            }
+            ViewBag.xCol = projNameList.ToArray();
+            ViewBag.yCol = projectallocatedList.ToArray();
+            ViewBag.zCol = projectInvList.ToArray();
+
             return PartialView();
         }
         public ActionResult ProjectsFundsChart()
@@ -105,7 +152,7 @@ namespace HackathonPMA.Controllers
 
                 projNameList.Add(result.ElementAt(index).Name + " (" + tempAmount + "%)");
                 projellocatedList.Add(tempAmount);
-                projectsTotal += tempAmount;
+                projectsTotal += result.ElementAt(index).amount;
             }
             if (totalFund > projectsTotal)
             {
@@ -123,9 +170,17 @@ namespace HackathonPMA.Controllers
             return PartialView();
         }
 
+        public class MyViewModel
+        {
+            public string Name  { get; set; }
+            public string City { get; set; }
+            public int count { get; set; }
+        }
+
         // POST: /Analytics/ByProjectChart
         public ActionResult ByProjectChart(ByProjectViewModel model)
         {
+            //projectDb.Projects.Where(x => x.IsParent.Equals(true)).GroupBy(y => y.City).Select(y => new MyViewModel{Name = y.Key})
            List<Project> projList = new List<Project>();
 
            findSubProjects(model.ProjectName, projList);
