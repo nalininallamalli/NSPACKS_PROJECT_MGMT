@@ -469,6 +469,15 @@ namespace HackathonPMA.Controllers
             {
                 return HttpNotFound();
             }
+            List<FundProject> fps = db.FundProjects.ToList();
+            foreach(FundProject fp in fps )
+            {
+                if(fp.FundId.Equals(id))
+                {
+                    ViewBag.message = "Fund is associated with one or more projects, It can not be deleted.";
+                    return View(fund);
+                }
+            }
             return View(fund);
         }
 
@@ -479,6 +488,19 @@ namespace HackathonPMA.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Fund fund = db.Funds.Find(id);
+            if (fund == null)
+            {
+                return HttpNotFound();
+            }
+            List<FundProject> fps = db.FundProjects.ToList();
+            foreach(FundProject fp in fps )
+            {
+                if(fp.FundId.Equals(id))
+                {
+                    ViewBag.message = "Fund is associated with one or more projects, It can not be deleted.";
+                    return View(fund);
+                }
+            }
             db.Funds.Remove(fund);
             db.SaveChanges();
             return RedirectToAction("Index");
