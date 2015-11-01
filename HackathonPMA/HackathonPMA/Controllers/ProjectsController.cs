@@ -46,7 +46,11 @@ namespace HackathonPMA.Controllers
 
             List<Project> selProjects = new List<Project>();
 
-            if (!User.IsInRole("Admin"))
+            if ((User.IsInRole("Admin")) || (User.IsInRole("Manager")))
+            {
+                selProjects = db.Projects.ToList();
+            }
+            else 
             {
                 string userId = User.Identity.GetUserId();
                 var empProjects = db.EmployeeProjects;
@@ -59,9 +63,7 @@ namespace HackathonPMA.Controllers
                         selProjects.Add(p);
                     }
                 }
-            } else {
-                selProjects = db.Projects.ToList();
-            }
+            } 
 
 
             var projects = from s in selProjects
