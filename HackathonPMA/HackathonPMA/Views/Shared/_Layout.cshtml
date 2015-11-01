@@ -7,9 +7,9 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
-
 </head>
 <body>
+    
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -48,12 +48,13 @@
             <div id="push"></div>
         </div>
     </div>
-    <footer id="footer">
+    <footer id="footer" style="background-color:#0066CC; color:black; font:bolder;">        
         <div class="container">
             <p>&copy; @DateTime.Now.Year - N-SPARKS Team</p>
         </div>
+        
     </footer>
-
+    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
