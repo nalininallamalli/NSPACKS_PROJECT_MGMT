@@ -174,7 +174,7 @@ namespace HackathonPMA.Controllers
         {
             if (ModelState.IsValid)
             {
-                Double spentAmount = 0;
+                Int32 spentAmount = 0;
                 fund.SpentAmount = Convert.ToString(spentAmount).Trim();
                 fund.TotalAmount = fund.TotalAmount.Trim();
                 db.Funds.Add(fund);

@@ -32,7 +32,7 @@ namespace HackathonPMA.Models
         [Required]
         public string Name { get; set; }
 
-        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Spent Amount must be a number")]
+        [RegularExpression("([0-9]*)", ErrorMessage = "Spent Amount must be a number")]
         public string SpentAmount { get; set; }
     
         public virtual ICollection<FundProject> FundProjects { get; set; }
