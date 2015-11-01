@@ -65,7 +65,13 @@
                 $("#ddlRole").change();
             });
             $('select#ddlRole').change(function () {
+                
                 var roleid = $(this).val();
+                var thisvalue = $(this).find("option:selected").text();
+                if (thisvalue == "Manager" || roleid == "") {
+                    $("#tbDetails > tbody").html("");
+                    return;
+                }
                 $('#hdnRid').val(roleid);
                 //loadings users from database - related to role selecteds
                 $.ajax({
