@@ -100,3 +100,11 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("ListUsers",
     new { page, sortBy = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+@*<div style="padding:10px; border:1px solid black">*@
+
+@Html.ActionLink("Generate PDF", "Report", new { id = "PDF" }) |
+@Html.ActionLink("Generate Doc", "Report", new { id = "Word" }) |
+@Html.ActionLink("Generate Excel", "Report", new { id = "Excel" }) |
+@Html.ActionLink("Generate Image", "Report", new { id = "Image" })
+@*</div>*@

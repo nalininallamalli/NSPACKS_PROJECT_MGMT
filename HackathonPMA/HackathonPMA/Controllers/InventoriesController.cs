@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using HackathonPMA.Models;
 using PagedList;
+using Microsoft.Reporting.WebForms;
+using System.IO;
 
 namespace HackathonPMA.Controllers
 {
@@ -81,6 +83,65 @@ namespace HackathonPMA.Controllers
             int pageNumber = (page ?? 1);
             return View(inventories.ToPagedList(pageNumber, pageSize));
            // return View(inventories.ToList());
+        }
+
+
+        public ActionResult Report(string id)
+        {
+            LocalReport lr = new LocalReport();
+
+            string path = Path.Combine(Server.MapPath("~/Reports"), "Inventories.rdlc");
+            if (System.IO.File.Exists(path))
+            {
+                lr.ReportPath = path;
+            }
+            else
+            {
+                return View("Index");
+            }
+
+            List<Inventory> cm = new List<Inventory>();
+
+            using (Entities es = new Entities())
+            {
+                cm = es.Inventories.ToList();
+            }
+
+            ReportDataSource rd = new ReportDataSource("InventoriesDataSet", cm);
+            lr.DataSources.Add(rd);
+
+            string reportType = id;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+
+            string deviceInfo =
+
+            "<DeviceInfo>" +
+            "  <OutputFormat>" + id + "</OutputFormat>" +
+            "  <PageWidth>8.5in</PageWidth>" +
+            "  <PageHeight>11in</PageHeight>" +
+            "  <MarginTop>0.5in</MarginTop>" +
+            "  <MarginLeft>1in</MarginLeft>" +
+            "  <MarginRight>1in</MarginRight>" +
+            "  <MarginBottom>0.5in</MarginBottom>" +
+            "</DeviceInfo>";
+
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+
+            renderedBytes = lr.Render(
+                reportType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+
+
+            return File(renderedBytes, mimeType);
         }
 
         // GET: Inventories/Details/5
