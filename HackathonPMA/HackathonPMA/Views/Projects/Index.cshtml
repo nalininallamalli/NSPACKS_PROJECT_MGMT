@@ -80,7 +80,7 @@
 
 @if (HttpContext.Current.User.Identity.IsAuthenticated)
 {
-    if (User.IsInRole("Admin"))
+    if ((User.IsInRole("Admin")) || (User.IsInRole("Manager")))
     {
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
