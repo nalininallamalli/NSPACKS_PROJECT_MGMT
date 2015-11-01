@@ -77,7 +77,7 @@
                     success: function (data) {
                         $("#tbDetails > tbody").html("");
                         // selecteduserid.value = "";
-                        $('#selecteduserid').val("");
+                        //$('#selecteduserid').val("");
                         for (var i = 0; i < data.length; i++) {
                             var val = "";
                             if ($('#selecteduserid1').val().toString().indexOf(data[i].Id) > -1) {
