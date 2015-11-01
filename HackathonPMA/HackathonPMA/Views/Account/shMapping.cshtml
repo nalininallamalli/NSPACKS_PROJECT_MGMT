@@ -32,7 +32,6 @@
                         <th>FirstName</th>
                         <th>LastName</th>
                         <th>UserName</th>
-                        <th>Gender</th>
                         <th>City</th>
                         <th>State</th>
                         <th />
@@ -98,7 +97,7 @@
                                 $('#selecteduserid').val($('#selecteduserid').val() + "#" + data[i].Id);
                             }
                             $("#tbDetails").append("<tr><td>" + data[i].FirstName + "</td><td>" + data[i].LastName + "</td><td>"
-                                + data[i].UserName + "</td><td>" + data[i].Gender + "</td><td>" + data[i].City + "</td><td>" + data[i].State +
+                                + data[i].UserName + "</td><td>" + data[i].City + "</td><td>" + data[i].State +
                                 //"</td><td><input type='checkbox' id='chkshMap' onclick='AddRemoveUser(this," + data[i].Id+ ");' /></td></tr>");
                                 "</td><td><input type='checkbox' id='chkshMap' value='" + data[i].Id     
                                 + "' " + val + " /></td></tr>");
