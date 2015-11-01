@@ -47,7 +47,13 @@
             <input type="hidden" name="btnAction" id="hdnValue" />
 
             <input type="submit" id="btnActionBack" value="Back" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Back")' />
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Admin"))
+    {
             <input type="submit" id="btnActionNext" value="Next" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Next")' />
+    }
+}
             <input type="submit" id="btnActionSave" value="Finish" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Finish")' />            
             <input type="submit" id="btnActionSave" value="Cancel" class="btn btn-default cancel" onclick='$("#hdnValue").val("Cancel")' />            
         </div>
