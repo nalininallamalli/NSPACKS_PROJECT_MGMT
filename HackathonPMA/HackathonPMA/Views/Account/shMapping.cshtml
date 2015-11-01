@@ -50,7 +50,10 @@
 {
     if (User.IsInRole("Admin"))
     {
+        if(ViewBag.IsParent)
+        { 
             <input type="submit" id="btnActionNext" value="Next" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Next")' />
+        }
     }
 }
             <input type="submit" id="btnActionSave" value="Finish" class="btn btn-default  cancel" onclick='$("#hdnValue").val("Finish")' />            

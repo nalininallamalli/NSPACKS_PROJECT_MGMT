@@ -503,6 +503,7 @@ namespace HackathonPMA.Controllers
             TempData["hdnUsr"] = TempData["hdnUsr"];
             TempData["hdnRid"] = TempData["hdnRid"];
             TempData["hdnFunds"] = TempData["hdnFunds"];
+            TempData["isParent"] = TempData["isParent"];
 
             if (ModelState.IsValid)
             {
@@ -512,6 +513,7 @@ namespace HackathonPMA.Controllers
                     TempData["project"] = null;
                     TempData["hdnUsr"] = null;
                     TempData["fundsMapping"] = null;
+                    TempData["isParent"] = null;
                     return RedirectToAction("Index");
                 }
                 Project p = db.Projects.Find(project.Id);
@@ -533,6 +535,7 @@ namespace HackathonPMA.Controllers
                     TempData["hdnUsr"] = TempData["hdnUsr"];
                     TempData["hdnRid"] = TempData["hdnRid"];
                     TempData["hdnFunds"] = TempData["hdnFunds"];
+                    TempData["isParent"] = p.IsParent;
 
                     return RedirectToAction("shMapping", "Account");
                 }
@@ -545,6 +548,7 @@ namespace HackathonPMA.Controllers
                 TempData["hdnUsr"] = null;
                 TempData["hdnRid"] = null;
                 TempData["isEdit"] = null;
+                TempData["isParent"] = null;
                 TempData["hdnFunds"] = null;
                 //ToAdd: start
                 return RedirectToAction("Index");

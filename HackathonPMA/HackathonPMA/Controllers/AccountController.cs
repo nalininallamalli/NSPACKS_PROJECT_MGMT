@@ -80,6 +80,7 @@ namespace HackathonPMA.Controllers
             TempData["fundsMapping"] = TempData["fundsMapping"];
             ViewBag.hdnUsr = TempData["hdnUsr"];
             ViewBag.hdnRid = TempData["hdnRid"];
+            ViewBag.IsParent = TempData["isParent"];
             TempData["hdnFunds"] = TempData["hdnFunds"];
             TempData["isEdit"] = TempData["isEdit"];
             var Db = new ApplicationDbContext();
@@ -112,6 +113,7 @@ namespace HackathonPMA.Controllers
             model.Roles = (IEnumerable<SelectListItem>)list;
             TempData["project"] = TempData["project"];
             TempData["isEdit"] = TempData["isEdit"];
+            TempData["isParent"] = TempData["isParent"];
             TempData["fundsMapping"] = TempData["fundsMapping"];            
             TempData["hdnFunds"] = TempData["hdnFunds"];
             return View(model);
@@ -131,6 +133,7 @@ namespace HackathonPMA.Controllers
             }
             TempData["project"] = TempData["project"];
             TempData["isEdit"] = TempData["isEdit"];
+            TempData["isParent"] = TempData["isParent"];
             TempData["fundsMapping"] = TempData["fundsMapping"];
             TempData["hdnUsr"] = hdnUsr;
             TempData["hdnRid"] = hdnRid;
@@ -238,6 +241,7 @@ namespace HackathonPMA.Controllers
             TempData["hdnRid"] = null;
             TempData["isEdit"] = null;
             TempData["hdnFunds"] = null;
+            TempData["isParent"] = null;
            
             return RedirectToAction("Index", "projects");
         }
