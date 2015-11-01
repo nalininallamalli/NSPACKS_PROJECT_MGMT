@@ -68,7 +68,8 @@
                 
                 var roleid = $(this).val();
                 var thisvalue = $(this).find("option:selected").text();
-                if (thisvalue == "Manager" || roleid == "") {
+                //if (thisvalue == "Manager" || roleid == "") {//NTC
+                if (roleid == "") {
                     $("#tbDetails > tbody").html("");
                     return;
                 }
