@@ -3,17 +3,17 @@
     var yColumn = ViewBag.yCol;
     var zColumn = ViewBag.zCol;
     var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
-        .AddTitle("Projects Fund & Inventory Distribution")
-        .AddLegend("Number of Funds and Inventories per project")
+        .AddTitle("Inventory Distribution")
+        .AddLegend("Allocated vs. Spent Inventories")
         .AddSeries(
-            name: "Allocated Funds",
+            name: "Inventories",
         // xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
         // yValues: new[] { "2", "6", "4", "5", "3" },
             xValue: xColumn,
             yValues: yColumn,
-            xField: "Projects", yFields: "Funds", chartType: "line")
+            xField: "Inventories", yFields: "Allocated Inventories", chartType: "line")
         .AddSeries(
-           name: "Allocated Inventory",
+           name: "Spent Inventories",
                 yValues: zColumn,
                  chartType: "line"
            )

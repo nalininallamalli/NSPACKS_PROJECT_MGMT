@@ -449,6 +449,7 @@
     </Content>
     <Content Include="Views\Account\Report.cshtml" />
     <Content Include="Views\Funds\Report.cshtml" />
+    <Content Include="Views\Analytics\LocationChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-HackathonPMA-20151015031441.mdf" />

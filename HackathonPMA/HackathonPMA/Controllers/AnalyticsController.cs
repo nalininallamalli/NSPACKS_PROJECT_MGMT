@@ -18,35 +18,19 @@ namespace HackathonPMA.Controllers
         {
             var model = new ByProjectViewModel();
 
-           /* var yValues = (from p in projectDb.Projects
-                           join f in projectDb.FundProjects on p.Id equals f.ProjectId
-                           group f by f.ProjectId into projGroup
-                           select new 
-                           {
-                               pName = 
-                               amount = projGroup.Sum(fp => Convert.ToDouble(fp.TotalAmount))
-                           });*/
-            
-            if (ProjectName != null)
+           /* if (ProjectName != null)
             {
                 var listLocations = projectDb.Projects.Where(r => r.Name.Equals(ProjectName)).OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Location.ToString(), Text = rr.Location }).ToList();
                 model.LocationList = (IEnumerable<SelectListItem>)listLocations;
 
                 return PartialView("ByProjectChart");
-            }
+            }*/
 
             var list = projectDb.Projects.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             model.ProjectList = (IEnumerable<SelectListItem>)list;
             model.LocationList = null;
 
             return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult LoadLocations(string projName)
-        {
-            var locations = projectDb.Projects.Where(item => item.Name == projName).Select(x => x);
-            return Json(locations.ToList());
         }
 
         public ActionResult _ViewByProjectTab()
@@ -66,20 +50,20 @@ namespace HackathonPMA.Controllers
             var result = projectDb.Projects.Where(p => p.IsParent.Equals(true)).Select(pp => new { pp.Name, pp.TotalAllocatedAmount, pp.TotalSpentAmount }).ToArray();
             List<string> projNameList = new List<string>();
             List<double> projectallocatedList = new List<double>();
-            List<double> projectInvList = new List<double>();
+            List<double> projectSpentList = new List<double>();
 
             for (int index = 0; index < result.Length; index++)
             {
                 var tempAmount = result.ElementAt(index).TotalAllocatedAmount;
-                var availableAmount = (result.ElementAt(index).TotalAllocatedAmount - result.ElementAt(index).TotalSpentAmount);
+                var spentAmount = result.ElementAt(index).TotalSpentAmount;
 
                 projNameList.Add(result.ElementAt(index).Name);
                 projectallocatedList.Add(tempAmount);
-                projectInvList.Add(availableAmount);
+                projectSpentList.Add(spentAmount);
             }
             ViewBag.xCol = projNameList.ToArray();
             ViewBag.yCol = projectallocatedList.ToArray();
-            ViewBag.zCol = projectInvList.ToArray();
+            ViewBag.zCol = projectSpentList.ToArray();
 
            // projectDb.EmployeeProjects.Where(p1 => parentProj.Select(p2 => p2.Id).Contains(p1.)).Select(p3 => p3.EmployeeId);
             //projectDb.Projects.GroupBy(pp => pp.City).Where();
@@ -111,6 +95,43 @@ namespace HackathonPMA.Controllers
 
             ViewBag.aCol = pNameList.ToArray();
             ViewBag.bCol = countList.ToArray();
+
+            return PartialView();
+        }
+
+        public ActionResult LocationChart()
+        {
+            var result = projectDb.Projects.Select(pp => new { pp.City}).ToArray();
+            List<string> cityList = new List<string>();
+            List<int> countList = new List<int>();
+
+            Dictionary<string, int> projCityDictionary = new Dictionary<string, int>();
+          
+            for (int index = 0; index < result.Length; index++)
+            {
+                var tempCity = result.ElementAt(index).City;
+                if (tempCity != null)
+                {
+                    tempCity = tempCity.ToLower();
+                    if (projCityDictionary.ContainsKey(tempCity))
+                    {
+                        projCityDictionary[tempCity] = projCityDictionary[tempCity] + 1;
+                    }
+                    else
+                    {
+                        projCityDictionary.Add(tempCity, 1);
+                    }
+                }
+            }
+            var enumerator = projCityDictionary.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var pair = enumerator.Current;
+                cityList.Add(pair.Key);
+                countList.Add(pair.Value);
+            }
+            ViewBag.xCol = cityList.ToArray();
+            ViewBag.yCol = countList.ToArray();
 
             return PartialView();
         }

@@ -42,31 +42,6 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-
-        $(function () {
-            $('select#projDropDown').change(function () {
-                var projName = $(this).val();
-                //loadings locations from database for the selected project
-                $.ajax({
-                    url: 'LoadLocations',
-                    type: 'POST',
-                    data: JSON.stringify({ projName: projName }),
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    success: function (data) {
-                        // selecteduserid.value = "";
-                        $('#locationDropDown').val(data);
-                    }
-                });
-            });
-            //Binding click event on dynamic created element
-            $(document).on('click', "#chkshMap", function () {
-                var x = this;
-                // selecteduserid.value = selecteduserid.value + "#" + x.value;
-                $('#selecteduserid').val($('#selecteduserid').val() + "#" + x.value);
-            });
-
-
             //Binding click event on static elemnts
             $("input#showGraph").on('click', function () {
                 return ByProjectChart();
