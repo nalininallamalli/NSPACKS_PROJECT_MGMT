@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Analytics View";
+}
+
+<!-- Tab Buttons -->
+<div>
+<ul id="tabstrip" class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#_ViewByFundsTab" role="tab" data-toggle="tab">View by Funds</a></li>
+    <li><a href="#_ViewByProjectTab" role="tab" data-toggle="tab">View by Project</a></li>
+    <li><a href="#_CustomViewTab" role="tab" data-toggle="tab">Overall Statistics</a></li>
+</ul>
+
+<!-- Tab Content Containers -->
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="_ViewByFundsTab">@Html.Partial("~/Views/Analytics/_ViewByFundsTab.cshtml")</div>
+    <div class="tab-pane fade" id="_ViewByProjectTab">@Html.Partial("~/Views/Analytics/_ViewByProjectTab.cshtml")</div>
+    <div class="tab-pane fade" id="_CustomViewTab">@Html.Partial("~/Views/Analytics/_CustomViewTab.cshtml")</div>
+</div>
+</div>

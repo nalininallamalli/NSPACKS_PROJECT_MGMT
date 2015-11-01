@@ -1,0 +1,69 @@
+﻿@* @model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> *@
+
+@model PagedList.IPagedList<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Roles";
+}
+
+<h3>Roles</h3>
+
+<p>
+    @Html.ActionLink("Create New Role", "Create")
+</p>
+@using (Html.BeginForm("Index", "Roles", FormMethod.Get))
+{
+    <p>
+        @Html.TextBox("searchBy", ViewBag.CurrentFilter as string)
+        <input type="submit" class="btn btn-default" value="Search" />
+    </p>
+}
+
+
+    <table class="table">
+        <tr>
+            <th>
+               @* @Html.DisplayNameFor(model => model.Name) *@
+                @Html.ActionLink("Name", "Index", new { sortBy = ViewBag.NameSort, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+
+@if ((item.Name.Equals("Admin") || item.Name.Equals("Individual") || item.Name.Equals("Manager")))
+{
+            <td>
+                
+            </td>
+}
+else
+{
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+}
+        </tr>
+    }
+    
+    </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortBy = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<div style="padding:10px; border:1px solid black">
+
+    @Html.ActionLink("Generate PDF", "Report", new { id = "PDF" }) |
+    @Html.ActionLink("Generate Doc", "Report", new { id = "Word" }) |
+    @Html.ActionLink("Generate Excel", "Report", new { id = "Excel" }) |
+    @Html.ActionLink("Generate Image", "Report", new { id = "Image" })
+</div>

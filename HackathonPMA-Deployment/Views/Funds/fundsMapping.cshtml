@@ -1,0 +1,184 @@
+﻿@model IEnumerable<HackathonPMA.Models.Fund>
+
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Fund mapping details</h2>
+
+@using (Html.BeginForm("fundsMapping", "Funds", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input id="hdnFunds" type="hidden" name="hdnFunds" value="@ViewBag.hdnFunds" />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <table id="tbDetails" class="table">
+                <tr>
+                    <th>
+                        @Html.ActionLink("Name", "Index", new { sortBy = ViewBag.NameSort })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Description", "Index", new { sortBy = ViewBag.DescriptionSort })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Amount", "Index", new { sortBy = ViewBag.AmountSort })
+                    </th>
+                    <th>
+                        Available Amount
+                    </th>
+                    <th>
+                        Choose Share (%)
+                    </th>
+                    <th>
+                        Amount allocated
+                    </th>
+                </tr>
+                @{
+    int counter = 0;
+    var val = "";
+    var t = 0.0;
+    var perc = 0.0;
+    var refVal = 0.0;
+    int j = 0;
+    var arr = "".Split('#'); ;
+    if (@ViewBag.hdnFunds != null)
+    {
+        arr = @ViewBag.hdnFunds.Split('#');
+    }
+    var id = "";
+                }
+                @foreach (var item in Model)
+                {
+                    counter++;
+                    perc = 0;
+                    refVal = 0;
+                    t = Convert.ToDouble(item.TotalAmount) - Convert.ToDouble(item.SpentAmount);
+                    id = "sAmt" + counter.ToString();
+                    
+                    for (@j = 0; @j < @arr.Count(); @j++)
+                    {
+                        if (Convert.ToString(arr[@j].Split(',')[0]) == Convert.ToString(@item.Id))
+                        {
+                            perc = Convert.ToDouble(arr[@j].Split(',')[1]) * 100 / Convert.ToDouble(t);
+                            perc = Math.Round(perc);
+                            refVal = Convert.ToDouble(arr[@j].Split(',')[1]);
+                            refVal = Math.Round(refVal);
+                        }
+                    }
+
+
+                    t = Convert.ToDouble(item.TotalAmount) - Convert.ToDouble(item.SpentAmount);
+                   
+                        id = "sAmt" + counter.ToString();
+                    val = @item.TotalAmount;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalAmount)
+                        </td>
+                        <td>
+                            @t
+                        </td>
+                        <td>
+                            <input type="text" id="perc" class="number-only" value="@perc" onmousedown="chkAmt(this);" onfocus="chkAmt(this);" onkeyup="AllAmt(this, @item.Id, @t, 'sAmt' + @counter.ToString());" />
+                        </td>
+                        <td>
+                            @*@Html.LabelFor(modelItem => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })*@
+
+                            @*@Html.LabelFor(f => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })
+
+                            @Html.DisplayFor(f => item.SpentAmount, new { @id = "sAmt" + counter.ToString() })*@
+
+                            
+                            
+                            <input type="text" value="@refVal"  readonly="readonly" id="@id" />
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+            @{
+    if (Model.Count() < 1)
+    {
+        <div>Funds are not available.. Please add funds.</div>
+    }
+
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="hidden" name="btnAction" id="hdnValue" />
+
+            <input type="submit" id="btnActionSave" value="Back" class="btn btn-default" onclick='$("#hdnValue").val("Back")' />
+            <input type="submit" id="btnActionSave" value="Finish" class="btn btn-default" onclick='$("#hdnValue").val("Finish")' />
+            <input type="submit" id="btnActionSave" value="Cancel" class="btn btn-default" onclick='$("#hdnValue").val("Cancel")' />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        $(function(){
+
+            $('.number-only').keypress(function(e) {
+                if(isNaN(this.value+""+String.fromCharCode(e.charCode))) return false;
+            })
+            .on("cut copy paste",function(e){
+                e.preventDefault();
+            });
+
+        });
+        function chkAmt(cnt) {
+            var per = cnt.value;            
+            if (per < 1) {
+                $(cnt).val('');
+            }
+        }
+
+        function AllAmt(cnt,fid, amt, cntrl)
+        {
+            var per=cnt.value;
+            if(per=="-")
+                per=0
+            if(per<0)
+                per=0
+            if(per>100 )
+            {
+                per = 100;
+                $(cnt).val('100');
+            }
+            var hdnval = "";
+            var isPresent = 0;
+            var x = ((per * amt) / 100);;
+            // selecteduserid.value = selecteduserid.value + "#" + x.value;
+            var arr = $('#hdnFunds').val().split("#");
+         
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i] != "") {
+                    var arr1 = arr[i].split(",");
+                    if (arr1[0] == fid) {
+                        arr1[1] = x;// if present update the amt
+                        isPresent = 1;
+                    }
+                    if(x>0)
+                        hdnval = hdnval + "#" + arr1[0] + "," + arr1[1];//reconstruct the mapping if valid amt is allocated
+                }
+            }
+            if (isPresent == 0)
+                hdnval = hdnval + "#" + fid + "," + x;
+
+            $('#hdnFunds').val(hdnval);
+
+            $('#'+cntrl).val((per*amt)/100);
+        }
+    </script>
+}

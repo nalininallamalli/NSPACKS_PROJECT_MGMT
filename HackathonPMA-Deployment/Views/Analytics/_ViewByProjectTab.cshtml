@@ -1,0 +1,51 @@
+﻿@model HackathonPMA.Models.ByProjectViewModel
+@{
+    ViewBag.Title = "View Graph By Project";
+}
+
+<h2>View Graph By Project</h2>
+
+<div class="row">
+    <div class="col-md-14">
+        <section id="showGraph">
+            @using (Html.BeginForm ("ByProjectChart", "Analytics"))
+            {
+                <div class="form-horizontal">
+                    @Html.AntiForgeryToken()
+                    <h4>Select Project to view graph</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ProjectName, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.ProjectName, Model.ProjectList, "Select Project ...", new { @class = "form-control", @id = "projDropDown" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" id="showGraph" value="Show Graph" class="btn btn-default" />
+                        </div>
+                    </div>
+                   </div>
+         }
+</section>
+    </div>
+    <!-- <div class="col-md-4">
+         <section id="socialLoginForm">
+          @*   @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        *@ ></section>
+     </div> -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+            //Binding click event on static elemnts
+            $("input#showGraph").on('click', function () {
+                return ByProjectChart();
+            });
+        });
+    </script>
+}

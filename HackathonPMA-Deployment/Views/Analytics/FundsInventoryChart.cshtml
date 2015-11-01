@@ -1,0 +1,20 @@
+﻿@{
+    var xColumn = ViewBag.xCol;
+    var yColumn = ViewBag.yCol;
+    var zColumn = ViewBag.zCol;
+    var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
+        .AddTitle("Fund Distribution")
+        .AddLegend("Allocated vs. Spent Funds")
+        .AddSeries(
+            name: "Projects",
+            xValue: xColumn,
+            yValues: yColumn,
+            xField: "Projects", yFields: "Allocated Funds", chartType: "line")
+        .AddSeries(
+           name: "Spent Funds",
+                yValues: zColumn,
+                 chartType: "line"
+           )
+        .Write();
+}
+
