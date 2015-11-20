@@ -636,7 +636,38 @@ namespace HackathonPMA.Controllers
                         db.Entry(mainProject).State = EntityState.Modified;
                     }
                 }
+                else // we are deleting the parent project
+                {
+                    double remaining = project.TotalAllocatedAmount - project.TotalSpentAmount;
 
+                    List<FundProject> fps = db.FundProjects.ToList();
+                    foreach (FundProject fp in fps)
+                    {   
+                        if (fp.ProjectId.Equals(project.Id))
+                        {
+                            Fund fund = db.Funds.Find(fp.FundId);
+                            if(fund != null)
+                            { 
+                                double fundAmount = Convert.ToDouble(fund.SpentAmount);
+                                if(fundAmount >= remaining)
+                                { 
+                                    fundAmount = fundAmount - remaining;
+                                    remaining = 0;
+                                }
+                                else
+                                {
+                                    remaining = remaining - fundAmount;
+                                    fundAmount = 0;                                
+                                }
+                                fund.SpentAmount = Convert.ToString((Int64)fundAmount);
+                                fund.TotalAmount = fund.TotalAmount.Trim();
+                                db.Entry(fund).State = EntityState.Modified;
+                            }
+                        }
+                        if (remaining <= 0)
+                            break;
+                    }
+                }
                 db.Projects.Remove(project);
             }
             db.SaveChanges();
