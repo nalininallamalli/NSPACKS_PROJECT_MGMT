@@ -169,17 +169,17 @@ namespace HackathonPMA.Controllers
             double projectsTotal = 0;
             for (int index = 0; index < result.Length; index++)
             {
-                var tempAmount = (result.ElementAt(index).amount) * 100 / totalFund;
+                double tempAmount = (result.ElementAt(index).amount) * 100 / totalFund;
 
-                projNameList.Add(result.ElementAt(index).Name + " (" + tempAmount + "%)");
-                projellocatedList.Add(tempAmount);
+                projNameList.Add(result.ElementAt(index).Name + " (" + Math.Round(tempAmount, 2) + "%)");
+                projellocatedList.Add(Math.Round(tempAmount,2));
                 projectsTotal += result.ElementAt(index).amount;
             }
             if (totalFund > projectsTotal)
             {
                 var diff = (totalFund - projectsTotal) * 100 / totalFund;
-                projNameList.Add("Unallocated" + " (" + diff + "%)");
-                projellocatedList.Add(diff);
+                projNameList.Add("Unallocated" + " (" + Math.Round(diff, 2) + "%)");
+                projellocatedList.Add(Math.Round(diff,2));
             }
 
             var xValue = projNameList.ToArray();
