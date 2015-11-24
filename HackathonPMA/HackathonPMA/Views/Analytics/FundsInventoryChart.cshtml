@@ -4,14 +4,14 @@
     var zColumn = ViewBag.zCol;
     var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
         .AddTitle("Fund Distribution")
-        .AddLegend("Allocated vs. Spent Funds")
+        .AddLegend("Allocated Vs. Available Funds")
         .AddSeries(
-            name: "Projects",
+            name: "Allocated Funds",
             xValue: xColumn,
             yValues: yColumn,
             xField: "Projects", yFields: "Allocated Funds", chartType: "line")
         .AddSeries(
-           name: "Spent Funds",
+           name: "Available Funds",
                 yValues: zColumn,
                  chartType: "line"
            )
