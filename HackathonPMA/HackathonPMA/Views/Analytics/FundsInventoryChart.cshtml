@@ -9,11 +9,11 @@
             name: "Allocated Funds",
             xValue: xColumn,
             yValues: yColumn,
-            xField: "Projects", yFields: "Allocated Funds", chartType: "line")
+            xField: "Projects", yFields: "Allocated Funds", chartType: "bar")
         .AddSeries(
            name: "Available Funds",
                 yValues: zColumn,
-                 chartType: "line"
+                 chartType: "bar"
            )
         .Write();
 }

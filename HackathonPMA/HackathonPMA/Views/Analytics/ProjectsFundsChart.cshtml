@@ -7,14 +7,14 @@
        @Html.ActionLink(item, "ByProjectChart", "Analytics");
       //  item = "<a href="~/Views/Analytics/ByProjectChart.cshtml">item</a>";
     }
-    var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
+
+    var myChart = new Chart(width: 900, height: 600, themePath:"./theme.xml")
         .AddTitle("Project-Fund Chart")
         .AddLegend("Percentage Distribution")
-        .AddSeries(
+        .AddSeries( 
             name: "Project-Funds",
             xValue: xColumn,
             yValues: yColumn,
-            xField: "Projects", yFields: "Funds", chartType: "pie")
+            chartType: "pie")
             .Write();
-
 }

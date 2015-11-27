@@ -12,11 +12,11 @@
            // yValues: new[] { "2", "6", "4", "5", "3" },
             xValue: xColumn,
             yValues: yColumn,
-            xField: "Projects", yFields: "Funds", chartType: "bar")
+            xField: "Projects", yFields: "Funds", chartType: "SplineArea")
         .AddSeries(
            name: "Spent Funds",
                 yValues: zColumn,
-                 chartType: "bar"
+                 chartType: "SplineArea"
            )
         .Write();
 }

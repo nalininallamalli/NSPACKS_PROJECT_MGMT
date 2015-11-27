@@ -1,17 +1,15 @@
 ﻿@using HackathonPMA.Models
 @model HackathonPMA.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Create New Project";
 }
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 
 
-<h2>@ViewBag.Title.</h2>
-
 @using (Html.BeginForm("shMapping", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>User project mapping</h4>
+    <h3>Assign Stakeholders</h3>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
 

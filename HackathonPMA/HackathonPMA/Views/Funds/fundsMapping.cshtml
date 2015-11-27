@@ -5,11 +5,12 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Fund mapping details</h2>
+
 
 @using (Html.BeginForm("fundsMapping", "Funds", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    <h3>Assign Funds </h3>
     <input id="hdnFunds" type="hidden" name="hdnFunds" value="@ViewBag.hdnFunds" />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

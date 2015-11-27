@@ -1,7 +1,7 @@
 ﻿@{
     var xColumn = ViewBag.xCol;
     var yColumn = ViewBag.yCol;
-    var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
+    var myChart = new Chart(width: 900, height: 600, themePath:"./theme.xml")
         .AddTitle("Custom Chart")
         .AddLegend("Funds in Rupees Per instance")
         .AddSeries(

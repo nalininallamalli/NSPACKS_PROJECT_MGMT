@@ -6,10 +6,8 @@
         .AddLegend("Number of Project Instances per City")
         .AddSeries(
             name: "Number of Project Instances",
-            @* xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
-                yValues: new[] { "2", "6", "4", "5", "3" }, *@
          xValue: xColumn,
          yValues: yColumn,
-         xField: "Cities", yFields: "Project Instances", chartType: "bar")
+         xField: "Cities", yFields: "Project Instances", chartType: "Column")
          .Write();
 }
