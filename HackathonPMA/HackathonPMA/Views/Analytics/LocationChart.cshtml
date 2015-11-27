@@ -2,14 +2,14 @@
     var xColumn = ViewBag.xCol;
     var yColumn = ViewBag.yCol;
     var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
-        .AddTitle("Project distribution per City")
-        .AddLegend("Number of Project instances per City")
+        .AddTitle("Project Distribution per City")
+        .AddLegend("Number of Project Instances per City")
         .AddSeries(
-            name: "Number of Project instances",
+            name: "Number of Project Instances",
             @* xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
                 yValues: new[] { "2", "6", "4", "5", "3" }, *@
          xValue: xColumn,
          yValues: yColumn,
-         xField: "Cities", yFields: "Project Instances", chartType: "line")
+         xField: "Cities", yFields: "Project Instances", chartType: "bar")
          .Write();
 }
