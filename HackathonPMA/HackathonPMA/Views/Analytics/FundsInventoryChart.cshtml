@@ -1,20 +1,14 @@
 ﻿@{
     var xColumn = ViewBag.xCol;
     var yColumn = ViewBag.yCol;
-    var zColumn = ViewBag.zCol;
     var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
-        .AddTitle("Fund Distribution")
-        .AddLegend("Allocated Vs. Available Funds")
+        .AddTitle("Volunteer Distribution per City")
+        .AddLegend("Number of Volunteers per City")
         .AddSeries(
-            name: "Allocated Funds",
-            xValue: xColumn,
-            yValues: yColumn,
-            xField: "Projects", yFields: "Allocated Funds", chartType: "bar")
-        .AddSeries(
-           name: "Available Funds",
-                yValues: zColumn,
-                 chartType: "bar"
-           )
-        .Write();
+            name: "Number of Volunteers",
+         xValue: xColumn,
+         yValues: yColumn,
+         xField: "Cities", yFields: "Volunteers", chartType: "bar")
+         .Write();
 }
 

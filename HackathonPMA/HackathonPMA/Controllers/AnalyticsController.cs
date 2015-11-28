@@ -11,6 +11,8 @@ namespace HackathonPMA.Controllers
     public class AnalyticsController : Controller
     {
         Entities projectDb = new Entities();
+        ApplicationDbContext employeeDb = new ApplicationDbContext();
+
         ProjectsController projController = new ProjectsController();
 
         // GET: Analytics
@@ -127,7 +129,7 @@ namespace HackathonPMA.Controllers
             while (enumerator.MoveNext())
             {
                 var pair = enumerator.Current;
-                cityList.Add(pair.Key);
+                cityList.Add(pair.Key.ToString().ToUpper());
                 countList.Add(pair.Value);
             }
             ViewBag.xCol = cityList.ToArray();
@@ -137,12 +139,42 @@ namespace HackathonPMA.Controllers
         }
 
         public ActionResult FundsInventoryChart() {
-            var result = projectDb.Projects.Where(p => p.IsParent.Equals(true)).Select(pp => new { pp.Name, pp.TotalAllocatedAmount, pp.TotalSpentAmount }).ToArray();
+           /* var result = projectDb.Projects.Where(p => p.IsParent.Equals(true)).Select(pp => new { pp.Name, pp.TotalAllocatedAmount, pp.TotalSpentAmount }).ToArray();
             List<string> projNameList = new List<string>();
             List<double> projectallocatedList = new List<double>();
-            List<double> projectInvList = new List<double>();
+            List<double> projectInvList = new List<double>(); */
 
-            for (int index = 0; index < result.Length; index++)
+            var result1 = employeeDb.Users.Select(pp => new { pp.City }).ToArray();
+            List<string> cityList = new List<string>();
+            List<int> countList = new List<int>();
+
+            Dictionary<string, int> projCityDictionary = new Dictionary<string, int>();
+
+            for (int index = 0; index < result1.Length; index++)
+            {
+                var tempCity = result1.ElementAt(index).City;
+                if (tempCity != null)
+                {
+                    tempCity = tempCity.ToLower();
+                    if (projCityDictionary.ContainsKey(tempCity))
+                    {
+                        projCityDictionary[tempCity] = projCityDictionary[tempCity] + 1;
+                    }
+                    else
+                    {
+                        projCityDictionary.Add(tempCity, 1);
+                    }
+                }
+            }
+            var enumerator = projCityDictionary.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var pair = enumerator.Current;
+                cityList.Add(pair.Key.ToString().ToUpper());
+                countList.Add(pair.Value);
+            }
+
+           /* for (int index = 0; index < result.Length; index++)
             {
                 var tempAmount = result.ElementAt(index).TotalAllocatedAmount;
                 var availableAmount = (result.ElementAt(index).TotalAllocatedAmount - result.ElementAt(index).TotalSpentAmount);
@@ -153,8 +185,9 @@ namespace HackathonPMA.Controllers
             }
             ViewBag.xCol = projNameList.ToArray();
             ViewBag.yCol = projectallocatedList.ToArray();
-            ViewBag.zCol = projectInvList.ToArray();
-
+            ViewBag.zCol = projectInvList.ToArray(); */
+            ViewBag.xCol = cityList.ToArray();
+            ViewBag.yCol = countList.ToArray();
             return PartialView();
         }
         public ActionResult ProjectsFundsChart()
